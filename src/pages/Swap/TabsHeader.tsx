@@ -1,4 +1,5 @@
 import React from 'react';
+import { ConfigButton } from './ConfigButton';
 
 const flexRowSpace = <span style={{ flex: 1 }}></span>;
 
@@ -43,6 +44,7 @@ export class TabsHeader extends React.Component {
         <Tab name="Provide" />
         <Tab name="Withdraw" />
         {flexRowSpace}
+        <ConfigButton />
       </div>
     );
   }
