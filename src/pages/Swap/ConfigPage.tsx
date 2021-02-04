@@ -1,52 +1,91 @@
 import React from 'react';
-import { Button, Input, Grid, Search, Radio } from 'semantic-ui-react';
+import { Button, Input, Radio, Icon } from 'semantic-ui-react';
 import cn from 'classnames';
 import * as styles from './styles/styles.styl';
 
-export class ConfigPage extends React.Component<{}, { slippage: number }> {
-  state = { slippage: 0.5 };
-  handleClick = selected => this.setState(() => ({ slippage: selected }));
+class Warning extends React.Component {
+  render() {
+    return <></>;
+  }
+}
+
+export class ConfigPage extends React.Component<{}, {}> {
+  slippageValues = [0.1, 0.5, 1];
+  state = {
+    selectedSlippage: this.slippageValues[1],
+    customSlippage: false,
+    expertMode: false,
+  };
+
+  changeSelectedSlippage = selected =>
+    this.setState(() => ({
+      selectedSlippage: selected,
+      customSlippage: false,
+    }));
+
+  changeCustomSlippage = (_, slippage) => {
+    if (slippage.value === '') {
+      this.setState(() => ({
+        selectedSlippage: this.slippageValues[1],
+        customSlippage: false,
+      }));
+    } else {
+      this.setState(() => ({
+        selectedSlippage: Number(slippage.value),
+        customSlippage: true,
+      }));
+    }
+  };
+
+  checkSlippage = slip => {
+    const slipNumber = Number(slip);
+
+    if (slipNumber === NaN || slipNumber <= 0 || slipNumber >= 50) {
+      return {
+        type: 'error',
+        msg: 'Enter a valid slippage percentage',
+      };
+    }
+
+    if (slipNumber < 0.5) {
+      return {
+        type: 'warning',
+        msg: 'This transaction may fail',
+      };
+    }
+
+    return { type: 'valid', msg: '' };
+  };
 
   render() {
-    const { slippage } = this.state;
+    const selectedSlippage = this.state.selectedSlippage;
 
     return (
       <>
         <div>Transaction Settings</div>
-        <div>Slippage tolerance</div>
+        <div>Slippage Tolerance</div>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <Button
-            basic={slippage !== 0.1}
-            onClick={() => this.handleClick(0.1)}
-            compact
-            circular
+          {this.slippageValues.map(slip => (
+            <Button
+              key={'slip-button-' + slip}
+              basic={selectedSlippage !== slip}
+              onClick={() => this.changeSelectedSlippage(slip)}
+              compact
+              circular
+              size="small"
+              color="blue"
+            >
+              {slip}%
+            </Button>
+          ))}
+          <Input
+            placeholder={this.state.selectedSlippage}
             size="small"
-            color="blue"
+            onChange={this.changeCustomSlippage}
+            icon={true}
           >
-            0.1%
-          </Button>
-          <Button
-            basic={slippage !== 0.5}
-            onClick={() => this.handleClick(0.5)}
-            compact
-            circular
-            size="small"
-            color="blue"
-          >
-            0.5%
-          </Button>
-          <Button
-            basic={slippage !== 1}
-            onClick={() => this.handleClick(1)}
-            compact
-            circular
-            size="small"
-            color="blue"
-          >
-            1%
-          </Button>
-          <Input placeholder="0.5%" size="small" icon={'none'}>
             <input className={cn(styles.slippageInput)}></input>
+            <Icon name="percent" />
           </Input>
         </div>
         <div>
