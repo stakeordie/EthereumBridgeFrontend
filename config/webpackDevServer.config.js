@@ -32,6 +32,7 @@ function onProxyReq(proxyResponse, req) {
 module.exports = function() {
   return {
     stats: 'errors-only',
+    transportMode: 'ws',
     // disableHostCheck: !proxy ||
     //   process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true',
     disableHostCheck: true,
@@ -41,6 +42,7 @@ module.exports = function() {
     watchContentBase: true,
     hot: true,
     publicPath: '/',
+    injectClient: false,
     watchOptions: {
       ignored: ignoredFiles(paths.appSrc),
     },
