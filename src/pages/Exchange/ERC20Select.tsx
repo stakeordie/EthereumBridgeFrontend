@@ -21,7 +21,10 @@ const selectTokenText = (mode: string, token: ITokenInfo) => {
   }
 };
 
-export const ERC20Select = observer(() => {
+export const ERC20Select = observer((props: {
+  onSelectToken?: Function,
+}) => {
+
   const { userMetamask, exchange, tokens } = useStores();
   const [erc20, setERC20] = useState(userMetamask.erc20Address);
   const [error, setError] = useState('');
@@ -31,11 +34,11 @@ export const ERC20Select = observer(() => {
 
   useEffect(() => {
     setERC20(userMetamask.erc20Address);
-    setToken(userMetamask.erc20Address);
+    setToken(userMetamask.erc20Address)
   }, [userMetamask.erc20Address]);
 
   return (
-    <Box direction="column" margin={{ top: 'xlarge' }}>
+    <Box direction="column">
       <Box direction="row" align="center" justify="between">
         <Text size="large" bold>
           Token
@@ -43,10 +46,10 @@ export const ERC20Select = observer(() => {
       </Box>
 
       {!custom ? (
-        <Box margin={{ top: 'small', bottom: 'medium' }}>
+        <Box style={{ marginTop: 8 }} margin={{ bottom: 'medium' }}>
           <Select
             options={tokens.allData
-              .filter(token => token.display_props && token.src_coin !== 'Ethereum')
+              .slice()
               .sort((a, b) =>
                 /* SCRT first */
                 a.display_props.symbol.toLowerCase().includes('scrt') ? -1 : 1,
@@ -59,8 +62,9 @@ export const ERC20Select = observer(() => {
               }))}
             value={token}
             onChange={async value => {
-              setToken(value);
+              setToken(value)
               setSnip20(tokens.allData.find(t => t.src_address === value).dst_address);
+              props.onSelectToken(tokens.allData.find(t => t.src_address === value).display_props)
 
               setError('');
               try {
@@ -71,7 +75,7 @@ export const ERC20Select = observer(() => {
             }}
             placeholder="Select your token"
           />
-          {token ? (
+          {/* {token ? (
             <Box direction="row" justify="between" align="center" margin={{ top: 'medium' }}>
               <Text>Address:</Text>
               <a
@@ -87,26 +91,26 @@ export const ERC20Select = observer(() => {
                 {truncateAddressString(exchange.mode === EXCHANGE_MODE.ETH_TO_SCRT ? token : snip20, 16)}
               </a>
             </Box>
-          ) : null}
+          ) : null} */}
         </Box>
       ) : (
-        <>
-          <Box direction="row" justify="end">
-            <Button
-              onClick={async () => {
-                setError('');
-                try {
-                  await userMetamask.setToken(erc20);
-                } catch (e) {
-                  setError(e.message);
-                }
-              }}
-            >
-              {erc20 ? 'Change token' : 'Select token'}
-            </Button>
-          </Box>
-        </>
-      )}
+          <>
+            <Box direction="row" justify="end">
+              <Button
+                onClick={async () => {
+                  setError('');
+                  try {
+                    await userMetamask.setToken(erc20);
+                  } catch (e) {
+                    setError(e.message);
+                  }
+                }}
+              >
+                {erc20 ? 'Change token' : 'Select token'}
+              </Button>
+            </Box>
+          </>
+        )}
 
       {error ? (
         <Box>

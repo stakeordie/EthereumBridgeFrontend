@@ -7,7 +7,7 @@ import * as styles from './styles.styl';
 import { Exchange } from '../Exchange';
 import { EXCHANGE_MODE, TOKEN } from 'stores/interfaces';
 import cn from 'classnames';
-import { Text } from 'components/Base';
+import { Text, Title } from 'components/Base';
 import { WalletBalances } from './WalletBalances';
 import { useEffect } from 'react';
 
@@ -80,7 +80,7 @@ export const EthBridge = observer((props: any) => {
     <BaseContainer>
       <PageContainer>
         <Box direction="row" wrap={true} fill={true} justify="between" align="start">
-          <Box direction="column" align="center" justify="center" className={styles.base}>
+          <Box fill direction="column" align="center" justify="center" className={styles.base}>
             {/*<Box*/}
             {/*  direction="row"*/}
             {/*  justify="center"*/}
@@ -117,7 +117,10 @@ export const EthBridge = observer((props: any) => {
             {/*>*/}
             {/*  <ERC20Select />*/}
             {/*</Box>*/}
-
+            <Box fill direction="row" justify="between" margin={{ bottom: 'small' }}>
+              <Title bold>Secret Bridge</Title>
+              wallts
+            </Box>
             <Exchange />
 
             {/*<Box*/}
@@ -128,9 +131,9 @@ export const EthBridge = observer((props: any) => {
             {/*  </DisableWrap>*/}
             {/*</Box>*/}
           </Box>
-          <Box>
+          {/* <Box>
             <WalletBalances />
-          </Box>
+          </Box> */}
         </Box>
       </PageContainer>
     </BaseContainer>

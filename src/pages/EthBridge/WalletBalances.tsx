@@ -35,6 +35,21 @@ const getTokenName = (tokenType: TOKEN, token: ITokenInfo) => {
   }
 };
 
+const Wallet = observer((props: {
+  address: string,
+  symbol: string,
+  amount: string,
+}) => <Box direction="row">
+    <Box pad="xmall" align="center">
+      <img className={styles.imgToken} src={"/wallet.svg"} />
+      <Text margin={{ left: 'xsmall' }}>{truncateAddressString(props.address, 10)}</Text>
+    </Box>
+    <Box background="#DBDCE1">
+      <Text bold>{props.amount}</Text>
+    </Box>
+  </Box>
+)
+
 const AssetRow = observer<any>(props => {
   let value = (
     <Box direction="row">
@@ -125,14 +140,14 @@ export const WalletBalances = observer(() => {
 
       exchange.token === TOKEN.ERC20
         ? setDisplayedTokens(
-            tokens.allData.filter(
-              token =>
-                token.display_props &&
-                exchange.token === TOKEN.ERC20 &&
-                user.snip20Address === token.dst_address &&
-                token.name !== 'WSCRT',
-            ),
-          )
+          tokens.allData.filter(
+            token =>
+              token.display_props &&
+              exchange.token === TOKEN.ERC20 &&
+              user.snip20Address === token.dst_address &&
+              token.name !== 'WSCRT',
+          ),
+        )
         : setDisplayedTokens(tokens.allData.filter(token => token.src_coin === 'Ethereum'));
     };
 
@@ -155,6 +170,58 @@ export const WalletBalances = observer(() => {
 
     updateBalanceForAddress();
   }, [user, displayedTokens]);
+
+  return (
+    <Box direction="row" pad="none">
+      <Box>
+        {!userMetamask.isAuthorized ? <Button
+          margin={{ vertical: 'medium' }}
+          onClick={() => {
+            userMetamask.signIn(true);
+          }}
+        >
+          Connect with Metamask
+        </Button> :
+          <Wallet
+            address={user.address}
+            amount={user.balanceSCRT}
+            symbol="SCRT"
+          />
+        }
+      </Box>
+
+      <Box>
+        {!user.isAuthorized ? <Button
+          margin={{ vertical: 'medium' }}
+          onClick={() => {
+            if (!user.isKeplrWallet) {
+              actionModals.open(() => <AuthWarning />, {
+                title: '',
+                applyText: 'Got it',
+                closeText: '',
+                noValidation: true,
+                width: '500px',
+                showOther: true,
+                onApply: () => Promise.resolve(),
+              });
+            } else {
+              user.signIn();
+            }
+          }}
+        >
+          Connect with Keplr
+        </Button> :
+          <Wallet
+            address={userMetamask.ethAddress}
+            amount={userMetamask.ethBalance}
+            symbol="SCRT"
+          />
+        }
+        {!user.isKeplrWallet ? <Error error="Keplr not found" /> : null}
+        {user.error ? <Error error={user.error} /> : null}
+      </Box>
+    </Box>
+  )
 
   return (
     <Box direction="column" className={styles.walletBalances} margin={{ vertical: 'large' }}>
@@ -208,18 +275,18 @@ export const WalletBalances = observer(() => {
                 ))}
             </>
           ) : (
-            <Box direction="row" align="baseline" justify="start">
-              <Button
-                margin={{ vertical: 'medium' }}
-                onClick={() => {
-                  userMetamask.signIn(true);
-                }}
-              >
-                Connect with Metamask
+              <Box direction="row" align="baseline" justify="start">
+                <Button
+                  margin={{ vertical: 'medium' }}
+                  onClick={() => {
+                    userMetamask.signIn(true);
+                  }}
+                >
+                  Connect with Metamask
               </Button>
-              {userMetamask.error ? <Error error={userMetamask.error} /> : null}
-            </Box>
-          )}
+                {userMetamask.error ? <Error error={userMetamask.error} /> : null}
+              </Box>
+            )}
         </Box>
 
         <Box direction="column">
@@ -288,31 +355,31 @@ export const WalletBalances = observer(() => {
               })}
             </>
           ) : (
-            <Box direction="row" align="baseline" justify="start">
-              <Button
-                margin={{ vertical: 'medium' }}
-                onClick={() => {
-                  if (!user.isKeplrWallet) {
-                    actionModals.open(() => <AuthWarning />, {
-                      title: '',
-                      applyText: 'Got it',
-                      closeText: '',
-                      noValidation: true,
-                      width: '500px',
-                      showOther: true,
-                      onApply: () => Promise.resolve(),
-                    });
-                  } else {
-                    user.signIn();
-                  }
-                }}
-              >
-                Connect with Keplr
+              <Box direction="row" align="baseline" justify="start">
+                <Button
+                  margin={{ vertical: 'medium' }}
+                  onClick={() => {
+                    if (!user.isKeplrWallet) {
+                      actionModals.open(() => <AuthWarning />, {
+                        title: '',
+                        applyText: 'Got it',
+                        closeText: '',
+                        noValidation: true,
+                        width: '500px',
+                        showOther: true,
+                        onApply: () => Promise.resolve(),
+                      });
+                    } else {
+                      user.signIn();
+                    }
+                  }}
+                >
+                  Connect with Keplr
               </Button>
-              {!user.isKeplrWallet ? <Error error="Keplr not found" /> : null}
-              {user.error ? <Error error={user.error} /> : null}
-            </Box>
-          )}
+                {!user.isKeplrWallet ? <Error error="Keplr not found" /> : null}
+                {user.error ? <Error error={user.error} /> : null}
+              </Box>
+            )}
         </Box>
       </Box>
     </Box>

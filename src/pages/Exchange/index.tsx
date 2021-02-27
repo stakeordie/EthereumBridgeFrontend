@@ -4,7 +4,7 @@ import * as styles from './styles.styl';
 import { Form, Input, isRequired, MobxForm, NumberInput } from 'components/Form';
 import { inject, observer } from 'mobx-react';
 import { IStores } from 'stores';
-import { Button, Icon, Text } from 'components/Base';
+import { Button, Icon, Text, Title } from 'components/Base';
 import { formatWithSixDecimals, moreThanZero, unlockToken } from 'utils';
 import { Spinner } from 'ui/Spinner';
 import { EXCHANGE_STEPS } from '../../stores/Exchange';
@@ -22,6 +22,15 @@ export interface ITokenInfo {
   minAmount: string;
 }
 
+type NetworkTemplateInterface = {
+  name: string,
+  wallet: string
+  tokenSymbol: string
+  amount: number,
+}
+
+type State = { selectedToken: any };
+
 function getLabel(mode: EXCHANGE_MODE, tokenType: TOKEN, tokenInfo: ITokenInfo) {
   if (tokenInfo.label === 'WSCRT') {
     return mode === EXCHANGE_MODE.SCRT_TO_ETH ? `SSCRT Amount` : `WSCRT Amount`;
@@ -38,12 +47,13 @@ export class Exchange extends React.Component<
     Pick<IStores, 'exchange'> &
     Pick<IStores, 'routing'> &
     Pick<IStores, 'actionModals'> &
-    Pick<IStores, 'userMetamask'>
+    Pick<IStores, 'userMetamask'>, State
 > {
   formRef: MobxForm;
 
   constructor(props) {
     super(props);
+    this.state = { selectedToken: null };
 
     autorun(() => {
       const { exchange } = this.props;
@@ -139,8 +149,38 @@ export class Exchange extends React.Component<
     }
   }
 
+  
   render() {
     const { exchange, routing, user, userMetamask } = this.props;
+    const { selectedToken } = this.state;
+
+    const NTemplate1: NetworkTemplateInterface = {
+      name: exchange.mode === EXCHANGE_MODE.ETH_TO_SCRT ? "Ethereum" : "Secret Network", 
+      wallet: exchange.mode === EXCHANGE_MODE.ETH_TO_SCRT ? "Metamask" : "Keplr", 
+      amount: 0, //TOKEN AMOUNT VALUE HERE
+      tokenSymbol: "No Token Selected", 
+    }
+
+    const NTemplate2: NetworkTemplateInterface = {
+      name: exchange.mode === EXCHANGE_MODE.ETH_TO_SCRT ? "Secret Network" : "Ethereum", 
+      wallet: exchange.mode === EXCHANGE_MODE.ETH_TO_SCRT ? "Keplr" : "Metamask", 
+      amount: 0, //TOKEN AMOUNT VALUE HERE
+      tokenSymbol: "No Token Selected", 
+    }
+
+    if(selectedToken){
+
+      NTemplate1.tokenSymbol = 
+        exchange.mode === EXCHANGE_MODE.ETH_TO_SCRT ? 
+          selectedToken.symbol : 
+          `Secret ${selectedToken.symbol}`
+
+      NTemplate2.tokenSymbol = 
+        exchange.mode === EXCHANGE_MODE.ETH_TO_SCRT ? 
+          `Secret ${selectedToken.symbol}` : 
+          selectedToken.symbol
+    }
+
 
     let icon = () => <Icon style={{ width: 50 }} glyph="RightArrow" />;
     let description = 'Approval';
@@ -204,6 +244,163 @@ export class Exchange extends React.Component<
       </Box>
     );
 
+    const NetworkTemplate = observer((
+      props: {
+        name: string,
+        wallet: string
+        tokenSymbol: string
+        amount: number,
+      }) => (
+      <Box direction="column" width="230"  margin={{ left: 'xlarge', right: 'xlarge' }}>
+        <Box direction="row" align="start" margin={{ bottom: 'small' }}>
+          <img className={styles.imgToken} src={props.name === "Ethereum" ? "/eth.svg" : "/scrt.svg"} />
+          <Box direction="column" margin={{ left: 'xxsmall' }}>
+            <Title bold color={"#30303D"} margin={{ bottom: 'xxsmall' }}>{props.name}</Title>
+            <Text size="medium" bold color={"#748695"}>{props.wallet}</Text>
+          </Box>
+        </Box>
+        
+        <Box pad="xxsmall" direction="row" align="center" justify="start" style={{backgroundColor: "#E1FEF2"}}>
+          {selectedToken && <img src={selectedToken.image} style={{ width: 20, marginRight: 10 }} alt={props.tokenSymbol} />}
+          <Text bold margin={{ left: 'xxsmall' }} color="#30303D" size="medium">{props.tokenSymbol}</Text>
+          <Text bold margin={{ left: 'xxsmall' }} color="#748695" size="medium">{props.amount}</Text>
+        </Box>
+      </Box>
+    ));
+
+    console.log('userMetamask', userMetamask.ethAddress)
+    return (
+      <Box fill direction="column"  className={styles.exchangeContainer}>
+        <Box fill direction="row" justify="around" pad="xlarge" background="#F8F9FC">
+          <NetworkTemplate {...NTemplate1}/>
+          <Box pad="small">
+            <Icon size="60" glyph="Reverse"  onClick={async () => {
+              exchange.mode === EXCHANGE_MODE.ETH_TO_SCRT ? 
+                exchange.setMode(EXCHANGE_MODE.SCRT_TO_ETH) :   
+                exchange.setMode(EXCHANGE_MODE.ETH_TO_SCRT)
+            }}/>
+          </Box>
+          <NetworkTemplate {...NTemplate2}/>
+        </Box>
+        <Form ref={ref => (this.formRef = ref)} data={this.props.exchange.transaction} {...({} as any)}>
+          {exchange.step.id === EXCHANGE_STEPS.BASE ? (
+            <Box direction="row" fill={true} pad="xlarge">
+              
+              <Box direction="row" gap="2px" width="50%" margin={{ right: 'medium' }}>
+                <Box width="100%" margin={{right: 'medium'}}>
+                  <ERC20Select 
+                    onSelectToken={(value) => {
+                      value.symbol === "ETH" ? exchange.setToken(TOKEN.ETH) : exchange.setToken(TOKEN.ERC20) 
+                      console.log(exchange.token)
+                      this.setState({ selectedToken: value })
+                    }}
+                  />
+                </Box>
+                <Box direction="column" width="100%">
+                
+                  <NumberInput
+                    label={getLabel(exchange.mode, exchange.token, this.tokenInfo)}
+                    name="amount"
+                    type="decimal"
+                    precision="6"
+                    delimiter="."
+                    placeholder="0"
+                    style={{ width: '100%' }}
+                    onChange={(value) => console.log(value)}
+                    rules={[
+                      isRequired,
+                      moreThanZero,
+                      (_, value, callback) => {
+                        const errors = [];
+                        // QUESTION - where is the amount value at?
+                        if (value && Number(value) > Number(this.tokenInfo.maxAmount.replace(/,/g, ''))) {
+                          errors.push('Exceeded the maximum amount');
+                        } else if (value && Number(value) < Number(this.tokenInfo.minAmount.replace(/,/g, ''))) {
+                          errors.push('Below the minimum amount');
+                        }
+
+                        callback(errors);
+                      },
+                    ]}
+                  />
+                  <Text size="small" style={{ textAlign: 'right' }}>
+                    <b>Min / Max</b> = {formatWithSixDecimals(this.tokenInfo.minAmount.replace(/,/g, ''))}
+                    {' / '}
+                    {formatWithSixDecimals(this.tokenInfo.maxAmount.replace(/,/g, ''))}{' '}
+                    {(exchange.mode === EXCHANGE_MODE.SCRT_TO_ETH && exchange.token === TOKEN.ERC20 ? 'secret' : '') +
+                      this.tokenInfo.label}
+                  </Text>
+                </Box>
+              </Box>
+                  
+              <Box width="50%">
+
+              {exchange.mode === EXCHANGE_MODE.SCRT_TO_ETH ? (
+                <Box direction="column" fill={true} style={{ position:'relative' }}>
+
+                  {userMetamask.isAuthorized && 
+                    <Box
+                      fill={true}
+                      style={{
+                        right: 0,
+                        top: 0,
+                        position: 'absolute',
+                        color: 'rgb(0, 173, 232)',
+                        textAlign: 'right',
+                      }}
+                      onClick={() => (exchange.transaction.ethAddress = userMetamask.ethAddress)}
+                    >
+                      Use my address
+                    </Box>
+                  }
+
+                  <Input
+                    label="Destination ETH Address"
+                    name="ethAddress"
+                    style={{ width: '100%' }}
+                    placeholder="Receiver address"
+                    rules={[isRequired /* isEthAddress */]}
+                  />
+     
+                </Box>
+              ) : (
+                <Box direction="column" fill={true} style={{ position:'relative' }}>
+
+                  {user.isAuthorized &&
+                    <Box
+                      fill={true}
+                      style={{
+                        right: 0,
+                        top: 0,
+                        position: 'absolute',
+                        color: 'rgb(0, 173, 232)',
+                        textAlign: 'right',
+                      }}
+                      onClick={() => (exchange.transaction.scrtAddress = user.address)}
+                    >
+                      Use my address
+                    </Box>
+                  }
+
+                  <Input
+                    label="Destination Secret Address"
+                    name="scrtAddress"
+                    style={{ width: '100%' }}
+                    placeholder="Receiver address"
+                    rules={[isRequired /* isSecretAddress */]}
+                  />
+                </Box>
+              )}
+
+              </Box>
+              
+            </Box>
+          ) : null}
+        </Form>
+      </Box>
+
+    )
+
     return (
       <Box direction="column" pad="xlarge" className={styles.exchangeContainer}>
         {exchange.step.id === EXCHANGE_STEPS.BASE ? (
@@ -211,7 +408,7 @@ export class Exchange extends React.Component<
             <Box
               className={cn(styles.itemToken, exchange.token === TOKEN.ETH ? styles.selected : '')}
               onClick={() => {
-                exchange.setToken(TOKEN.ETH);
+                exchange.setToken(TOKEN.ETH); //HERE
                 routing.push(`/${exchange.token}`);
               }}
             >
@@ -225,7 +422,7 @@ export class Exchange extends React.Component<
             <Box
               className={cn(styles.itemToken, exchange.token === TOKEN.ERC20 ? styles.selected : '')}
               onClick={() => {
-                exchange.setToken(TOKEN.ERC20);
+                exchange.setToken(TOKEN.ERC20);  //HERE
                 routing.push(`/${exchange.token}`);
               }}
             >
