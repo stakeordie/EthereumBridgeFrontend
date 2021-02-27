@@ -91,7 +91,7 @@ export const EthBridge = observer((props: any) => {
             {/*  </Title>*/}
             {/*</Box>*/}
 
-            <Box
+            {/* <Box
               direction="row"
               justify="between"
               className={styles.swapDirectionChoice}
@@ -110,16 +110,16 @@ export const EthBridge = observer((props: any) => {
                 onClick={() => exchange.setMode(EXCHANGE_MODE.SCRT_TO_ETH)}
                 isActive={exchange.mode === EXCHANGE_MODE.SCRT_TO_ETH}
               />
-            </Box>
+            </Box> */}
 
             {/*<Box*/}
             {/*  margin={{ bottom: 'medium' }}*/}
             {/*>*/}
             {/*  <ERC20Select />*/}
             {/*</Box>*/}
-            <Box fill direction="row" justify="between" margin={{ bottom: 'small' }}>
-              <Title bold>Secret Bridge</Title>
-              wallts
+            <Box fill direction="row" justify="between" align="end" margin={{ bottom: 'medium', top: 'large' }}>
+              <Title bold >Secret Bridge</Title>
+              <WalletBalances />
             </Box>
             <Exchange />
 

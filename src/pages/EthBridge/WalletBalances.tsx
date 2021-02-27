@@ -35,17 +35,19 @@ const getTokenName = (tokenType: TOKEN, token: ITokenInfo) => {
   }
 };
 
-const Wallet = observer((props: {
+const WalletTemplate = observer((props: {
   address: string,
   symbol: string,
   amount: string,
-}) => <Box direction="row">
-    <Box pad="xmall" align="center">
-      <img className={styles.imgToken} src={"/wallet.svg"} />
-      <Text margin={{ left: 'xsmall' }}>{truncateAddressString(props.address, 10)}</Text>
+}) => <Box direction="row" background="white" style={{ borderRadius: 4 }}>
+    <Box pad="xxsmall" align="center" direction="row">
+      <img className={styles.imgToken} src={"/static/wallet.svg"} />
+      <Text margin={{ left: 'xxsmall' }}>{truncateAddressString(props.address, 10)}</Text>
     </Box>
-    <Box background="#DBDCE1">
-      <Text bold>{props.amount}</Text>
+    <Box pad="xxsmall" background="#DBDCE1" align="center" direction="row" style={{ borderRadius: 4 }}>
+      {props.amount ? <Text bold>{props.amount}</Text> :
+        <Loader type="ThreeDots" color="#00BFFF" height="1em" width="1em" />}
+      <Text bold margin={{ left: 'xxsmall' }}>{props.symbol}</Text>
     </Box>
   </Box>
 )
@@ -172,27 +174,9 @@ export const WalletBalances = observer(() => {
   }, [user, displayedTokens]);
 
   return (
-    <Box direction="row" pad="none">
-      <Box>
-        {!userMetamask.isAuthorized ? <Button
-          margin={{ vertical: 'medium' }}
-          onClick={() => {
-            userMetamask.signIn(true);
-          }}
-        >
-          Connect with Metamask
-        </Button> :
-          <Wallet
-            address={user.address}
-            amount={user.balanceSCRT}
-            symbol="SCRT"
-          />
-        }
-      </Box>
-
-      <Box>
+    <Box direction="row" pad="none" align="end" style={{ minHeight: 50 }}>
+      <Box margin={{ right: 'small' }}>
         {!user.isAuthorized ? <Button
-          margin={{ vertical: 'medium' }}
           onClick={() => {
             if (!user.isKeplrWallet) {
               actionModals.open(() => <AuthWarning />, {
@@ -210,15 +194,26 @@ export const WalletBalances = observer(() => {
           }}
         >
           Connect with Keplr
-        </Button> :
-          <Wallet
-            address={userMetamask.ethAddress}
-            amount={userMetamask.ethBalance}
+          </Button> : <WalletTemplate
+            address={user.address}
+            amount={user.balanceSCRT || ""}
             symbol="SCRT"
           />
         }
-        {!user.isKeplrWallet ? <Error error="Keplr not found" /> : null}
-        {user.error ? <Error error={user.error} /> : null}
+        {/* {!user.isKeplrWallet ? <Error error="Keplr not found" /> : null} */}
+        {/* {user.error ? <Error error={user.error} /> : null} */}
+      </Box>
+
+      <Box>
+        {!userMetamask.isAuthorized ? <Button onClick={() => userMetamask.signIn(true)}>
+          Connect with Metamask
+          </Button> : <WalletTemplate
+            address={userMetamask.ethAddress}
+            amount={userMetamask.ethBalance}
+            symbol="ETH"
+          />
+        }
+        {/* {userMetamask.error ? <Error error={userMetamask.error} /> : null} */}
       </Box>
     </Box>
   )
