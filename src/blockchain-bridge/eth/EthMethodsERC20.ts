@@ -45,16 +45,13 @@ export class EthMethodsERC20 {
 
     amount = Number(mulDecimals(amount, decimals));
 
-    const allowance = await this.getAllowance(erc20Address);
+    return await erc20Contract.methods.approve(this.ethManagerAddress, MAX_UINT).send({
+      from: accounts[0],
+      gas: process.env.ETH_GAS_LIMIT,
+      gasPrice: await getGasPrice(this.web3),
+      amount: amount,
+    });
 
-    if (Number(allowance) < Number(amount)) {
-      await erc20Contract.methods.approve(this.ethManagerAddress, MAX_UINT).send({
-        from: accounts[0],
-        gas: process.env.ETH_GAS_LIMIT,
-        gasPrice: await getGasPrice(this.web3),
-        amount: amount,
-      });
-    }
   };
 
   swapToken = async (erc20Address, userAddr, amount, decimals) => {

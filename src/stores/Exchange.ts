@@ -15,6 +15,7 @@ export enum EXCHANGE_STEPS {
   CONFIRMATION = 'CONFIRMATION',
   SENDING = 'SENDING',
   RESULT = 'RESULT',
+  APPROVE_CONFIRMATION = 'APPROVE_CONFIRMATION'
 }
 
 export interface IStepConfig {
@@ -22,6 +23,7 @@ export interface IStepConfig {
   buttons: Array<{
     title: string;
     onClick: () => void;
+    disabled?: () => void;
     validate?: boolean;
     transparent?: boolean;
   }>;
@@ -101,6 +103,45 @@ export class Exchange extends StoreConstructor {
     return this.mode === EXCHANGE_MODE.SCRT_TO_ETH ? this.swapFeeUsd : 0;
   }
 
+  onClickSend = async () => {
+    console.log('yo')
+    this.stepNumber = this.stepNumber + 1;
+    this.transaction.erc20Address = this.stores.userMetamask.erc20Address;
+    this.transaction.snip20Address = this.stores.user.snip20Address;
+
+    switch (this.mode) {
+      case EXCHANGE_MODE.ETH_TO_SCRT:
+        this.transaction.ethAddress = this.stores.userMetamask.ethAddress;
+
+        this.isFeeLoading = true;
+        this.ethNetworkFee = await getNetworkFee(Number(process.env.ETH_GAS_LIMIT));
+        this.isFeeLoading = false;
+        break;
+      case EXCHANGE_MODE.SCRT_TO_ETH:
+        this.transaction.scrtAddress = this.stores.user.address;
+        this.isFeeLoading = true;
+        this.ethSwapFee = await getNetworkFee(process.env.SWAP_FEE);
+        let token: ITokenInfo;
+        if (this.token === TOKEN.ETH) {
+          token = this.stores.tokens.allData.find(t => t.name === 'Ethereum');
+        } else {
+          token = this.stores.tokens.allData.find(t => t.dst_address === this.transaction.snip20Address);
+        }
+        this.swapFeeUsd = this.ethSwapFee * this.stores.user.ethRate;
+        this.swapFeeToken = this.swapFeeUsd / Number(token.price);
+        this.isFeeLoading = false;
+        break;
+    }
+  }
+
+  onClickApprove = async () => {
+    if (this.mode != EXCHANGE_MODE.ETH_TO_SCRT || this.token === TOKEN.ETH) return
+    this.stepNumber = 4;
+    this.isFeeLoading = true;
+    this.ethNetworkFee = await getNetworkFee(Number(process.env.ETH_GAS_LIMIT));
+    this.isFeeLoading = false;
+  }
+
   stepsConfig: Array<IStepConfig> = [
     {
       id: EXCHANGE_STEPS.BASE,
@@ -175,7 +216,32 @@ export class Exchange extends StoreConstructor {
         },
       ],
     },
+    {
+      id: EXCHANGE_STEPS.APPROVE_CONFIRMATION,
+      buttons: [
+        {
+          title: 'Confirm',
+          onClick: () => {
+            this.sendOperation()
+          },
+        },
+      ],
+    },
   ];
+
+  @action.bound
+  async isTokenApproved(address: string) {
+    let result = false
+    if (this.mode != EXCHANGE_MODE.ETH_TO_SCRT) result = true
+    try {
+      const allowance = await contract.ethMethodsERC20.getAllowance(address);
+      if (Number(allowance) >= Number(this.transaction.amount)) result = true
+    } catch (error) {
+      throw (error)
+    }
+
+    return result
+  }
 
   @action.bound
   setAddressByMode() {
@@ -239,8 +305,8 @@ export class Exchange extends StoreConstructor {
         swap.swap.src_coin === 'native'
           ? TOKEN.ETH
           : this.operation.type === EXCHANGE_MODE.ETH_TO_SCRT
-          ? TOKEN.ERC20
-          : TOKEN.S20;
+            ? TOKEN.ERC20
+            : TOKEN.S20;
 
       this.operation.status = swap.swap.status;
 
@@ -332,7 +398,11 @@ export class Exchange extends StoreConstructor {
         await this.swapSnip20ToEth(this.token === TOKEN.ETH);
       } else if (this.mode === EXCHANGE_MODE.ETH_TO_SCRT) {
         if (this.token === TOKEN.ERC20) {
-          await this.swapErc20ToScrt();
+          if (!this.isTokenApproved(this.transaction.erc20Address)) {
+            await this.approveEcr20();
+          } else {
+            await this.swapErc20ToScrt();
+          }
         } else {
           await this.swapEthToScrt();
         }
@@ -367,7 +437,7 @@ export class Exchange extends StoreConstructor {
     }
   }
 
-  async swapErc20ToScrt() {
+  async approveEcr20() {
     this.operation = this.defaultOperation;
     this.operation.status = SwapStatus.SWAP_WAIT_APPROVE;
     this.setStatus();
@@ -375,14 +445,29 @@ export class Exchange extends StoreConstructor {
     await this.createOperation();
     this.stores.routing.push(TOKEN.ETH + '/operations/' + this.operation.id);
 
-    await contract.ethMethodsERC20.callApprove(
+    const transaction = await contract.ethMethodsERC20.callApprove(
       this.transaction.erc20Address,
       this.transaction.amount,
       this.stores.userMetamask.erc20TokenDetails.decimals,
     );
 
-    this.operation.status = SwapStatus.SWAP_WAIT_SEND;
+    this.txHash = transaction.transactionHash;
+
+    this.operation.status = await this.updateOperation(this.operation.id, transaction.transactionHash);
     this.setStatus();
+
+    await this.waitForResult();
+
+    this.setStatus();
+  }
+
+  async swapErc20ToScrt() {
+    this.operation = this.defaultOperation;
+    this.operation.status = SwapStatus.SWAP_WAIT_APPROVE;
+    this.setStatus();
+
+    await this.createOperation();
+    this.stores.routing.push(TOKEN.ETH + '/operations/' + this.operation.id);
 
     const transaction = await contract.ethMethodsERC20.swapToken(
       this.transaction.erc20Address,

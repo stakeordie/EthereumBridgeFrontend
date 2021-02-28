@@ -46,7 +46,7 @@ export const ERC20Select = observer((props: {
       </Box>
 
       {!custom ? (
-        <Box style={{ marginTop: 8 }} margin={{ bottom: 'medium' }}>
+        <Box style={{ marginTop: 8 }}>
           <Select
             options={tokens.allData
               .slice()
@@ -61,17 +61,11 @@ export const ERC20Select = observer((props: {
                 value: token.src_address,
               }))}
             value={token}
-            onChange={async value => {
+            onChange={value => {
+              const tokenDisplayProps = tokens.allData.find(t => t.src_address === value).display_props
               setToken(value)
               setSnip20(tokens.allData.find(t => t.src_address === value).dst_address);
-              props.onSelectToken(tokens.allData.find(t => t.src_address === value).display_props)
-
-              setError('');
-              try {
-                await userMetamask.setToken(value, tokens);
-              } catch (e) {
-                setError(e.message);
-              }
+              props.onSelectToken(tokenDisplayProps, value)
             }}
             placeholder="Select your token"
           />
@@ -112,11 +106,11 @@ export const ERC20Select = observer((props: {
           </>
         )}
 
-      {error ? (
+      {/* {error ? (
         <Box>
           <Text color="red">{error}</Text>
         </Box>
-      ) : null}
+      ) : null} */}
     </Box>
   );
 });

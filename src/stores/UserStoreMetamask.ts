@@ -190,6 +190,7 @@ export class UserStoreMetamask extends StoreConstructor {
 
     this.erc20TokenDetails = await ethMethodsERC20.tokenDetails(erc20Address);
     this.erc20Address = erc20Address;
+
     this.erc20Balance = divDecimals(
       await getErc20Balance(this.ethAddress, erc20Address),
       this.erc20TokenDetails.decimals,
