@@ -4,7 +4,7 @@ import { statusFetching } from '../constants';
 import { StoreConstructor } from './core/StoreConstructor';
 import * as agent from 'superagent';
 import { IOperation } from './interfaces';
-import { divDecimals, formatWithSixDecimals, sleep, toFixedTrunc, unlockToken } from '../utils';
+import { divDecimals, fixUnlockToken, formatWithSixDecimals, sleep, toFixedTrunc, unlockToken } from '../utils';
 import { SigningCosmWasmClient } from 'secretjs';
 import { getViewingKey, QueryDeposit, QueryRewards, Snip20GetBalance } from '../blockchain-bridge/scrt';
 
@@ -352,7 +352,7 @@ export class UserStoreEx extends StoreConstructor {
     });
 
     if (isNaN(Number(rawBalance))) {
-      return 'Fix Unlock';
+      return fixUnlockToken;
     }
 
     if (decimals) {
@@ -422,11 +422,7 @@ export class UserStoreEx extends StoreConstructor {
   @action public updateSScrtBalance = async () => {
     try {
       const balance = await this.getSnip20Balance(process.env.SSCRT_CONTRACT, 6);
-      if (balance.includes(unlockToken)) {
-        this.balanceToken['sSCRT'] = balance;
-      } else {
-        this.balanceToken['sSCRT'] = formatWithSixDecimals(toFixedTrunc(balance, 6));
-      }
+      this.balanceToken['sSCRT'] = balance;
     } catch (err) {
       this.balanceToken['sSCRT'] = unlockToken;
     }
@@ -466,11 +462,7 @@ export class UserStoreEx extends StoreConstructor {
 
     try {
       const balance = await this.getSnip20Balance(token.dst_address, token.decimals);
-      if (balance.includes(unlockToken)) {
-        this.balanceToken[token.src_coin] = balance;
-      } else {
-        this.balanceToken[token.src_coin] = formatWithSixDecimals(toFixedTrunc(balance, 6));
-      }
+      this.balanceToken[token.src_coin] = balance;
     } catch (err) {
       this.balanceToken[token.src_coin] = unlockToken;
     }

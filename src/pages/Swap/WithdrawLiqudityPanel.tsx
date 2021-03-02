@@ -12,7 +12,7 @@ import { SwapPair } from './types/SwapPair';
 import { DownArrow } from '../../ui/Icons/DownArrow';
 import { PairAnalyticsLink } from '../../components/Swap/PairAnalyticsLink';
 import Loader from 'react-loader-spinner';
-import { storeTxResultLocally } from './utils';
+import { shareOfPoolNumberFormat, storeTxResultLocally } from './utils';
 
 export class WithdrawLiquidityPanel extends React.Component<
   {
@@ -94,10 +94,12 @@ export class WithdrawLiquidityPanel extends React.Component<
         );
 
         lpShareJsxElement = (
-          <span>{`${lpTokenBalanceNum
-            .multipliedBy(100)
-            .dividedBy(lpTokenTotalSupply)
-            .toFormat(2)}%`}</span>
+          <span>{`${shareOfPoolNumberFormat.format(
+            lpTokenBalanceNum
+              .multipliedBy(100)
+              .dividedBy(lpTokenTotalSupply)
+              .toNumber(),
+          )}%`}</span>
         );
       } else {
         pooledTokenA = '0';
@@ -149,16 +151,17 @@ export class WithdrawLiquidityPanel extends React.Component<
           <Accordion.Title
             active={this.state.isActive}
             onClick={async () => {
-              this.setState({ isActive: !this.state.isActive });
-              if (!this.state.isActive) {
-                await this.setState({ isLoadingBalance: true });
-                // get balances and subscribe for events for this pair
-                await this.props.getBalance(selectedPair);
-                await this.setState({ isLoadingBalance: false });
-              } else {
-                // unsubscribe
-                this.props.onCloseTab(selectedPair);
-              }
+              this.setState({ isActive: !this.state.isActive }, async () => {
+                if (this.state.isActive) {
+                  this.setState({ isLoadingBalance: true });
+                  // get balances and subscribe for events for this pair
+                  await this.props.getBalance(selectedPair);
+                  this.setState({ isLoadingBalance: false });
+                } else {
+                  // unsubscribe
+                  this.props.onCloseTab(selectedPair);
+                }
+              });
             }}
           >
             <div
@@ -173,7 +176,7 @@ export class WithdrawLiquidityPanel extends React.Component<
                   margin: 'auto',
                 }}
               >
-                {selectedPair.asset_infos[0].symbol}-{selectedPair.asset_infos[1].symbol}
+                {selectedPair.humanizedSymbol()}
               </strong>
               <FlexRowSpace />
             </div>
@@ -382,7 +385,7 @@ export class WithdrawLiquidityPanel extends React.Component<
 
                           this.props.notify(
                             'success',
-                            `Withdrawn ${100 * withdrawPercentage}% from your pooled ${pairSymbol}`,
+                            `Withdrawn ${100 * withdrawPercentage}% from your pooled ${selectedPair.humanizedSymbol()}`,
                           );
 
                           this.setState({
@@ -391,7 +394,8 @@ export class WithdrawLiquidityPanel extends React.Component<
                         } catch (error) {
                           this.props.notify(
                             'error',
-                            `Error withdrawing ${100 * withdrawPercentage}% from your pooled ${pairSymbol}: ${
+                            `Error withdrawing ${100 *
+                              withdrawPercentage}% from your pooled ${selectedPair.humanizedSymbol()}: ${
                               error.message
                             }`,
                           );

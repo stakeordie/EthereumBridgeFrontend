@@ -40,7 +40,7 @@ interface RewardsToken {
 const calculateAPY = (token: RewardsToken, price: number, priceUnderlying: number) => {
   // console.log(Math.round(Date.now() / 1000000))
   // deadline - current time, 6 seconds per block
-  const timeRemaining = (token.deadline - 1722275) * 6 + 1610446108 - Math.round(Date.now() / 1000);
+  const timeRemaining = (token.deadline - 2424433) * 6.22 + 1614681910 - Math.round(Date.now() / 1000);
 
   // (token.deadline - Math.round(Date.now() / 1000000) );
   const pending = Number(divDecimals(token.remainingLockedRewards, token.rewardsDecimals)) * price;
@@ -178,11 +178,13 @@ class EarnRow extends Component<
                   <DepositContainer
                     value={this.state.depositValue}
                     action={
-                      <Grid columns={1} stackable relaxed={"very"}>
-                        <Grid.Column style={{
-                            display: "flex",
-                            justifyContent: "center"}
-                        }>
+                      <Grid columns={1} stackable relaxed={'very'}>
+                        <Grid.Column
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                          }}
+                        >
                           <EarnButton
                             props={this.props}
                             value={this.state.depositValue}
@@ -205,16 +207,18 @@ class EarnRow extends Component<
                     value={this.state.withdrawValue}
                     onChange={this.handleChangeWithdraw}
                     action={
-                      <Grid columns={1} stackable relaxed={"very"}>
-                        <Grid.Column style={{
-                          display: "flex",
-                          justifyContent: "center"}
-                        }>
-                      <WithdrawButton
-                        props={this.props}
-                        value={this.state.withdrawValue}
-                        changeValue={this.handleChangeWithdraw}
-                      />
+                      <Grid columns={1} stackable relaxed={'very'}>
+                        <Grid.Column
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <WithdrawButton
+                            props={this.props}
+                            value={this.state.withdrawValue}
+                            changeValue={this.handleChangeWithdraw}
+                          />
                         </Grid.Column>
                       </Grid>
                     } //({props: this.props, value: this.state.withdrawValue})}
