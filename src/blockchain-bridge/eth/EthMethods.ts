@@ -17,7 +17,7 @@ export class EthMethods {
     this.ethManagerContract = params.ethManagerContract;
   }
 
-  swapEth = async (userAddr, amount, sendTxCallback?) => {
+  swapEth = async (userAddr, amount, callback?) => {
     // @ts-ignore
     const accounts = await ethereum.enable();
 
@@ -31,12 +31,19 @@ export class EthMethods {
 
     const gasLimit = Math.max(estimateGas + estimateGas * 0.3, Number(process.env.ETH_GAS_LIMIT));
 
-    return await this.ethManagerContract.methods.swap(secretAddrHex).send({
+    this.ethManagerContract.methods.swap(secretAddrHex).send({
       value: ethToWei(amount),
       from: accounts[0],
       gas: new BN(gasLimit),
       gasPrice: await getGasPrice(this.web3),
-    });
+    }).on('transactionHash', function (hash) {
+      callback({ hash })
+    }).then(function (receipt) {
+      callback({ receipt })
+    }).catch(function (error) {
+      callback({ error })
+    })
+
   };
 
   checkEthBalance = async addr => {

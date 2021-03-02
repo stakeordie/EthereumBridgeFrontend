@@ -23,18 +23,17 @@ const selectTokenText = (mode: string, token: ITokenInfo) => {
 
 export const ERC20Select = observer((props: {
   onSelectToken?: Function,
+  value: string,
 }) => {
 
   const { userMetamask, exchange, tokens } = useStores();
   const [erc20, setERC20] = useState(userMetamask.erc20Address);
   const [error, setError] = useState('');
-  const [token, setToken] = useState('');
   const [snip20, setSnip20] = useState('');
   const [custom, setCustom] = useState(false);
 
   useEffect(() => {
     setERC20(userMetamask.erc20Address);
-    setToken(userMetamask.erc20Address)
   }, [userMetamask.erc20Address]);
 
   return (
@@ -60,12 +59,16 @@ export const ERC20Select = observer((props: {
                 text: selectTokenText(exchange.mode, token),
                 value: token.src_address,
               }))}
-            value={token}
-            onChange={value => {
-              const tokenDisplayProps = tokens.allData.find(t => t.src_address === value).display_props
-              setToken(value)
-              setSnip20(tokens.allData.find(t => t.src_address === value).dst_address);
-              props.onSelectToken(tokenDisplayProps, value)
+            value={props.value}
+            onChange={async _value => {
+              const token = tokens.allData.find(t => t.src_address === _value)
+              setSnip20(tokens.allData.find(t => t.src_address === _value).dst_address);
+              props.onSelectToken(token, _value)
+
+              try {
+                await userMetamask.setToken(_value, tokens);
+              } catch (e) { }
+
             }}
             placeholder="Select your token"
           />

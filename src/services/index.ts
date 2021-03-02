@@ -14,10 +14,10 @@ export const createOperation = async params => {
   return res.body;
 };
 
-export const updateOperation = async (id: string, transactionHash: string) => {
+export const updateOperation = async (id: string, params: any) => {
   const url = backendUrl(`/operations/${id}`);
 
-  const res = await agent.post<IOperation>(url, { transactionHash });
+  const res = await agent.post<IOperation>(url, params);
 
   return res.body;
 };

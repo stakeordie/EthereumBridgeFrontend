@@ -4,6 +4,7 @@ import { SwapStatus } from '../constants';
 export enum EXCHANGE_MODE {
   ETH_TO_SCRT = 'eth_to_scrt',
   SCRT_TO_ETH = 'scrt_to_eth',
+  APPROVE_ERC20 = 'approve_erc20',
 }
 
 export enum TOKEN {
@@ -58,6 +59,7 @@ export interface IOperation {
   oneAddress: string;
   actions: Array<IAction>;
   timestamp: number;
+  confirmations: number;
   erc20Address?: string;
 }
 

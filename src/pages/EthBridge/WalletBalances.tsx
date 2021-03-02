@@ -160,10 +160,7 @@ export const WalletBalances = observer(() => {
     const updateBalanceForAddress = async () => {
       const balances = [];
       for (const token of displayedTokens) {
-        await user.updateBalanceForSymbol(token.display_props.symbol);
-
-        console.log(`${user.balanceToken[token.src_coin]}`);
-
+        //await user.updateBalanceForSymbol(token.display_props.symbol);
         balances[token.display_props.symbol] = user.balanceToken[token.src_coin];
       }
 

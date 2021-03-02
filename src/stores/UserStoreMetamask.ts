@@ -182,8 +182,8 @@ export class UserStoreMetamask extends StoreConstructor {
   @action.bound public setToken = async (erc20Address: string, tokens?) => {
     this.erc20TokenDetails = null;
     this.erc20Address = '';
-    this.erc20Balance = '';
-    this.erc20BalanceMin = '';
+    this.erc20Balance = 'loading';
+    this.erc20BalanceMin = 'loading';
     this.stores.user.snip20Address = '';
     this.stores.user.snip20Balance = '';
     this.stores.user.snip20BalanceMin = '';
@@ -195,6 +195,7 @@ export class UserStoreMetamask extends StoreConstructor {
       await getErc20Balance(this.ethAddress, erc20Address),
       this.erc20TokenDetails.decimals,
     );
+
     this.erc20BalanceMin = this.stores.tokens.allData.find(
       t => t.src_address === erc20Address,
     ).display_props.min_to_scrt;

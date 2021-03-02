@@ -341,7 +341,7 @@ export class UserStoreEx extends StoreConstructor {
     });
 
     if (!viewingKey) {
-      return 'Unlock';
+      return unlockToken;
     }
 
     const rawBalance = await Snip20GetBalance({
