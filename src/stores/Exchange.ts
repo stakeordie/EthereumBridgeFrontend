@@ -8,6 +8,7 @@ import * as contract from '../blockchain-bridge';
 import { balanceNumberFormat, divDecimals, mulDecimals, sleep, uuid } from '../utils';
 import { getNetworkFee } from '../blockchain-bridge/eth/helpers';
 import { Snip20SendToBridge, Snip20SwapHash } from '../blockchain-bridge';
+import { ConsoleView } from 'react-device-detect';
 
 export enum EXCHANGE_STEPS {
   BASE = 'BASE',
@@ -23,6 +24,7 @@ export interface IStepConfig {
   buttons: Array<{
     title: string;
     onClick: () => void;
+    disabled?: () => void;
     validate?: boolean;
     transparent?: boolean;
   }>;
@@ -64,6 +66,7 @@ export class Exchange extends StoreConstructor {
     oneAddress: '',
     status: SwapStatus.SWAP_WAIT_SEND,
     timestamp: 0,
+    confirmations: 0,
     token: undefined,
     type: undefined,
   };
@@ -274,10 +277,8 @@ export class Exchange extends StoreConstructor {
   }
 
   @action.bound
-  async createOperation(transactionHash?: string) {
-    let params = transactionHash ? { id: uuid(), transactionHash } : { id: uuid() };
-
-    const operation = await operationService.createOperation(params);
+  async createOperation(params?: any) {
+    const operation = await operationService.createOperation({ id: uuid(), ...params });
 
     operation.operation.status = SwapStatus[SwapStatus[operation.operation.status]];
 
@@ -286,12 +287,12 @@ export class Exchange extends StoreConstructor {
   }
 
   @action.bound
-  async updateOperation(id: string, transactionHash: string) {
-    const result = await operationService.updateOperation(id, transactionHash);
+  async updateOperation(id: string, params?: any) {
+    const result = await operationService.updateOperation(id, params);
 
     if (result.result === 'failed') {
       throw Error(
-        `Failed to update operation ${this.operation.id}, tx hash: ${transactionHash}. Please contact support with these details`,
+        `Failed to update operation ${this.operation.id}, tx hash: ${params.transactionHash}. Please contact support with these details`,
       );
     }
 

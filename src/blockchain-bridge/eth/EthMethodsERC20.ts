@@ -52,7 +52,6 @@ export class EthMethodsERC20 {
 
     const MyERC20Json = require('../out/MyERC20.json');
     const erc20Contract = new this.web3.eth.Contract(MyERC20Json.abi, erc20Address);
-
     amount = Number(mulDecimals(amount, decimals));
 
     const allowance = await this.getAllowance(erc20Address);

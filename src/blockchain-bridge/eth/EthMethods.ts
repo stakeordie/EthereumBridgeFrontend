@@ -17,7 +17,7 @@ export class EthMethods {
     this.ethManagerContract = params.ethManagerContract;
   }
 
-  swapEth = async (userAddr, amount, sendTxCallback?) => {
+  swapEth = async (userAddr, amount, callback?) => {
     // @ts-ignore
     const accounts = await ethereum.enable();
 
@@ -37,11 +37,11 @@ export class EthMethods {
       gas: new BN(gasLimit),
       gasPrice: await getGasPrice(this.web3),
     }).on('transactionHash', function (hash) {
-      sendTxCallback({ hash })
+      callback({ hash })
     }).then(function (receipt) {
-      sendTxCallback({ receipt })
+      callback({ receipt })
     }).catch(function (error) {
-      sendTxCallback({ error })
+      callback({ error })
     })
 
   };

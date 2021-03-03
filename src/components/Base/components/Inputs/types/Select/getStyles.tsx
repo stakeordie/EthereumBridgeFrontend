@@ -50,8 +50,8 @@ const defaultPreset: StylesConfig = {
     backgroundColor: state.isFocused
       ? state.theme.palette.Basic100
       : state.isSelected
-      ? state.theme.palette.Basic200
-      : 'transparent',
+        ? state.theme.palette.Basic200
+        : 'transparent',
     color: state.theme.textColor,
     padding: '16px',
     fontSize: '14px',
@@ -71,7 +71,7 @@ const defaultPreset: StylesConfig = {
     color: props.theme.styled.input.textColor,
     // padding: '3px',
     borderRadius: props.theme.styled.input.borderRadius || 0,
-    minHeight: props.theme.styled.input.minLength || 38,
+    minHeight: props.theme.styled.input.minLength || 46,
     borderColor: `${props.theme.palette.Basic200} !important`,
     boxShadow: 'none',
   }),
@@ -94,8 +94,8 @@ const filterPreset: StylesConfig = {
     backgroundColor: state.isFocused
       ? state.theme.palette.Basic100
       : state.isSelected
-      ? state.theme.palette.Basic200
-      : 'transparent',
+        ? state.theme.palette.Basic200
+        : 'transparent',
     color: state.theme.textColor,
     padding: '8px',
     fontSize: '13px',
