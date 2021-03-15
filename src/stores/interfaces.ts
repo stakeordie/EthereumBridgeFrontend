@@ -120,6 +120,11 @@ export interface IRewardPool {
   deadline: string;
 }
 
+export interface SushiPool {
+  entryUSD: number;
+  exitUSD: number;
+}
+
 export interface ISecretSwapPair {
   asset_infos: Array<Token | NativeToken>;
   contract_addr: string;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from 'grommet';
 import { BaseContainer, PageContainer } from 'components';
 import { observer } from 'mobx-react-lite';
@@ -12,9 +12,12 @@ import { rewardsDepositKey, rewardsKey } from '../../stores/UserStore';
 import { divDecimals, sleep } from '../../utils';
 import { InfoModalEarn } from '../../components/InfoModalEarn';
 import { Icon } from 'components/Base/components/Icons';
+import * as operationService from 'services';
+
 
 export const EarnRewards = observer((props: any) => {
   const { user, tokens, rewards } = useStores();
+  const [sushiAPY, setSushiAPY] = useState("")
 
   useEffect(() => {
     const refreshAllTokens = async () => {
@@ -34,6 +37,16 @@ export const EarnRewards = observer((props: any) => {
       pollingInterval: 20000,
     });
     rewards.fetch();
+
+
+    console.log('user.scrtRate', user.scrtRate)
+    operationService.getSushiPool("0x9c86BC3C72Ab97c2234CBA8c6c7069009465AE86").then((value) => {
+      const liquidity = value.entryUSD - value.exitUSD
+      const sushi = (10000 * user.scrtRate) / liquidity * 52
+      console.log(liquidity)
+      console.log(sushi)
+    });
+
   }, []);
 
   return (
