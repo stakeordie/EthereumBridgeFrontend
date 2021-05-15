@@ -1,8 +1,9 @@
-import { ExecuteResult, SigningCosmWasmClient } from 'secretjs';
+import { CosmWasmClient, ExecuteResult, SigningCosmWasmClient } from 'secretjs';
 import { getScrtProof } from 'services';
+import { AsyncSender } from './asyncSender';
 
 export const isClaimedSefiRewardsScrt = async (params: {
-  secretjs: SigningCosmWasmClient;
+  secretjs: CosmWasmClient;
   index: number;
 }): Promise<boolean> => {
   const { secretjs, index } = params;
@@ -19,10 +20,7 @@ export const isClaimedSefiRewardsScrt = async (params: {
   }
 };
 
-export const ClaimAirdrop = async (params: {
-  secretjs: SigningCosmWasmClient;
-  address: string;
-}): Promise<ExecuteResult> => {
+export const ClaimAirdrop = async (params: { secretjs: AsyncSender; address: string }): Promise<ExecuteResult> => {
   const { secretjs, address } = params;
   const proof = (await getScrtProof(address)).proof;
 
@@ -33,7 +31,7 @@ export const ClaimAirdrop = async (params: {
     proof: proof.proof.map(p => p.substring(2)), // map to remove the '0x's
   };
 
-  let result = await secretjs.execute(process.env.SCRT_DIST_TOKEN_ADDRESS, {
+  let result = await secretjs.asyncExecute(process.env.SCRT_DIST_TOKEN_ADDRESS, {
     claim: execMsg,
   });
 

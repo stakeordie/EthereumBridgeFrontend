@@ -8,8 +8,9 @@ import * as styles from '../EthBridge/styles.styl';
 // import { IColumn, Table } from '../../components/Table';
 // import { ERC20Select } from '../Exchange/ERC20Select';
 import EarnRow from '../../components/Earn/EarnRow';
+import { calculateAPY } from '../../components/Earn/EarnRow';
 import { rewardsDepositKey, rewardsKey } from '../../stores/UserStore';
-import { divDecimals, sleep } from '../../utils';
+import { divDecimals, sleep, zeroDecimalsFormatter } from '../../utils';
 import { InfoModalEarn } from '../../components/InfoModalEarn';
 import { Icon } from 'components/Base/components/Icons';
 import cogoToast from 'cogo-toast';
@@ -47,16 +48,16 @@ export const EarnRewards = observer((props: any) => {
       }
       setFilteredTokens(await tokens.tokensUsage('REWARDS'));
     };
-    asyncWrapper().then(() => {});
+    asyncWrapper().then(() => { });
   }, [tokens, tokens.data]);
 
   useEffect(() => {
-    const refreshAllTokens = async () => {
-      while (!user.secretjs || tokens.isPending) {
-        await sleep(100);
-      }
-      await Promise.all([...filteredTokens.map(token => user.updateBalanceForSymbol(token.display_props.symbol))]);
-    };
+    // const refreshAllTokens = async () => {
+    //   while (!user.secretjs || tokens.isPending) {
+    //     await sleep(100);
+    //   }
+    //   await Promise.all([...filteredTokens.map(token => user.updateBalanceForSymbol(token.display_props.symbol))]);
+    // };
     const resolveSushiAPY = async () => {
       while (!user.secretjs || !user.scrtRate) {
         await sleep(100);
@@ -65,16 +66,16 @@ export const EarnRewards = observer((props: any) => {
       try {
         const sushipool = await services.getSushiPool('0x9c86bc3c72ab97c2234cba8c6c7069009465ae86');
         const liquidity = sushipool.entryUSD - sushipool.exitUSD;
-        const apy = ((10000 * user.scrtRate) / liquidity) * 52;
+        const apy = ((3000 * user.scrtRate) / liquidity) * 52;
         setSushiAPY(Number((apy * 100).toFixed(2)));
       } catch (error) {
         setSushiAPY(0);
       }
     };
 
-    resolveSushiAPY().then(() => {});
-    refreshAllTokens().then(() => {});
-  }, [user, filteredTokens]);
+    resolveSushiAPY().then(() => { });
+    //refreshAllTokens().then(() => {});
+  }, [filteredTokens]);
 
   useEffect(() => {
     rewards.init({
@@ -129,7 +130,7 @@ export const EarnRewards = observer((props: any) => {
             locked in the rewards contract and your rewards. If you can't see these figures please refresh your browser.
           </p>
         </div>
-        <div
+        {/* <div
           style={{
             display: 'flex',
             minWidth: '550px',
@@ -171,19 +172,11 @@ export const EarnRewards = observer((props: any) => {
             </a>
             . 🍣
           </p>
-        </div>
+        </div> */}
         <Box direction="row" wrap={true} fill={true} justify="center" align="start">
           <Box direction="column" align="center" justify="center" className={styles.base}>
             {rewards.allData
               .slice()
-              .sort((a, b) => {
-                /* ETH first */
-                if (a.inc_token.symbol === 'sETH') {
-                  return -1;
-                }
-
-                return 0;
-              })
               .map(rewardToken => {
                 if (Number(rewardToken.deadline) < 2_000_000) {
                   return null;
@@ -193,7 +186,7 @@ export const EarnRewards = observer((props: any) => {
                   return null;
                 }
 
-                const rewardsToken = {
+                return {
                   rewardsContract: rewardToken.pool_address,
                   lockedAsset: rewardToken.inc_token.symbol,
                   lockedAssetAddress: token.dst_address,
@@ -213,13 +206,22 @@ export const EarnRewards = observer((props: any) => {
                   remainingLockedRewards: rewardToken.pending_rewards,
                   deadline: Number(rewardToken.deadline),
                 };
+              }).filter(function (el) {
+                return el != null;
+              })
+              .sort((a, b) => {
+                const rewards_a = zeroDecimalsFormatter.format(Number(calculateAPY(a, Number(a.rewardsPrice), Number(a.price))));
+                const rewards_b = zeroDecimalsFormatter.format(Number(calculateAPY(b, Number(b.rewardsPrice), Number(b.price))));
+                return Number(rewards_b) - Number(rewards_a);
+              })
+              .map(rewardToken => {
 
                 return (
                   <EarnRow
                     notify={notify}
-                    key={rewardToken.inc_token.symbol}
+                    key={rewardToken.lockedAsset}
                     userStore={user}
-                    token={rewardsToken}
+                    token={rewardToken}
                     callToAction="Earn sSCRT"
                   />
                 );

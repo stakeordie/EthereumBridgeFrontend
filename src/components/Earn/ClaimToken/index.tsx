@@ -16,7 +16,7 @@ export const ClaimTokenScrt = observer(() => {
       text={'Claim SeFi SCRT'}
       onClick={async () => {
         try {
-          await claimScrt(user.secretjs, user.address);
+          await claimScrt(user.secretjsSend, user.address);
           console.log('success in claim');
         } catch (e) {
           console.error('failed to claim');

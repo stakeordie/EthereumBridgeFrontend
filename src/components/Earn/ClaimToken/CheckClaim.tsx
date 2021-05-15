@@ -7,7 +7,7 @@ import { Button, Modal } from 'semantic-ui-react';
 import { ExitIcon } from '../../../ui/Icons/ExitIcon';
 import { IsValid } from '../../../pages/Swap/TokenSelector/IsValid';
 import { divDecimals, sleep } from '../../../utils';
-import { SigningCosmWasmClient } from 'secretjs';
+import { CosmWasmClient, SigningCosmWasmClient } from 'secretjs';
 import Loader from 'react-loader-spinner';
 import * as styles from './styles.styl';
 import { FlexRowSpace } from '../../Swap/FlexRowSpace';
@@ -15,6 +15,7 @@ import { Text } from 'components/Base';
 import { CopyWithFeedback } from 'components/Swap/CopyWithFeedback';
 import { Spinner2 } from '../../../ui/Spinner2';
 import { useStores } from 'stores';
+import BigNumber from 'bignumber.js';
 
 export const CheckClaim = (props: { isEth?: boolean; onClick?: any; loading?: boolean; title?: string }) => {
   // const { user } = useStores();
@@ -30,7 +31,7 @@ export const CheckClaim = (props: { isEth?: boolean; onClick?: any; loading?: bo
 };
 
 export const CheckClaimModal = (props: {
-  secretjs?: SigningCosmWasmClient;
+  secretjs?: CosmWasmClient;
   address: string;
   loadingBalance?: boolean;
   isEth?: boolean;
@@ -140,7 +141,7 @@ export const CheckClaimModal = (props: {
             }
           }}
           positive
-          disabled={claimInfo === undefined || claimInfo.isClaimed}
+          disabled={claimInfo === undefined || claimInfo.isClaimed || claimInfo.amount.isZero()}
         />
       </Modal.Actions>
     </Modal>
@@ -150,6 +151,13 @@ export const CheckClaimModal = (props: {
 export const ClaimBoxInfo = (props: { address: string; amount?: string; isClaimed?: boolean; onClick?: any }) => {
   if (!props.address) {
     return <div style={{ display: 'flex', justifyContent: 'center' }}>Please connect wallet.</div>;
+  }
+
+  const amountAsNumber = new BigNumber(props.amount);
+
+  const sefiAmount = divDecimals(props.amount, 6);
+  if (sefiAmount === 'NaN') {
+    console.error('Error getting genesis SEFI amount, got', props.amount);
   }
 
   return (
@@ -165,7 +173,8 @@ export const ClaimBoxInfo = (props: { address: string; amount?: string; isClaime
         </div>
         <div className={cn(styles.tokenInfoItemsRight)}>
           <h3>
-            {divDecimals(props.amount, 6)} {'SEFI'}
+            {sefiAmount !== 'NaN' ? sefiAmount : <Loader type="ThreeDots" color="#00BFFF" height="1em" width="1em" />}{' '}
+            {'SEFI'}
           </h3>
         </div>
       </div>
@@ -174,7 +183,8 @@ export const ClaimBoxInfo = (props: { address: string; amount?: string; isClaime
           <h3>Available for claim?</h3>
         </div>
         <div className={cn(styles.tokenInfoItemsRight)}>
-          <IsValid isValid={!props.isClaimed} /> {props.isClaimed && 'Already claimed'}
+          <IsValid isValid={!props.isClaimed && !amountAsNumber.isZero()} /> {props.isClaimed && 'Already claimed'}{' '}
+          {amountAsNumber.isZero() && 'No claim found for this address'}
         </div>
       </div>
     </div>

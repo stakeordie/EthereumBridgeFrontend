@@ -3,6 +3,7 @@ import {
   IOperation,
   IRewardPool,
   ISecretSwapPair,
+  ISecretSwapPool,
   ISecretToken,
   ISignerHealth,
   ISwap,
@@ -88,10 +89,23 @@ export const getTokensInfo = async (params: any): Promise<{ content: ITokenInfo[
   let content = tokens.body.tokens
     .filter(t => (process.env.TEST_COINS ? t : !t.display_props.hidden))
     .map(t => {
+      // todo: fix this up - proxy token
       if (t.display_props.proxy) {
-        t.display_props.proxy_address = t.dst_address;
-        t.dst_address = process.env.SSCRT_CONTRACT;
-        t.display_props.proxy_symbol = 'WSCRT';
+        switch (t.display_props.symbol.toLowerCase()) {
+          case 'sscrt':
+            t.display_props.proxy_address = t.dst_address;
+            t.dst_address = process.env.SSCRT_CONTRACT;
+            t.display_props.proxy_symbol = 'WSCRT';
+            break;
+          case 'sienna':
+            t.display_props.proxy_address = t.dst_address;
+            t.dst_address = process.env.SIENNA_CONTRACT;
+            t.display_props.proxy_symbol = 'WSIENNA';
+            break;
+          default:
+            throw new Error('Unsupported proxy token');
+        }
+
         //t.display_props.symbol = t.name;
       }
 
@@ -119,6 +133,16 @@ export const getSecretSwapPairs = async (params: any): Promise<{ content: ISecre
   const res = await agent.get<{ body: ISecretSwapPair[] }>(url, params);
 
   const content = res.body.pairs;
+
+  return { content: content };
+};
+
+export const getSecretSwapPools = async (params: any): Promise<{ content: ISecretSwapPool[] }> => {
+  const url = backendUrl('/secretswap_pools/');
+
+  const res = await agent.get<{ body: ISecretSwapPool[] }>(url, params);
+
+  const content = res.body.pools;
 
   return { content: content };
 };

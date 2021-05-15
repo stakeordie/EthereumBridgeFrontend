@@ -33,10 +33,7 @@ const ScrtTokenBalance = (props: {
   onUnlock?: Function;
 }) => {
   const { user } = useStores();
-  const [value, setValue] = useState<string>(props.value);
-  useEffect(() => {
-    setValue(props.value);
-  }, [props.value]);
+  const { value } = props;
 
   const text = props.subtitle ? props.subtitle : 'Available Balance';
 

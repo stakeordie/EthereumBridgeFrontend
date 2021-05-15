@@ -48,6 +48,7 @@ export interface IAction {
 }
 
 export interface IOperation {
+  transactionHash: string;
   id: string;
   type: EXCHANGE_MODE;
   token: TOKEN;
@@ -59,6 +60,9 @@ export interface IOperation {
   actions: Array<IAction>;
   timestamp: number;
   erc20Address?: string;
+  swap?: ISwap;
+  symbol?: string;
+  image?: string;
 }
 
 export interface ISwap {
@@ -166,6 +170,7 @@ export interface IRewardPool {
   total_locked: string;
   pending_rewards: string;
   deadline: string;
+  hidden?: boolean;
 }
 
 export interface ISecretSwapPair {
@@ -179,6 +184,30 @@ export interface ISecretSwapPair {
     address: string;
     code_hash: string;
   };
+}
+
+export interface TokenPool {
+  info: {
+    token: {
+      contract_addr: string;
+      token_code_hash: string;
+      viewing_key: string;
+    };
+  };
+  amount: string;
+}
+
+export interface NativeTokenPool {
+  info: {
+    native_token: {
+      denom: string;
+    };
+  };
+  amount: string;
+}
+export interface ISecretSwapPool {
+  assets: Array<TokenPool | NativeTokenPool>;
+  total_share: string;
 }
 
 export interface ISignerHealth {

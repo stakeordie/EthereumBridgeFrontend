@@ -2,6 +2,7 @@ import { SigningCosmWasmClient } from 'secretjs';
 import { ClaimAirdrop, ethMethodsSefi, isClaimedSefiRewardsScrt } from '../../../blockchain-bridge';
 import BigNumber from 'bignumber.js';
 import * as services from 'services';
+import { AsyncSender } from '../../../blockchain-bridge/scrt/asyncSender';
 
 export interface ClaimInfoResponse {
   address: string;
@@ -9,8 +10,7 @@ export interface ClaimInfoResponse {
   isClaimed: boolean;
 }
 
-export const claimScrt = async (secretjs: SigningCosmWasmClient, address: string) => {
-
+export const claimScrt = async (secretjs: AsyncSender, address: string) => {
   const result = await ClaimAirdrop({ secretjs, address });
 
   return result;

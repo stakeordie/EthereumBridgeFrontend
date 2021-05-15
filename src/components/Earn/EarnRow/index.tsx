@@ -11,9 +11,35 @@ import { UserStoreEx } from '../../../stores/UserStore';
 import { observer } from 'mobx-react';
 import WithdrawButton from './WithdrawButton';
 import { divDecimals, formatWithTwoDecimals, zeroDecimalsFormatter } from '../../../utils';
-import { Text } from '../../Base/components/Text';
+import { Text } from '../../Base';
 import ScrtTokenBalance from '../ScrtTokenBalance';
 
+
+export const calculateAPY = (token: RewardsToken, price: number, priceUnderlying: number) => {
+  // console.log(Math.round(Date.now() / 1000000))
+  // deadline - current time, 6 seconds per block
+  const timeRemaining = (token.deadline - 3377310) * 6.22 + 1620719241 - Math.round(Date.now() / 1000);
+
+  // (token.deadline - Math.round(Date.now() / 1000000) );
+  const pending = Number(divDecimals(token.remainingLockedRewards, token.rewardsDecimals)) * price;
+
+  // this is already normalized
+  const locked = Number(token.totalLockedRewards);
+
+  //console.log(`pending - ${pending}; locked: ${locked}, time remaining: ${timeRemaining}`)
+  return (((pending * 100) / locked) * (3.154e7 / timeRemaining)).toFixed(0);
+};
+
+export const apyString = (token: RewardsToken) => {
+  const apy = Number(calculateAPY(token, Number(token.rewardsPrice), Number(token.price)));
+  if (isNaN(apy) || 0 > apy) {
+    return `0%`;
+  }
+
+  const apyStr = zeroDecimalsFormatter.format(Number(apy));
+
+  return `${apyStr}%`;
+};
 interface RewardsToken {
   name: string;
   decimals: string;
@@ -36,52 +62,21 @@ interface RewardsToken {
   deadline: number;
   rewardsSymbol?: string;
 }
-
-const calculateAPY = (token: RewardsToken, price: number, priceUnderlying: number) => {
-  // console.log(Math.round(Date.now() / 1000000))
-  // deadline - current time, 6 seconds per block
-  const timeRemaining = (token.deadline - 2424433) * 6.22 + 1614681910 - Math.round(Date.now() / 1000);
-
-  // (token.deadline - Math.round(Date.now() / 1000000) );
-  const pending = Number(divDecimals(token.remainingLockedRewards, token.rewardsDecimals)) * price;
-
-  // this is already normalized
-  const locked = Number(token.totalLockedRewards);
-
-  //console.log(`pending - ${pending}; locked: ${locked}, time remaining: ${timeRemaining}`)
-  return (((pending * 100) / locked) * (3.154e7 / timeRemaining)).toFixed(0);
-};
-
-const apyString = (token: RewardsToken) => {
-  const apy = Number(calculateAPY(token, Number(token.rewardsPrice), Number(token.price)));
-  if (isNaN(apy) || 0 > apy) {
-    return `0%`;
-  }
-
-  const apyStr = zeroDecimalsFormatter.format(Number(apy));
-
-  if (token.deposit && Number(token.deposit) > 0) {
-    return `${apyStr}% on ${token.deposit} ${token.lockedAsset}`;
-  } else {
-    return `${apyStr}%`;
-  }
-};
-
 @observer
 class EarnRow extends Component<
-  {
-    userStore: UserStoreEx;
-    token: RewardsToken;
-    notify: Function;
-    callToAction: string;
-  },
-  {
-    activeIndex: Number;
-    depositValue: string;
-    withdrawValue: string;
-    claimButtonPulse: boolean;
-    pulseInterval: number;
-  }
+{
+  userStore: UserStoreEx;
+  token: RewardsToken;
+  notify: Function;
+  callToAction: string;
+},
+{
+  activeIndex: Number;
+  depositValue: string;
+  withdrawValue: string;
+  claimButtonPulse: boolean;
+  pulseInterval: number;
+}
 > {
   state = {
     activeIndex: -1,
@@ -103,9 +98,11 @@ class EarnRow extends Component<
     const { index } = titleProps;
     const { activeIndex } = this.state;
     const newIndex = activeIndex === index ? -1 : index;
-
+    if (activeIndex === -1) {
+      this.props.userStore.updateBalanceForSymbol(this.props.token.display_props.symbol);
+      this.props.userStore.refreshRewardsBalances(this.props.token.display_props.symbol);
+    }
     this.setState({ activeIndex: newIndex });
-    this.props.userStore.refreshRewardsBalances(this.props.token.display_props.symbol);
   };
 
   togglePulse = () =>
@@ -139,7 +136,9 @@ class EarnRow extends Component<
           </div>
           <div className={cn(styles.assetName)}>
             <SoftTitleValue
-              title={this.props.token.display_props.label === "SEFI" ? "SEFI STAKING" : this.props.token.display_props.label}
+              title={
+                this.props.token.display_props.label === 'SEFI' ? 'SEFI STAKING' : this.props.token.display_props.label
+              }
               subTitle={this.props.token.display_props.symbol}
             />
           </div>
@@ -180,7 +179,11 @@ class EarnRow extends Component<
               unlockSubtitle={'Available to Deposit'}
               onUnlock={value => {
                 if (value) {
-                  this.props.notify('success', `Created a viewing key for s${this.props.token.display_props.symbol}`);
+                  this.props.notify(
+                    'success',
+                    `Created a viewing key for ${this.props.token.display_props.symbol !== 'SEFI' ? 's' : ''}${this.props.token.display_props.symbol
+                    }`,
+                  );
                 } else {
                   this.props.notify(
                     'error',
@@ -205,7 +208,8 @@ class EarnRow extends Component<
                 if (value) {
                   this.props.notify(
                     'success',
-                    `Created a viewing key for s${this.props.token.display_props.symbol} rewards`,
+                    `Created a viewing key for ${this.props.token.display_props.symbol !== 'SEFI' ? 's' : ''}${this.props.token.display_props.symbol
+                    } rewards`,
                   );
                 } else {
                   this.props.notify(
@@ -243,6 +247,7 @@ class EarnRow extends Component<
                     onChange={this.handleChangeDeposit}
                     balance={this.props.token.balance}
                     currency={this.props.token.lockedAsset}
+                    price={this.props.token.price}
                     balanceText="Available"
                     unlockPopupText='In order to view your available assets, click on "View Balance" above'
                   />
@@ -269,6 +274,7 @@ class EarnRow extends Component<
                     } //({props: this.props, value: this.state.withdrawValue})}
                     balance={this.props.token.deposit}
                     currency={this.props.token.lockedAsset}
+                    price={this.props.token.price}
                     balanceText="Locked"
                     unlockPopupText='In order to view your locked assets, click on "View Balance" below'
                   />
@@ -283,6 +289,7 @@ class EarnRow extends Component<
             rewardsContract={this.props.token.rewardsContract}
             symbol={this.props.token.display_props.symbol}
             notify={this.props.notify}
+            rewardsToken={this.props.token.rewardsSymbol || 'sSCRT'}
           />
           <Text
             size="medium"
