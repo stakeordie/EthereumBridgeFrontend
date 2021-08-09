@@ -1,5 +1,5 @@
 import React, { useState, createContext } from "react";
-import { IConfigs } from "../api/getConfigs";
+import { IConfigs } from "../../pages/SecretLottery/api/getConfigs";
 
 export const ConfigsContext = createContext<IConfigs | null>(null);
 export const ConfigsDispatchContext = createContext<Function>(() => null);

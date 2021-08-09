@@ -21,7 +21,8 @@ const Header = observer(({forceUpdate}:{forceUpdate:any}) =>{
     const isEarn = history.location.pathname === '/earn';
     const isCashback = history.location.pathname === '/cashback';
     const isGovernance = governancePaths.map((string) => (history.location.pathname.match(string)) ? true : false).includes(true);
-    const isApplications = history.location.pathname === '/secret-lottery';
+    // const isApplications = history.location.pathname === '/secret-lottery';
+    const isApplications = history.location.pathname === '/lottery';
     
 
     const handleSignIn = async()=>{
@@ -66,7 +67,8 @@ const Header = observer(({forceUpdate}:{forceUpdate:any}) =>{
                             <li><span>|</span></li>
                             <li className={(isGovernance)  ? 'active hide_mobile':'hide_mobile'}><Link  to="/governance">Governance</Link></li> 
                             <li><span>|</span></li>
-                            <li className={(isApplications) ? 'active hide_mobile' : 'hide_mobile'}><Link to="/secret-lottery">Applications</Link></li>
+                            {/* <li className={(isApplications) ? 'active hide_mobile' : 'hide_mobile'}><Link to="/secret-lottery">Applications</Link></li> */}
+                            <li className={(isApplications) ? 'active hide_mobile' : 'hide_mobile'}><Link to="/lottery">Applications</Link></li>
                         </ul>
                     </div>
                     

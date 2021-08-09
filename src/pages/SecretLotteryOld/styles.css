@@ -1,0 +1,156 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tiers-container {
+  width: 100%;
+  text-align: -webkit-center;
+}
+
+.tier-row {
+  width: 95%;
+  justify-content: center;
+  margin: 10px;
+}
+
+.pots-row {
+  border-radius: 18px;
+  border: 1px solid #424242;
+  box-shadow: inset 0 0 1px 0 #424242, 0 0 1px 0 #424242;
+  padding: 10px;
+  margin: 10px;
+}
+
+.round-container {
+  color: white;
+  width: 90%;
+  max-width: 400px;
+  margin: 10px;
+  border-radius: 18px;
+  border: 1px solid white;
+  padding: 20px;
+}
+
+.btn-custom-white {
+  color: #333;
+  background-color: #fff;
+  border: 0;
+}
+
+.btn-custom-white:focus {
+  color: #333;
+  background-color: #fff;
+  border: 0;
+}
+
+.btn-custom-white:not(:disabled):not(.disabled):active,
+.btn-custom-white:not(:disabled):not(.disabled).active,
+.show > .btn-custom-white.dropdown-toggle {
+  color: #fff;
+  background-color: rgb(24, 175, 222);
+  border: 0;
+}
+
+.btn-custom-white:hover {
+  color: #fff;
+  background-color: rgb(0, 142, 214);
+}
+
+.btn-custom-white:active {
+  color: #fff;
+  background-color: rgb(24, 175, 222);
+}
+
+#dropdownMenu::after{
+  display: none; 
+}
+
+.nav-item .dropdown-menu {
+  background: #424242;
+}
+
+.nav-item .dropdown-item {
+  color: #ffffff;
+}
+
+.nav-item .dropdown-item:hover {
+  background: rgb(91, 192, 222);
+}
+
+.tooltip-inner {
+  max-width: none; 
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.dropdown-toggle::after {
+  display: none;
+}
+
+.dimmer {
+  background: rgba(252,249,243,0.7) !important
+}
+
+.modal-header {
+  background: rgb(14, 14, 16);
+  color: white
+}
+
+.modal-body {
+  background: rgb(14, 14, 16);
+  color: white
+}
+
+.close{
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .85;
+}
