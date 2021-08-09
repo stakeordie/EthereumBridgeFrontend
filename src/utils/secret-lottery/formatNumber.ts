@@ -1,0 +1,1 @@
+export default (number: number) => Math.round(number * 1000000) / 1000000
