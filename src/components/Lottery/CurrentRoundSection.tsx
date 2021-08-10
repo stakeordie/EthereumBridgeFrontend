@@ -85,7 +85,7 @@ export default ({
 
     const getSEFIBalance = async () => {
         if (!client) return null
-        const response = await getBalance(client, constants.SEFI_CONTRACT_ADDRESS)
+        const response = await getBalance(client, process.env.SCRT_GOV_TOKEN_ADDRESS)
         const accountData = await client.execute.getAccount(client.accountData.address);
         balancesDispatch({
             native: parseInt(accountData ? accountData.balance[0].amount : "0"),
@@ -242,7 +242,7 @@ export default ({
 
                                             await buyTickets(
                                                 client,
-                                                constants.SEFI_CONTRACT_ADDRESS,
+                                                process.env.SCRT_GOV_TOKEN_ADDRESS,
                                                 constants.SECRET_LOTTERY_CONTRACT_ADDRESS,
                                                 tickets,
                                                 ticketPrice

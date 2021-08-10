@@ -43,7 +43,7 @@ export default ({
 
     const getSEFIBalance = async () => {
         if (!client) return null
-        const response = await getBalance(client, constants.SEFI_CONTRACT_ADDRESS)
+        const response = await getBalance(client, process.env.SCRT_GOV_TOKEN_ADDRESS);
         const accountData = await client.execute.getAccount(client.accountData.address);
         balancesDispatch({
             native: parseInt(accountData ? accountData.balance[0].amount : "0"),
@@ -127,7 +127,7 @@ export default ({
                                         menu !== "SEFI" ? null : balances.SEFI ? formatNumber(balances.SEFI / 1000000) + " SEFI" :
                                             <span><i style={{ color: "red", marginRight: "5px" }} className="fas fa-key" onClick={async () => {
                                                 try {
-                                                    await window.keplr.suggestToken(process.env.CHAIN_ID, constants.SEFI_CONTRACT_ADDRESS);
+                                                    await window.keplr.suggestToken(process.env.CHAIN_ID, process.env.SCRT_GOV_TOKEN_ADDRESSS);
                                                     const sleep = (ms: number) => new Promise((accept) => setTimeout(accept, ms));
                                                     await sleep(1000);
                                                     getSEFIBalance()
