@@ -158,7 +158,7 @@ export default ({
                                             onClick={async () => {
                                                 try {
                                                     setLoadingConvertTestnetSSCRT(true)
-                                                    await convertTosSCRT(client, constants.SSCRT_CONTRACT_ADDRESS)
+                                                    await convertTosSCRT(client, process.env.SSCRT_CONTRACT)
                                                     setLoadingConvertTestnetSSCRT(false)
                                                 } catch (e) {
                                                     setLoadingConvertTestnetSSCRT(false)
