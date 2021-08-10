@@ -127,7 +127,7 @@ export default ({
                                         menu !== "SEFI" ? null : balances.SEFI ? formatNumber(balances.SEFI / 1000000) + " SEFI" :
                                             <span><i style={{ color: "red", marginRight: "5px" }} className="fas fa-key" onClick={async () => {
                                                 try {
-                                                    await window.keplr.suggestToken(constants.CHAIN_ID, constants.SEFI_CONTRACT_ADDRESS);
+                                                    await window.keplr.suggestToken(process.env.CHAIN_ID, constants.SEFI_CONTRACT_ADDRESS);
                                                     const sleep = (ms: number) => new Promise((accept) => setTimeout(accept, ms));
                                                     await sleep(1000);
                                                     getSEFIBalance()

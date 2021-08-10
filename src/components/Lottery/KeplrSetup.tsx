@@ -43,7 +43,7 @@ const setupKeplr = async (setClient: any) => {
     //     4. chainName = Whatever you like
     // For more examples, go to: https://github.com/chainapsis/keplr-example/blob/master/src/main.js
     await window.keplr.experimentalSuggestChain({
-      chainId: constants.CHAIN_ID, 
+      chainId: process.env.CHAIN_ID,
       chainName: "Local Secret Chain",
       rpc: "https://bootstrap.secrettestnet.io:26667" || "https://chainofsecrets.secrettestnet.io:26667",
       rest: "https://bootstrap.secrettestnet.io" || "https://chainofsecrets.secrettestnet.io",
@@ -88,18 +88,18 @@ const setupKeplr = async (setClient: any) => {
   
     // Enable Keplr.
     // This pops-up a window for the user to allow keplr access to the webpage.
-    await window.keplr.enable(constants.CHAIN_ID);
+    await window.keplr.enable(process.env.CHAIN_ID);
   
     // Setup SecrtJS with Keplr's OfflineSigner
     // This pops-up a window for the user to sign on each tx we sent
-    const keplrOfflineSigner = window.getOfflineSigner(constants.CHAIN_ID);
+    const keplrOfflineSigner = window.getOfflineSigner(process.env.CHAIN_ID);
     const accounts = await keplrOfflineSigner.getAccounts();
 
     const execute = await new SigningCosmWasmClient(
       "https://bootstrap.secrettestnet.io" || "https://chainofsecrets.secrettestnet.io", // holodeck - https://bootstrap.secrettestnet.io; mainnet - user your LCD/REST provider
       accounts[0].address,
-      window.getOfflineSigner(constants.CHAIN_ID),
-      window.getEnigmaUtils(constants.CHAIN_ID),
+      window.getOfflineSigner(process.env.CHAIN_ID),
+      window.getEnigmaUtils(process.env.CHAIN_ID),
       {
         // 300k - Max gas units we're willing to use for init
         init: {
