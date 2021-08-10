@@ -38,7 +38,7 @@ const Lottery = () => {
     })
 
     const getPaginatedUserTicketsTrigger = async (client: IClientState, viewkey: string, page: number, page_size: number) => {
-        const paginatedUserTickets = await getPaginatedUserRounds(client, constants.SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, page - 1, page_size)
+        const paginatedUserTickets = await getPaginatedUserRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, page - 1, page_size)
         setPaginatedUserRounds(paginatedUserTickets);
     }
 

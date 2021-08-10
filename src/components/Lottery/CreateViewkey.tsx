@@ -26,7 +26,7 @@ export default ({
                         onClick={async() => {
                             setCreateViewKeyLoading(true)
                             try {
-                                let contract = constants.SECRET_LOTTERY_CONTRACT_ADDRESS;
+                                let contract = process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS;
                                 const response = await createViewKey(client, contract)
                                 successNotification("View Key Created!")
                                 console.log(response)

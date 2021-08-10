@@ -156,7 +156,7 @@ export default ({
                                         }
                                         onClick={async () => {
                                             if (!client) return
-                                            const response = await getRounds(client, constants.SECRET_LOTTERY_CONTRACT_ADDRESS, [parseInt(searchState)])
+                                            const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [parseInt(searchState)])
                                             setRoundViewer(response.rounds[0]);
                                         }}
                                         className="btn btn-info"><i className="fas fa-search"></i></button>

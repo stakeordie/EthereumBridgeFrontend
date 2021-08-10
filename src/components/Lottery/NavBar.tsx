@@ -190,7 +190,7 @@ export default ({
                                         <button className="btn btn-warning" style={{ fontSize: ".75rem" }}
                                             onClick={async () => {
                                                 try {
-                                                    await triggerTestnet(client, constants.SECRET_LOTTERY_CONTRACT_ADDRESS)
+                                                    await triggerTestnet(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS)
                                                     successNotification("Trigger")
                                                     window.location.reload();
                                                 } catch (e) {

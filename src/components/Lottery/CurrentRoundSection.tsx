@@ -64,13 +64,13 @@ export default ({
     }, [configs])
 
     const getConfigsTrigger = async (client: IClientState) => {
-        const configs = await getConfigs(client, constants.SECRET_LOTTERY_CONTRACT_ADDRESS)
+        const configs = await getConfigs(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS)
         configsDispatch(configs)
     }
 
     const getCurrentRoundTrigger = async (client: IClientState, viewkey: string, current_round: number) => {
-        const currentRoundPromise = getRounds(client, constants.SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
-        const currentRoundUserTicketsCountPromise = getUserRoundsTicketCount(client, constants.SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
+        const currentRoundPromise = getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
+        const currentRoundUserTicketsCountPromise = getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
 
         const [currentRound, currentRoundUserTicketsCount] = await Promise.all([currentRoundPromise, currentRoundUserTicketsCountPromise]);
 
@@ -243,7 +243,7 @@ export default ({
                                             await buyTickets(
                                                 client,
                                                 process.env.SCRT_GOV_TOKEN_ADDRESS,
-                                                constants.SECRET_LOTTERY_CONTRACT_ADDRESS,
+                                                process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS,
                                                 tickets,
                                                 ticketPrice
                                             )

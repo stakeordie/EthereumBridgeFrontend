@@ -9,7 +9,7 @@ export default async (
     try {
         let queryMsg = { 
             rewards: { 
-                address: constants.SECRET_LOTTERY_CONTRACT_ADDRESS, 
+                address: process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS,
                 key: stakingVK, 
                 height: (await client.execute.getBlock()).header.height 
             } 

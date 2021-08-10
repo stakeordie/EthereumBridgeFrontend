@@ -41,7 +41,7 @@ export default ({
         const requestsNumber = Math.ceil(userTicketsCount / ticketPageSize);
         let allTickets: IUserTicket[] = [];
         for (var i = 0; i < requestsNumber; i++) {
-            const response = await getUserRoundPaginatedTickets(client, constants.SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, round.round_number, i, ticketPageSize)
+            const response = await getUserRoundPaginatedTickets(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, round.round_number, i, ticketPageSize)
             allTickets = allTickets.concat(response.user_round_paginated_tickets)
         }
         setUserRoundTickets(allTickets)
@@ -157,7 +157,7 @@ export default ({
 
             await claimRewards(
                 client,
-                constants.SECRET_LOTTERY_CONTRACT_ADDRESS,
+                process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS,
                 round.round_number,
                 ticketIndexes
             );
