@@ -42,6 +42,12 @@ const Lottery = () => {
         setPaginatedUserRounds(paginatedUserTickets);
     }
 
+    console.log('Chain ID: ',process.env.CHAIN_ID);
+    console.log('SEFI Contract', process.env.SCRT_GOV_TOKEN_ADDRESS);
+    console.log('Contract Address',process.env.SSCRT_CONTRACT);
+    // console.log(process.env.SECRET_LOTTERY_CONTRACT_ADDRESS);
+    console.log('New Lottery', process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS);
+
     return (
         <div className="App">
             
