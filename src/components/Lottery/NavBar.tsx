@@ -1,7 +1,6 @@
 import { Dispatch, useContext, useEffect, useState } from "react"
 import { ClientContext, IClientState } from "../../stores/lottery-context/ClientContext";
 import { SigningCosmWasmClient } from 'secretjs';
-import constants from "../../constants";
 import getBalance from "../../pages/SecretLottery/api/getBalance";
 import React from "react";
 import { ViewKeyContext, ViewKeyDispatchContext } from "../../stores/lottery-context/ViewKeyContext";

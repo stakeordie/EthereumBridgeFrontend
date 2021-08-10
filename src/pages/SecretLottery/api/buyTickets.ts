@@ -1,5 +1,4 @@
 import { TxsResponse } from "secretjs";
-import constants from "../../../constants";
 import { IClientState } from "../../../stores/lottery-context/ClientContext";
 import entropy from "../../../utils/secret-lottery/entropy";
 const { fromUtf8 } = require("@iov/encoding");

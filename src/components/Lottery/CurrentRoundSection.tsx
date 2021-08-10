@@ -8,7 +8,6 @@ import getConfigs, { IConfigs } from "../../pages/SecretLottery/api/getConfigs";
 import getRounds, { IRound } from "../../pages/SecretLottery/api/getRounds";
 import getRoundStakingRewards, { IStakingRewads } from "../../pages/SecretLottery/api/getRoundStakingRewards";
 import getUserRoundsTicketCount from "../../pages/SecretLottery/api/getUserRoundsTicketCount";
-import constants from "../../constants";
 
 import { BalancesDispatchContext } from "../../stores/lottery-context/BalancesContext";
 import { ClientContext, IClientState } from "../../stores/lottery-context/ClientContext";

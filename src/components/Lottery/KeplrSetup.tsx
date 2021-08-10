@@ -1,6 +1,5 @@
 import { Dispatch, useContext, useEffect } from "react";
 import { BroadcastMode, SigningCosmWasmClient } from "secretjs";
-import constants from "../../constants";
 import { ClientDispatchContext } from "../../stores/lottery-context/ClientContext"
 
 export default () => {

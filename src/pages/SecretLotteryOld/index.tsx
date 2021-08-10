@@ -20,7 +20,6 @@ import CurrentRoundSection from '../../components/Lottery/CurrentRoundSection';
 import { Col, Container, Row } from 'react-bootstrap';
 import UserRounds from '../../components/Lottery/UserRounds';
 import getPaginatedUserRounds, { IPaginatedUserRounds } from '../../pages/SecretLottery/api/getPaginatedUserRounds';
-import constants from '../../constants';
 import RoundViewer from '../../components/Lottery/RoundViewer';
 import { IRound } from '../../pages/SecretLottery/api/getRounds';
 

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import createViewKey from "../../pages/SecretLottery/api/createViewKey";
-import constants from "../../constants";
 import { ClientContext } from "../../stores/lottery-context/ClientContext";
 import { ViewKeyContext, ViewKeyDispatchContext } from "../../stores/lottery-context/ViewKeyContext";
 import {errorNotification, successNotification} from "../../utils/secret-lottery/notifications";

@@ -4,7 +4,6 @@ import claimRewards from "../../pages/SecretLottery/api/claimRewards";
 import getBalance from "../../pages/SecretLottery/api/getBalance";
 import { IRound } from "../../pages/SecretLottery/api/getRounds";
 import getUserRoundPaginatedTickets, { IUserTicket } from "../../pages/SecretLottery/api/getUserRoundPaginatedTickets";
-import constants from "../../constants";
 import { BalancesDispatchContext } from "../../stores/lottery-context/BalancesContext";
 import { ClientContext, IClientState } from "../../stores/lottery-context/ClientContext";
 import { ViewKeyContext } from "../../stores/lottery-context/ViewKeyContext";

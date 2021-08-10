@@ -1,7 +1,6 @@
 import React, { Dispatch, useContext, useEffect, useState } from "react"
 import getPaginatedUserRounds, { IPaginatedUserRounds } from "../../pages/SecretLottery/api/getPaginatedUserRounds";
 import { IRound } from "../../pages/SecretLottery/api/getRounds";
-import constants from "../../constants";
 import { ClientContext, IClientState } from "../../stores/lottery-context/ClientContext";
 import { ViewKeyContext } from "../../stores/lottery-context/ViewKeyContext";
 import UserRoundTicketsModal from "./UserRoundTicketsModal";
