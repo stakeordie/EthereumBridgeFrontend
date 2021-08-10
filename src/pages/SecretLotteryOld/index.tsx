@@ -2,7 +2,6 @@ import React, { Dispatch, useEffect, useState } from 'react';
 import ClientContextProvider, { ClientContext, ClientDispatchContext, IClientState } from "../../stores/lottery-context/ClientContext";
 import ReactNotification from 'react-notifications-component'
 import logo from './logo.svg';
-import './styles.css';
 import { SigningCosmWasmClient } from 'secretjs';
 import KeplrSetup from '../../components/Lottery/KeplrSetup';
 import NavBar from '../../components/Lottery/NavBar';
