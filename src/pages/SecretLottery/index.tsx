@@ -5,6 +5,7 @@ import { Box } from 'grommet';
 import { observer } from 'mobx-react';
 import { useStores } from 'stores';
 import './index.scss';
+import CurrentRound from 'components/SecretLottery/CurrentRound';
 
 const SecretLottery = observer(() => {
 
@@ -18,7 +19,9 @@ const SecretLottery = observer(() => {
                     pad={{ horizontal: '136px', top: 'small' }}
                     style={{ alignItems: 'center' }}
                 >
-                    <h1>Hello From Secret Lottery</h1>
+                    <div className="lottery-container">
+                        <CurrentRound> </CurrentRound>
+                    </div>
                 </Box>
             </PageContainer>
         </BaseContainer>
