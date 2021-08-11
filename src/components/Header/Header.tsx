@@ -11,6 +11,7 @@ import { displayHumanizedBalance, fixUnlockToken, humanizeBalance, unlockToken }
 import { SwapToken, SwapTokenMap, TokenMapfromITokenInfo } from 'pages/TokenModal/types/SwapToken';
 import { ITokenInfo } from 'stores/interfaces';
 import { notify } from 'pages/Earn';
+import DropdownSelector from './DropdownSelector';
 // Import Icons
 const Header = observer(({forceUpdate}:{forceUpdate:any}) =>{
     const history = useHistory(); 
@@ -67,8 +68,8 @@ const Header = observer(({forceUpdate}:{forceUpdate:any}) =>{
                             <li><span>|</span></li>
                             <li className={(isGovernance)  ? 'active hide_mobile':'hide_mobile'}><Link  to="/governance">Governance</Link></li> 
                             <li><span>|</span></li>
-                            {/* <li className={(isApplications) ? 'active hide_mobile' : 'hide_mobile'}><Link to="/secret-lottery">Applications</Link></li> */}
-                            <li className={(isApplications) ? 'active hide_mobile' : 'hide_mobile'}><Link to="/lottery">Applications</Link></li>
+                            <li className={(isApplications) ? 'active hide_mobile' : 'hide_mobile'}><DropdownSelector /></li>
+                            
                         </ul>
                     </div>
                     

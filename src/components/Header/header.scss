@@ -72,6 +72,10 @@
         justify-content: space-between;
         margin-left: 3rem;
       }
+
+      .ui.dropdown>.text {
+        font-weight: bold;
+      }
     }
 
     .menu-right {
