@@ -2,6 +2,12 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { useStores } from 'stores';
 
+// CONTEXT
+import ClientContextProvider, { ClientContext, ClientDispatchContext, IClientState } from "../../stores/lottery-context/ClientContext";
+import ViewKeyContextProvider, { ViewKeyContext } from '../../stores/lottery-context/ViewKeyContext';
+import BalancesContextProvices from '../../stores/lottery-context/BalancesContext';
+import ConfigsContextProvider, { ConfigsContext } from '../../stores/lottery-context/LotteryConfigsContext';
+
 // Components
 import { PageContainer } from 'components/PageContainer';
 import { BaseContainer } from 'components/BaseContainer';
@@ -20,27 +26,35 @@ const SecretLottery = observer(() => {
     return (
         <BaseContainer>
             <PageContainer>
-                <Box
-                    className={`${theme.currentTheme}`}
-                    pad={{ horizontal: '136px', top: 'small' }}
-                    style={{ alignItems: 'center' }}
-                >
-                    <div className="lottery-container">
+                <ClientContextProvider>
+                    <ViewKeyContextProvider>
+                        <BalancesContextProvices>
+                            <ConfigsContextProvider>
+                                <Box
+                                    className={`${theme.currentTheme}`}
+                                    pad={{ horizontal: '136px', top: 'small' }}
+                                    style={{ alignItems: 'center' }}
+                                >
+                                    <div className="lottery-container">
 
-                        <CurrentRound>
+                                        <CurrentRound>
 
-                        </CurrentRound>
+                                        </CurrentRound>
 
-                        <RoundPotDistribution>
+                                        <RoundPotDistribution>
 
-                        </RoundPotDistribution>
+                                        </RoundPotDistribution>
 
-                        <YourTickets>
+                                        <YourTickets>
 
-                        </YourTickets>
+                                        </YourTickets>
 
-                    </div>
-                </Box>
+                                    </div>
+                                </Box>
+                            </ConfigsContextProvider>
+                        </BalancesContextProvices>
+                    </ViewKeyContextProvider>
+                </ClientContextProvider>
             </PageContainer>
         </BaseContainer>
     )
