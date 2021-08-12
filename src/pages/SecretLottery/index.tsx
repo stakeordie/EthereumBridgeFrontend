@@ -1,11 +1,16 @@
 import React from 'react';
+import { observer } from 'mobx-react';
+import { useStores } from 'stores';
+
+// Components
 import { PageContainer } from 'components/PageContainer';
 import { BaseContainer } from 'components/BaseContainer';
 import { Box } from 'grommet';
-import { observer } from 'mobx-react';
-import { useStores } from 'stores';
-import './index.scss';
 import CurrentRound from 'components/SecretLottery/CurrentRound';
+import RoundPotDistribution from 'components/SecretLottery/RoundPotDistribution';
+
+// Styles
+import './index.scss';
 
 const SecretLottery = observer(() => {
 
@@ -20,7 +25,14 @@ const SecretLottery = observer(() => {
                     style={{ alignItems: 'center' }}
                 >
                     <div className="lottery-container">
-                        <CurrentRound> </CurrentRound>
+                        <CurrentRound>
+
+                        </CurrentRound>
+
+                        <RoundPotDistribution>
+
+                        </RoundPotDistribution>
+
                     </div>
                 </Box>
             </PageContainer>

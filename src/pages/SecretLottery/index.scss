@@ -125,6 +125,7 @@ $font-family: Poppins;
     
 }
 
+// Lottery Component
 .box-round{
     background-color: $secret-background;
     box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
@@ -132,6 +133,8 @@ $font-family: Poppins;
     padding: 26px;
     height: 396px;
     width: 600px;
+    // Center content
+    margin: 0 auto;
 
     .data{
         display: grid;
@@ -181,3 +184,61 @@ $font-family: Poppins;
 
 }
 
+
+.box-round-pot{ 
+
+    margin-top: 32px;
+
+    background-color:$secret-background;
+    height: 989px;
+    width: 742px;
+    border-radius: 16px;
+    padding: 26px;
+    box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
+
+    .round-info-container{
+        margin-top: 26px;
+        display: grid;
+        grid-template-rows: 6 1fr;
+        grid-row-gap: 16px;
+
+        .row-match{
+            display: grid;
+            grid-template-columns: 35% 30% 35%;
+            align-items: center;
+            padding: 10px;
+
+            .col-title{
+                h4{
+                    text-align: left;
+                    color:$secret-swap-neutral-03;
+                }
+            }
+
+            .col-values{
+                h4{
+                    text-align: right;
+                }
+                p{
+                    text-align: right;
+                    color:$secret-swap-neutral-03;
+                }
+                span{
+                    color:$secret-swap-neutral-03;
+                }
+            }
+
+            .col-results{
+                i{
+                    margin-right: 12px;
+
+                    :last-of-type{
+                        margin-right: 0px;
+                    }
+                }
+            }
+        }
+
+    }
+
+}
