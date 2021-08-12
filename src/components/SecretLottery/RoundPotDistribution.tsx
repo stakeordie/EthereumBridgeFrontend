@@ -6,7 +6,7 @@ const RoundPotDistribution = (props: any) => {
     return (
         <>
             <div className="box-round-pot">
-                <div className="roun-pot-title">
+                <div className="round-pot-title">
                     <h2>Round Pot Distribution</h2>
                 </div>
                 <div className="round-info-container">
@@ -120,12 +120,54 @@ const RoundPotDistribution = (props: any) => {
                         </div>
                     </div>
 
+                    <div className="row-match">
+                        <div className="col-title">
+                            <h4 className="burn">Burn</h4>
+                        </div>
+                        <div className="col-results">
 
+                        </div>
+                        <div className="col-values">
+                            <h4>1,975 <span>SEFI</span></h4>
+                            <p>$26,239</p>
+                        </div>
+                    </div>
 
+                    <div className="row-match">
+                        <div className="col-title">
+                            <h4>Trigger Fee</h4>
+                        </div>
+                        <div className="col-results">
+
+                        </div>
+                        <div className="col-values">
+                            <h4>543<span> SEFI</span></h4>
+                            <p>$26,239</p>
+                        </div>
+                    </div>
+
+                </div> {/* round-info-container */}
+
+                <div className="box-pot-size">
+                    <div className="box-pot-size-container">
+                        <div className="col-pot-results">
+                            <h4>Pot Size</h4>
+                            <h5>218,665 <span>SEFI</span></h5>
+                            <h6>$65,599</h6>
+                        </div>
+                        <div className="col-pot-button">
+                            <button className="button-primary-lg">
+                                Buy Tickets
+                            </button>
+                        </div>
+
+                    </div>
 
                 </div>
-            </div>
+            </div> {/*box-round-pot*/}
+
         </>
+
     )
 }
 

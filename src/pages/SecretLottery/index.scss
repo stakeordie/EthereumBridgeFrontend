@@ -199,7 +199,7 @@ $font-family: Poppins;
     .round-info-container{
         margin-top: 26px;
         display: grid;
-        grid-template-rows: 6 1fr;
+        grid-template-rows: 8 1fr;
         grid-row-gap: 16px;
 
         .row-match{
@@ -209,9 +209,16 @@ $font-family: Poppins;
             padding: 10px;
 
             .col-title{
+                
+                .burn{
+                    h4{
+                        color:$secret-swap-red-01 !important;
+                    }
+                }
+
                 h4{
                     text-align: left;
-                    color:$secret-swap-neutral-03;
+                    color:$secret-swap-neutral-03;                   
                 }
             }
 
@@ -240,5 +247,43 @@ $font-family: Poppins;
         }
 
     }
+
+    .box-pot-size{
+        margin-top: 36px;
+        border-radius: 16px;
+        padding: 16px;
+        background-color:$secret-swap-green-03;
+        
+        height: auto;
+        width: auto;
+
+        .box-pot-size-container{
+            display: grid;
+            grid-template-columns: 50% 50%;
+            align-items: center;
+            // grid-column-gap: 26px;
+
+            .col-pot-results{
+                display: grid;
+                grid-template-rows: (3, 1fr);
+                grid-gap: 4px;
+
+                h5{
+                    color:$secret-swap-green-01;
+                }
+
+                span{
+                    font-size: 20px;
+                }
+
+                h6{
+                    color:$secret-swap-neutral-03;
+                }
+            }
+
+        }
+    }
+
+    
 
 }
