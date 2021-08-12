@@ -41,13 +41,14 @@ $font-family: Poppins;
     }
 }
 
-.button-ghost{
+.trans{
     border: 1px solid $secret-swap-neutral-01;
     border-radius: 4px;
     height: 46px;
     width: 152.5px;
     padding: 11px, 35.25px, 11px, 35.25px;
     cursor: pointer;
+    background-color: none;
 }
 
 // Box Round Data
@@ -184,7 +185,6 @@ $font-family: Poppins;
 
 }
 
-
 .box-round-pot{ 
 
     margin-top: 32px;
@@ -282,8 +282,37 @@ $font-family: Poppins;
             }
 
         }
+    }  
+}
+
+.box-tickets{
+    margin-top: 32px;
+    background:$secret-swap-white ;
+    box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
+    border-radius: 16px;
+    padding: 26px;
+    width: auto;
+    height: auto;
+
+    .tickets-result{
+        margin-top: 36px;
+        display: grid;
+        grid-template-columns: repeat(4,1fr);
+        grid-column-gap: 20px;
+        grid-row-gap: 16px;
+        align-items: center;
+
+        button{
+            background-color: white;
+            height: 46px;
+            width: 152.5px;
+            border-radius: 4px;
+            padding: 11px, 42px, 11px, 42px;
+            color:$secret-swap-neutral-01;
+            border: 1px solid $secret-swap-neutral-01;
+            font-weight: 600px;
+            font-size: 16px;
+        }
+            
     }
-
-    
-
 }

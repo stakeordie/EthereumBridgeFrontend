@@ -11,6 +11,7 @@ import RoundPotDistribution from 'components/SecretLottery/RoundPotDistribution'
 
 // Styles
 import './index.scss';
+import YourTickets from 'components/SecretLottery/YourTickets';
 
 const SecretLottery = observer(() => {
 
@@ -25,6 +26,7 @@ const SecretLottery = observer(() => {
                     style={{ alignItems: 'center' }}
                 >
                     <div className="lottery-container">
+
                         <CurrentRound>
 
                         </CurrentRound>
@@ -32,6 +34,10 @@ const SecretLottery = observer(() => {
                         <RoundPotDistribution>
 
                         </RoundPotDistribution>
+
+                        <YourTickets>
+
+                        </YourTickets>
 
                     </div>
                 </Box>
