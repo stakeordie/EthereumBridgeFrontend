@@ -1,4 +1,5 @@
 import React, { Dispatch, useEffect, useState } from 'react';
+import { useStores } from 'stores';
 import ClientContextProvider, { ClientContext, ClientDispatchContext, IClientState } from "../../stores/lottery-context/ClientContext";
 import ReactNotification from 'react-notifications-component'
 import logo from './logo.svg';
@@ -22,9 +23,14 @@ import UserRounds from '../../components/Lottery/UserRounds';
 import getPaginatedUserRounds, { IPaginatedUserRounds } from '../../pages/SecretLottery/api/getPaginatedUserRounds';
 import RoundViewer from '../../components/Lottery/RoundViewer';
 import { IRound } from '../../pages/SecretLottery/api/getRounds';
+import './lottery.scss';
+import { BaseContainer, PageContainer } from 'components';
+import { Box } from 'grommet';
 
 
 const Lottery = () => {
+
+    let { theme } = useStores();
 
     const [roundViewer, setRoundViewer] = useState<IRound | null>(null);
     const [paginatedUserRounds, setPaginatedUserRounds] = useState<IPaginatedUserRounds | null>(null);
@@ -41,60 +47,55 @@ const Lottery = () => {
         setPaginatedUserRounds(paginatedUserTickets);
     }
 
-    console.log('Chain ID: ',process.env.CHAIN_ID);
-    console.log('Contract Address:',process.env.SSCRT_CONTRACT);
-    console.log('SEFI Contract:', process.env.SCRT_GOV_TOKEN_ADDRESS);
-    // console.log(process.env.SECRET_LOTTERY_CONTRACT_ADDRESS);
-    console.log('New Lottery:', process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS);
-
     return (
         <div className="App">
-            
-            <ClientContextProvider>
-                <ViewKeyContextProvider>
-                    <BalancesContextProvices>
-                        <ConfigsContextProvider>
-                            <div style={{ background: "linear-gradient(180deg, #242525 0%, #000 180%)", width: "100%", minHeight: "100vh" }}>
-                                <ReactNotification />
-                                <KeplrSetup />
-                                <NavBar menu={"SEFI"} />
-                                <Container fluid style={{ width: "80%", color: "white" }}>
-                                    <CreateViewkey menu={"SEFI"} />
-                                    <Row>
-                                        <CurrentRoundSection
-                                            getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
-                                            paginationValues={paginationValues}
-                                        />
-                                    </Row>
-                                    <Row>
-                                        <div style={{ backgroundColor: "white", height: "1px", width: "100%", marginTop: "30px", marginBottom: "30px", }}>
-                                        </div>
-                                    </Row>
-                                    <Row>
-                                        <Col xs={7}>
-                                            <UserRounds
-                                                paginatedUserRounds={paginatedUserRounds}
+            <BaseContainer>
+                <PageContainer>
+                    <ClientContextProvider>
+                        <ViewKeyContextProvider>
+                            <BalancesContextProvices>
+                                <ConfigsContextProvider>
+                                    <ReactNotification />
+                                    <Box className={`${theme.currentTheme}`}
+                                        pad={{ horizontal: '136px', top: 'small' }}
+                                        style={{ alignItems: 'center' }}
+                                    >
+                                        <KeplrSetup />
+                                        <NavBar menu={"SEFI"} />
+                                        <CreateViewkey menu={"SEFI"} />
+                                        <div className="lottery-container">
+                                            <CurrentRoundSection
                                                 getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
                                                 paginationValues={paginationValues}
-                                                setRoundViewer={setRoundViewer}
                                             />
-                                        </Col>
-                                        <Col style={{ justifyContent: "center", marginLeft: "50px" }}>
-                                            <RoundViewer
-                                                roundViewer={roundViewer}
-                                                setRoundViewer={setRoundViewer}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </Container>
-                                {
-                                    //<Home menu={"SEFI"}/>
-                                }
-                            </div>
-                        </ConfigsContextProvider>
-                    </BalancesContextProvices>
-                </ViewKeyContextProvider>
-            </ClientContextProvider>
+                                        </div>
+                                        <Row>
+                                            <div style={{ backgroundColor: "white", height: "1px", width: "100%", marginTop: "30px", marginBottom: "30px", }}>
+                                            </div>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={7}>
+                                                <UserRounds
+                                                    paginatedUserRounds={paginatedUserRounds}
+                                                    getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
+                                                    paginationValues={paginationValues}
+                                                    setRoundViewer={setRoundViewer}
+                                                />
+                                            </Col>
+                                            <Col style={{ justifyContent: "center", marginLeft: "50px" }}>
+                                                <RoundViewer
+                                                    roundViewer={roundViewer}
+                                                    setRoundViewer={setRoundViewer}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Box>
+                                </ConfigsContextProvider>
+                            </BalancesContextProvices>
+                        </ViewKeyContextProvider>
+                    </ClientContextProvider>
+                </PageContainer>
+            </BaseContainer>
                  
         </div>
     )

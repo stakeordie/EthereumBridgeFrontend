@@ -106,15 +106,32 @@ export default ({
             {
                 currentRoundsState && configs && stakingRewards &&
                 <React.Fragment>
-                    <Col style={{ padding: "30px", borderRadius: "30px", border: "solid", marginRight: "10px" }}>
-                        <Row style={{ justifyContent: "center" }}>
-                            <span style={{ fontSize: "1.5rem", display: "block", marginBottom: "8px" }}>Prize Pot</span>
-                        </Row>
-                        <Row style={{ justifyContent: "center" }}>
-                            <span style={{ fontSize: "3rem", display: "block", marginBottom: "8px" }}>
-                                {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)} SEFI
-                            </span>
-                        </Row>
+                    {/* Prize Pot */}
+                    <div className="box-round">
+                        <div className="data-header">
+                            <h4>Pot Size</h4>
+                        </div>
+                        <div className="data-body">
+                            <h1>
+                                {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}
+                                <span>SEFI</span>
+                            </h1>
+                        </div>
+                        <div className="data-footer">
+                            <h4>$65,599</h4>
+                        </div>
+
+                        <div className="round-bottom">
+                            <div className="round-bottom-content">
+                                <button className="button-primary-lg">
+                                    Buy Tickets
+                                </button>
+                                <div className="round-bottom-footer">
+                                    <p>You have bought <span>20 tickets</span> for this round</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div style={{ backgroundColor: "white", height: "1px", width: "100%", marginTop: "15px", marginBottom: "15px" }}>
                         </div>
                         <Row>
@@ -126,6 +143,9 @@ export default ({
                             </Col>
                         </Row>
 
+
+                        {/* Add This To Buy Tickets Modal */}
+
                         <Row style={{ justifyContent: "center", fontSize: "1.25rem", marginTop: "10px" }}>
                             {
                                 "Expected to End at: " + new Date(currentRoundsState.round_expected_end_timestamp*1000).toLocaleString()
@@ -134,8 +154,11 @@ export default ({
                                 "Min Ticket Count: " + configs.min_ticket_count_per_round
                             }
                         </Row>
-                    </Col>
-                    <Col style={{ borderRadius: "30px", border: "solid", marginLeft: "10px", marginRight: "10px" }}>
+                    </div>
+
+
+                    {/* Buy Tickets */}
+                    <Row style={{ borderRadius: "30px", border: "solid", marginLeft: "10px", marginRight: "10px" }}>
                         <Row style={{ justifyContent: "center", marginTop: "10px", marginBottom: "10px" }}>
                             <Col style={{ textAlign: "right", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                                 <span style={{ fontSize: "20px", lineHeight: "28px" }}>Buy Tickets</span>
@@ -283,8 +306,12 @@ export default ({
                                 : null
                         }
 
-                    </Col>
-                    <Col style={{ borderRadius: "30px", border: "solid", marginLeft: "10px" }}>
+                    </Row>
+
+
+
+                    {/* Round Pot Distribution */}
+                    <Row style={{ borderRadius: "30px", border: "solid", marginLeft: "10px" }}>
                         <Row style={{ justifyContent: "center", marginTop: "10px", marginBottom: "10px" }}>
                             <Col style={{ textAlign: "right", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <span style={{ fontSize: "20px", lineHeight: "28px" }}>Round Pot Distribution</span>
@@ -426,7 +453,7 @@ export default ({
                                 </Row>
                             </React.Fragment>
                         }
-                    </Col>
+                    </Row>
                 </React.Fragment>
             }
         </React.Fragment>
