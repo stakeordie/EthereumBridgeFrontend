@@ -18,7 +18,6 @@ import calcTotalPotSize from "../../utils/secret-lottery/calcTotalPotSize";
 import formatNumber from "../../utils/secret-lottery/formatNumber";
 import generateRandomTickets from "../../utils/secret-lottery/generateRandomTickets";
 import { errorNotification, successNotification } from "../../utils/secret-lottery/notifications";
-import Countdown from "./Countdown";
 
 export default ({
     getPaginatedUserTicketsTrigger,
@@ -128,21 +127,10 @@ export default ({
                                 </button>
                                 <div className="round-bottom-footer">
                                     <p>You have bought <span>20 tickets</span> for this round</p>
+                                    <p>Round {currentRoundsState.round_number} : <span>{currentRoundsState.ticket_count}</span> Tickets</p>
                                 </div>
                             </div>
                         </div>
-
-                        <div style={{ backgroundColor: "white", height: "1px", width: "100%", marginTop: "15px", marginBottom: "15px" }}>
-                        </div>
-                        <Row>
-                            <Col style={{ justifyContent: "center" }}>
-                                <span style={{ fontSize: "1.5rem" }}>Round {currentRoundsState.round_number} </span>
-                            </Col>
-                            <Col style={{ justifyContent: "center" }}>
-                                <span style={{ fontSize: "1.5rem" }}> {currentRoundsState.ticket_count} Tickets</span>
-                            </Col>
-                        </Row>
-
 
                         {/* Add This To Buy Tickets Modal */}
 
@@ -154,6 +142,10 @@ export default ({
                                 "Min Ticket Count: " + configs.min_ticket_count_per_round
                             }
                         </Row>
+                    </div>
+
+                    <div className="counter-row">
+                        <h4>Round {currentRoundsState.round_number} ends in <span>3h 24 m</span></h4>
                     </div>
 
 

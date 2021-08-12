@@ -185,6 +185,18 @@ $font-family: Poppins;
 
 }
 
+.counter-row{
+    margin-top: 42px;
+
+    h4{
+        color:$secret-swap-neutral-03;
+    }
+
+    span{
+        color:$secret-swap-green-01;
+    }
+}
+
 .box-round-pot{ 
 
     margin-top: 32px;
