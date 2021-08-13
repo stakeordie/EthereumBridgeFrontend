@@ -127,7 +127,8 @@ export default ({
                                     Buy Tickets
                                 </button>
                                 <div className="round-bottom-footer">
-                                    <p>You have bought <span>{currentRoundsState.ticket_count} tickets</span> for this round</p>
+                                    <p>You have bought <span>{currentRoundUserTicketsCount} tickets</span> for this round</p>
+                                    <p>Total Tickets <span>{currentRoundsState.ticket_count}</span> for this round</p>
                                     <p>Minimun Tickets Count:  <span>{configs.min_ticket_count_per_round}</span></p>
                                     {/* <p>Round {currentRoundsState.round_number} : <span>{currentRoundsState.ticket_count}</span> Tickets</p> */}
                                 </div>
@@ -252,7 +253,7 @@ export default ({
                                 {
                                     currentRoundUserTicketsCount && currentRoundUserTicketsCount > 0
                                         ?
-                                        <h6>You have bougth <span>{(currentRoundUserTicketsCount)}</span> tickets for this round</h6>
+                                        <h6>You have bought <span>{(currentRoundUserTicketsCount)}</span> tickets for this round</h6>
                                         : null
                                 }
                             </div>
