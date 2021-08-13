@@ -14,6 +14,7 @@ import { BaseContainer } from 'components/BaseContainer';
 import { Box } from 'grommet';
 import CurrentRound from 'components/SecretLottery/CurrentRound';
 import RoundPotDistribution from 'components/SecretLottery/RoundPotDistribution';
+import BuyTicketModal from 'components/SecretLottery/BuyTicketModal';
 
 // Styles
 import './index.scss';
@@ -40,6 +41,10 @@ const SecretLottery = observer(() => {
                                         <CurrentRound>
 
                                         </CurrentRound>
+
+                                        <BuyTicketModal>
+
+                                        </BuyTicketModal>
 
                                         <RoundPotDistribution>
 
