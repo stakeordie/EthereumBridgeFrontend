@@ -127,22 +127,23 @@ export default ({
                                     Buy Tickets
                                 </button>
                                 <div className="round-bottom-footer">
-                                    <p>You have bought <span>20 tickets</span> for this round</p>
-                                    <p>Round {currentRoundsState.round_number} : <span>{currentRoundsState.ticket_count}</span> Tickets</p>
+                                    <p>You have bought <span>{currentRoundsState.ticket_count} tickets</span> for this round</p>
+                                    <p>Minimun Tickets Count:  <span>{configs.min_ticket_count_per_round}</span></p>
+                                    {/* <p>Round {currentRoundsState.round_number} : <span>{currentRoundsState.ticket_count}</span> Tickets</p> */}
                                 </div>
                             </div>
                         </div>
 
                         {/* Add This To Buy Tickets Modal */}
 
-                        <Row style={{ justifyContent: "center", fontSize: "1.25rem", marginTop: "10px" }}>
+                        {/* <Row style={{ justifyContent: "center", fontSize: "1.25rem", marginTop: "10px" }}>
                             {
                                 "Expected to End at: " + new Date(currentRoundsState.round_expected_end_timestamp*1000).toLocaleString()
                             }
                             {
                                 "Min Ticket Count: " + configs.min_ticket_count_per_round
                             }
-                        </Row>
+                        </Row> */}
                     </div>
 
                     <div className="counter-row">
@@ -465,7 +466,7 @@ export default ({
 
                                     <div className="row-match">
                                         <div className="col-title">
-                                            <h4>Match all 4</h4>
+                                            <h4>Match first 4</h4>
                                         </div>
                                         <div className="col-results">
                                             <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
@@ -588,7 +589,10 @@ export default ({
                                     <div className="box-pot-size-container">
                                         <div className="col-pot-results">
                                             <h4>Pot Size</h4>
-                                            <h5>218,665 <span>SEFI</span></h5>
+                                            <h5>
+                                                {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}
+                                                <span> SEFI</span>
+                                            </h5>
                                             <h6>$65,599</h6>
                                         </div>
                                         <div className="col-pot-button">
