@@ -283,7 +283,9 @@ export default ({
 
                         </div>
 
-                        <Row style={{ textAlign: "center" }}>
+                        {/* TODO: Unhide Switch and implement functionallity */}
+
+                        {/* <Row style={{ textAlign: "center" }}>
                             <BootstrapSwitchButton
                                 checked={isManualTickets}
                                 width={100}
@@ -299,7 +301,10 @@ export default ({
                                     setManualTickets([]);
                                 }}
                             />
-                        </Row>
+                        </Row> */}
+
+
+
 
                         {/* OLD VERSION - INPUT */}
 
