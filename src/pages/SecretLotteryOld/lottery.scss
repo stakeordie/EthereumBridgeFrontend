@@ -202,7 +202,8 @@ $font-family: Poppins;
 
 .modal-container{
     margin: 32px auto 0 auto;
-    height: 418px;
+    // height: 418px;
+    height: auto;
     width: 420px;
     border-radius: 16px;
     padding: 26px;
@@ -279,7 +280,8 @@ $font-family: Poppins;
     margin-top: 32px;
 
     background-color:$secret-background;
-    height: 989px;
+    // height: 989px;
+    height: auto;
     width: 742px;
     border-radius: 16px;
     padding: 26px;
