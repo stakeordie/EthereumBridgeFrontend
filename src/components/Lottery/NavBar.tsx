@@ -87,24 +87,18 @@ export default ({
 
     return (
         <React.Fragment>
-            <nav className="navbar justify-content-between " style={{ color: "white" }}>
-                <a className="navbar-brand">
-                    <img style={{ maxHeight: "25px", marginRight: "10px", marginLeft: "10px" }} src={require("../../../public/static/dice.png").default} />
-                </a>
-                <div className="navbar-nav">
-                        <h3 style={{
-                            color: "white",
-                            marginRight: "10px",
-                        }}>
-                            Secret Lottery
-                        </h3>
-                </div>
-                
-                <div className="navbar-nav mr-auto">
+            <nav
+                className="navbar justify-content-between mb-10"
+                style={{ color: "black", marginBottom: '10px', width: '600px' }}
+            >
 
-                </div>
                 {
-                    !client && <button className="btn btn-warning py-2 px-4" onClick={() => window.open("https://wallet.keplr.app/#/dashboard")}>Get Keplr Wallet</button>
+                    !client &&
+                    <button className="btn btn-green py-2 px-4"
+                        onClick={() => window.open("https://wallet.keplr.app/#/dashboard")}
+                    >
+                        Get Keplr Wallet
+                    </button>
                 }
                 {
                     client && balances &&
@@ -124,86 +118,28 @@ export default ({
                                 <span style={{ marginLeft: "10px", verticalAlign: "middle" }}>
                                     {
                                         menu !== "SEFI" ? null : balances.SEFI ? formatNumber(balances.SEFI / 1000000) + " SEFI" :
-                                            <span><i style={{ color: "red", marginRight: "5px" }} className="fas fa-key" onClick={async () => {
-                                                try {
-                                                    await window.keplr.suggestToken(process.env.CHAIN_ID, process.env.SCRT_GOV_TOKEN_ADDRESSS);
-                                                    const sleep = (ms: number) => new Promise((accept) => setTimeout(accept, ms));
-                                                    await sleep(1000);
-                                                    getSEFIBalance()
-                                                } catch (e) {
-                                                    errorNotification(e)
+                                            <span style={{ cursor: "pointer" }}>
+                                                <i style={{ color: "red", marginRight: "5px" }}
+                                                    className="fas fa-key"
+                                                    onClick=
+                                                    {
+                                                        async () => {
+                                                            try {
+                                                                await window.keplr.suggestToken(process.env.CHAIN_ID, process.env.SCRT_GOV_TOKEN_ADDRESSS);
+                                                                const sleep = (ms: number) => new Promise((accept) => setTimeout(accept, ms));
+                                                                await sleep(1000);
+                                                                getSEFIBalance()
+                                                            } catch (e) {
+                                                                errorNotification(e)
+                                                            }
+                                                        }
                                                 }
-                                            }
-                                            }></i> {menu}</span>
+                                                >
+                                                </i> {menu}
+                                            </span>
                                     }
                                 </span>
                             </div>
-                        </div>
-                        <div style={{
-                            border: "1px solid white",
-                            padding: "4px 7px",
-                            borderRadius: "10px",
-                            margin: "10px",
-                            fontSize: ".85rem"
-                        }}>
-                            <div className="row" style={{ justifyContent: "center", margin: "0px" }}><span>Testnet</span></div>
-                            <div className="row" style={{ justifyContent: "center", margin: "0px" }}>
-                                <div className="col" style={{ padding: "3px" }}>
-                                    <button className="btn btn-warning" style={{ fontSize: ".75rem" }} onClick={() => window.open("https://faucet.secrettestnet.io/", "_blank")}> Get SCRT</button>
-                                </div>
-                                <div className="col" style={{ padding: "3px" }}>
-                                    <button className="btn btn-warning" style={{ fontSize: ".75rem" }}
-                                            disabled={loadingConvertTestnetSSCRT}
-                                            onClick={async () => {
-                                                try {
-                                                    setLoadingConvertTestnetSSCRT(true)
-                                                    await convertTosSCRT(client, process.env.SSCRT_CONTRACT)
-                                                    setLoadingConvertTestnetSSCRT(false)
-                                                } catch (e) {
-                                                    setLoadingConvertTestnetSSCRT(false)
-                                                }
-                                            }
-                                            }>
-                                            {
-                                                loadingConvertTestnetSSCRT ?
-                                                    <i className="fa fa-spinner fa-spin"></i> :
-                                                    "Convert to sSCRT"
-                                            }
-                                        </button>
-                                </div>
-                                {
-                                    menu === "SEFI" &&
-                                    <div className="col" style={{ padding: "3px" }}>
-                                        <button className="btn btn-warning" style={{ fontSize: ".75rem" }}
-                                            onClick={async () => {
-                                                window.open("https://ethbridge.test.enigma.co/swap#Swap", "_blank")
-                                            }
-                                            }>
-                                            {
-                                                "Swap"
-                                            }
-                                        </button>
-                                    </div>
-                                }
-                                <div className="col" style={{ padding: "3px" }}>
-                                        <button className="btn btn-warning" style={{ fontSize: ".75rem" }}
-                                            onClick={async () => {
-                                                try {
-                                                    await triggerTestnet(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS)
-                                                    successNotification("Trigger")
-                                                    window.location.reload();
-                                                } catch (e) {
-                                                    errorNotification(e)
-                                                }
-                                            } 
-                                            }>
-                                            {
-                                                "Trigger"
-                                            }
-                                        </button>
-                                </div>
-                            </div>
-
                         </div>
                     </React.Fragment>
                 }
