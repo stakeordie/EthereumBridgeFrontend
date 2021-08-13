@@ -1,5 +1,6 @@
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import React from "react";
+import { Button, Input } from 'semantic-ui-react';
 import { useContext, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import buyTickets from "../../pages/SecretLottery/api/buyTickets";
@@ -150,86 +151,196 @@ export default ({
 
 
                     {/* Buy Tickets */}
-                    <Row style={{ borderRadius: "30px", border: "solid", marginLeft: "10px", marginRight: "10px" }}>
-                        <Row style={{ justifyContent: "center", marginTop: "10px", marginBottom: "10px" }}>
-                            <Col style={{ textAlign: "right", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                                <span style={{ fontSize: "20px", lineHeight: "28px" }}>Buy Tickets</span>
-                            </Col>
-                            <Col style={{ textAlign: "left" }}>
-                                <BootstrapSwitchButton
-                                    checked={isManualTickets}
-                                    width={100}
-                                    onlabel='Manual'
-                                    onstyle="outline-light"
-                                    offstyle="outline-light"
-                                    style="border"
-                                    offlabel='Auto'
-                                    size="sm"
-                                    onChange={(checked: boolean) => {
-                                        setIsManualTickets(checked);
-                                        setAutoTicketsCount("0");
-                                        setManualTickets([]);
-                                    }}
-                                />
-                            </Col>
-                        </Row>
-                        <Row style={{ justifyContent: "center" }}>
-                            <div style={{ backgroundColor: "white", height: "1px", width: "80%", marginBottom: "20px", }}>
+                    <div className="modal-container">
+
+                        <div className="modal-header-buy">
+                            <h6>Buy Tickets</h6>
+                            <h6>X</h6>
+                        </div>
+
+                        <div className="modal-nav">
+                            <button className="active">Auto</button>
+                            <button className="inactive">Manual</button>
+                        </div>
+
+                        <div className="modal-body-buy">
+                            <div className="modal-input">
+                                {
+                                    !isManualTickets &&
+                                    <Input
+                                        fluid
+                                        placeholder="000"
+                                        type="number"
+                                        value={autoTicketsCount}
+                                        onChange={(e) => {
+                                            if (!e.target.value || e.target.value === "") setAutoTicketsCount("0")
+                                            else if (parseInt(e.target.value) >= 500) setAutoTicketsCount("500")
+                                            else setAutoTicketsCount(e.target.value)
+                                        }}
+                                    >
+                                        <Button
+                                            type='submit'
+                                            onClick={() => {
+                                                if (parseInt(autoTicketsCount) > 0) setAutoTicketsCount("" + (parseInt(autoTicketsCount) - 1))
+                                            }}>-
+                                        </Button>
+                                        <input />
+                                        <Button
+                                            type='submit'
+                                            onClick={() => {
+                                                if (parseInt(autoTicketsCount) >= 500) setAutoTicketsCount("500")
+                                                else setAutoTicketsCount("" + (parseInt(autoTicketsCount) + 1))
+                                            }}>+
+                                        </Button>
+                                    </Input>
+                                }
                             </div>
+
+                            <Button
+                                fluid
+                                color="black"
+                                type="button"
+                                disabled={
+                                    loadingBuyTickets ||
+                                    (isManualTickets && manualTickets.length === 0) ||
+                                    (!isManualTickets && parseInt(autoTicketsCount) === 0)
+                                }
+                                onClick={async () => {
+                                    if (!configs) return
+
+                                    setLoadingBuyTickets(true)
+
+                                    try {
+                                        let tickets = null;
+                                        let ticketPrice = null;
+                                        if (isManualTickets) {
+                                            tickets = manualTickets;
+                                            ticketPrice = "" + calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, manualTickets.length, currentRoundsState.round_ticket_price).finalPrice
+                                        } else {
+                                            const autoGeneratedTickets = generateRandomTickets(parseInt(autoTicketsCount));
+                                            tickets = autoGeneratedTickets;
+                                            ticketPrice = "" + calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(autoTicketsCount), currentRoundsState.round_ticket_price).finalPrice
+                                        }
+
+                                        await buyTickets(
+                                            client,
+                                            process.env.SCRT_GOV_TOKEN_ADDRESS,
+                                            process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS,
+                                            tickets,
+                                            ticketPrice
+                                        )
+                                        await getRoundStakingRewardsTrigger(client, configs)
+                                        await getCurrentRoundTrigger(client, viewkey, configs.current_round_number);
+                                        await getPaginatedUserTicketsTrigger(client, viewkey, paginationValues.page, paginationValues.page_size)
+                                        await getSEFIBalance()
+                                        successNotification("Buy Tickets Success!")
+
+                                        setLoadingBuyTickets(false)
+                                    }
+                                    catch (e) {
+                                        setLoadingBuyTickets(false)
+                                        errorNotification(e)
+                                    }
+                                }}
+                                loading={loadingBuyTickets}
+                            >Buy
+
+                            </Button>
+
+                            <div>
+                                {
+                                    currentRoundUserTicketsCount && currentRoundUserTicketsCount > 0
+                                        ?
+                                        <h6>You have bougth <span>{(currentRoundUserTicketsCount)}</span> tickets for this round</h6>
+                                        : null
+                                }
+                            </div>
+
+                        </div>
+
+                        <div className="modal-footer-container">
+                            <div className="row-footer">
+                                <p>Ticket Price</p>
+                                <h6>
+                                    {`${isManualTickets ?
+                                        formatNumber(calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, manualTickets.length, currentRoundsState.round_ticket_price).finalPrice / 1000000) :
+                                        formatNumber(calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(autoTicketsCount), currentRoundsState.round_ticket_price).finalPrice / 1000000)
+                                        } SEFI`}
+                                </h6>
+                            </div>
+                            <div className="row-footer">
+                                <p>Disccount</p>
+                                <h6>
+                                    {
+                                        calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, isManualTickets ?
+                                            manualTickets.length :
+                                            parseInt(autoTicketsCount), currentRoundsState.round_ticket_price).discount + "%"
+                                    }
+                                </h6>
+                            </div>
+
+                        </div>
+
+                        <Row style={{ textAlign: "center" }}>
+                            <BootstrapSwitchButton
+                                checked={isManualTickets}
+                                width={100}
+                                onlabel='Manual'
+                                onstyle="dark"
+                                // offstyle="outline-light"
+                                style="border"
+                                offlabel='Auto'
+                                size="sm"
+                                onChange={(checked: boolean) => {
+                                    setIsManualTickets(checked);
+                                    setAutoTicketsCount("0");
+                                    setManualTickets([]);
+                                }}
+                            />
                         </Row>
-                        <Row>
-                            {
-                                !isManualTickets &&
-                                <div style={{ width: "100%" }}>
-                                    <span>How many tickets to buy?</span>
-                                    <br />
-                                    <div style={{ display: "flex", justifyContent: "center", margin: "10px" }}>
-                                        <button className="btn btn-dark" style={{ borderRadius: "0px", borderColor: "white" }} onClick={() => {
-                                            if (parseInt(autoTicketsCount) > 0) setAutoTicketsCount("" + (parseInt(autoTicketsCount) - 1))
-                                        }}><i className="fas fa-minus"></i></button>
-                                        <input
-                                            style={{ textAlign: "center", width: "30%", backgroundColor: "transparent", color: "white" }}
-                                            type="number"
-                                            value={autoTicketsCount}
-                                            onChange={(e) => {
-                                                if (!e.target.value || e.target.value === "") setAutoTicketsCount("0")
-                                                else if (parseInt(e.target.value) >= 500) setAutoTicketsCount("500")
-                                                else setAutoTicketsCount(e.target.value)
-                                            }} />
-                                        <button className="btn btn-dark" style={{ borderRadius: "0px", borderColor: "white" }} onClick={() => {
-                                            if (parseInt(autoTicketsCount) >= 500) setAutoTicketsCount("500")
-                                            else setAutoTicketsCount("" + (parseInt(autoTicketsCount) + 1))
-                                        }}><i className="fas fa-plus"></i></button>
+
+                        {/* OLD VERSION - INPUT */}
+
+                        {/*
+                            <Row>
+                                {
+                                    !isManualTickets &&
+                                    <div style={{ width: "100%" }}>
+                                        <div style={{ display: "flex", justifyContent: "center", margin: "10px" }}>
+                                            <button className="btn btn-dark" style={{ borderRadius: "0px", borderColor: "white" }}
+                                                onClick={() => {
+                                                if (parseInt(autoTicketsCount) > 0) setAutoTicketsCount("" + (parseInt(autoTicketsCount) - 1))
+                                                }}>
+                                                <i className="fas fa-minus"></i>
+                                            </button>
+                                            <input
+                                                style={{ textAlign: "center", width: "30%", backgroundColor: "transparent", color: "white" }}
+                                                type="number"
+                                                value={autoTicketsCount}
+                                                onChange={(e) => {
+                                                    if (!e.target.value || e.target.value === "") setAutoTicketsCount("0")
+                                                    else if (parseInt(e.target.value) >= 500) setAutoTicketsCount("500")
+                                                    else setAutoTicketsCount(e.target.value)
+                                                }} />
+                                            <button className="btn btn-dark" style={{ borderRadius: "0px", borderColor: "white" }}
+                                                onClick={() => {
+                                                if (parseInt(autoTicketsCount) >= 500) setAutoTicketsCount("500")
+                                                else setAutoTicketsCount("" + (parseInt(autoTicketsCount) + 1))
+                                                }}>
+                                                <i className="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+
                                     </div>
-                                    <div style={{ display: "flex", justifyContent: "center" }}>
-                                        <button className="btn btn-dark" style={{ margin: "5px", borderColor: "white" }} onClick={() => {
-                                            if (parseInt(autoTicketsCount) + 5 >= 500) setAutoTicketsCount("500")
-                                            else setAutoTicketsCount("" + (parseInt(autoTicketsCount) + 5))
-                                        }}>+5</button>
-                                        <button className="btn btn-dark" style={{ margin: "5px", borderColor: "white" }} onClick={() => {
-                                            if (parseInt(autoTicketsCount) + 10 >= 500) setAutoTicketsCount("500")
-                                            else setAutoTicketsCount("" + (parseInt(autoTicketsCount) + 10))
-                                        }}>+10</button>
-                                        <button className="btn btn-dark" style={{ margin: "5px", borderColor: "white" }} onClick={() => {
-                                            if (parseInt(autoTicketsCount) + 25 >= 500) setAutoTicketsCount("500")
-                                            else setAutoTicketsCount("" + (parseInt(autoTicketsCount) + 25))
-                                        }}>+25</button>
-                                        <button className="btn btn-dark" style={{ margin: "5px", borderColor: "white" }} onClick={() => setAutoTicketsCount("" + ("0"))}>Reset</button>
-                                    </div>
-                                </div>
-                            }
-                        </Row>
+                                }
+                            </Row>
+                        */}
+
+                        {/* OLD VERSION - BUTTOn */}
+
+                        {/*
+
                         <Row style={{ justifyContent: "center" }}>
-                            <Col xs={5}>
-                                {
-                                    `${formatNumber(parseInt(currentRoundsState.round_ticket_price) / 1000000)} SEFI / ticket`
-                                }
-                                <br />
-                                {
-                                    "Discount: " + calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, isManualTickets ? manualTickets.length : parseInt(autoTicketsCount), currentRoundsState.round_ticket_price).discount + "%"
-                                }
-                                <br />
-                            </Col>
                             <Col>
                                 <button type="button" className="btn btn-success" style={{ borderRadius: "10px", margin: "10px" }}
                                     disabled={
@@ -275,7 +386,10 @@ export default ({
                                         }
                                     }}>
                                     {
-                                        loadingBuyTickets ? <i className="fa fa-spinner fa-spin"></i> :
+                                        loadingBuyTickets
+                                            ?
+                                            <i className="fa fa-spinner fa-spin"></i>
+                                            :
                                             <div>
                                                 Buy
                                                 <br />
@@ -290,15 +404,9 @@ export default ({
                                 </button>
                             </Col>
                         </Row>
-                        {
-                            currentRoundUserTicketsCount && currentRoundUserTicketsCount > 0 ?
-                                <Row style={{ justifyContent: "center" }}>
-                                    <span>{"You already have "} <b> {(currentRoundUserTicketsCount + " tickets")} </b> {" this round!"} </span>
-                                </Row>
-                                : null
-                        }
+                        */}
 
-                    </Row>
+                    </div>
 
 
 
