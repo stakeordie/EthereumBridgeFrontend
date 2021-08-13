@@ -10,10 +10,15 @@ const CurrentRound = observer((props: any) => {
         <>
             <div className="box-round">
 
-                <div className="data">
-                    <div className="data-header">
-                        <h4>Pot Size</h4>
+                <div className="hero-lottery">
+                    <div className="content-hero">
+                        <div className="data-header">
+                            <h4>Pot Size</h4>
+                        </div>
                     </div>
+                </div>
+
+                <div className="data">
                     <div className="data-body">
                         <h1>218,665 <span>SEFI</span></h1>
                     </div>
