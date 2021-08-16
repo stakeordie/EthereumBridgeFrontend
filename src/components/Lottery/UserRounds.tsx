@@ -35,10 +35,50 @@ export default ({
         }
     }, [client, viewkey])
 
-    if (!client || !viewkey || !paginatedUserRounds) return null
+    if (!client || !viewkey || !paginatedUserRounds) return null;
+
     return (
         <React.Fragment>
-            <div className="row" style={{ justifyContent: "center", margin: "0px" }}>
+
+            <div className="box-tickets">
+
+                <div className="box-tickets-title">
+                    <h2>Your Tickets</h2>
+                </div>
+
+                <div className="tickets-result">
+
+                    <h6>Round</h6>
+                    <h6>End Date</h6>
+                    <h6>Winning Ticket</h6>
+                    <h6>My Tickets</h6>
+
+                    {
+                        paginatedUserRounds &&
+                        paginatedUserRounds.rounds.map((userRound, index) =>
+                            <>
+                                <h6 key={index}>{userRound.round_number}</h6>
+                                <h6>{ }</h6>
+                                <h6>{userRound.drafted_ticket ? userRound.drafted_ticket!.split('').join(' ') : " - "}</h6>
+                                <button
+                                    onClick={
+                                        () => setUserRoundTicketsModal({
+                                            show: true,
+                                            selectedUserRound: userRound,
+                                            userTicketsCount: paginatedUserRounds.user_tickets_count[index]
+                                        })}
+                                >{paginatedUserRounds.user_tickets_count[index] + " Tickets"}
+                                </button>
+                            </>
+                        )
+                    }
+                </div>
+
+            </div>
+
+            {/* Old Versuib */}
+
+            {/* <div className="row" style={{ justifyContent: "center", margin: "0px" }}>
                 <h2>Your Tickets</h2>
             </div>
             <table className="table table-striped table-dark" style={{ margin: "20px" }}>
@@ -89,7 +129,7 @@ export default ({
                         )
                     }
                 </tbody>
-            </table>
+            </table> */}
 
             <UserRoundTicketsModal 
                 userRoundTicketsModal={userRoundTicketsModal}

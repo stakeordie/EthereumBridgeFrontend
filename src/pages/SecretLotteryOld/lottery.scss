@@ -382,18 +382,30 @@ $font-family: Poppins;
     box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
     border-radius: 16px;
     padding: 26px;
-    width: auto;
+    width: 742px;
+    margin: 32px auto 0px auto;
     height: auto;
 
+    h2{
+        text-align: center;
+    }
+
     .tickets-result{
+
         margin-top: 36px;
         display: grid;
-        grid-template-columns: repeat(4,1fr);
+        grid-template-columns: (4,1fr);
         grid-column-gap: 20px;
         grid-row-gap: 16px;
         align-items: center;
+        justify-items: center;
+
+        h6{
+            margin: 0;
+        }
 
         button{
+            cursor: pointer;
             background-color: white;
             height: 46px;
             width: 152.5px;
@@ -404,6 +416,5 @@ $font-family: Poppins;
             font-weight: 600px;
             font-size: 16px;
         }
-            
     }
 }

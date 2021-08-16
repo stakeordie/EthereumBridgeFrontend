@@ -69,12 +69,9 @@ const Lottery = () => {
                                                 paginationValues={paginationValues}
                                             />
                                         </div>
+
                                         <Row>
-                                            <div style={{ backgroundColor: "white", height: "1px", width: "100%", marginTop: "30px", marginBottom: "30px", }}>
-                                            </div>
-                                        </Row>
-                                        <Row>
-                                            <Col xs={7}>
+                                            <Col xs={12}>
                                                 <UserRounds
                                                     paginatedUserRounds={paginatedUserRounds}
                                                     getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
@@ -82,7 +79,7 @@ const Lottery = () => {
                                                     setRoundViewer={setRoundViewer}
                                                 />
                                             </Col>
-                                            <Col style={{ justifyContent: "center", marginLeft: "50px" }}>
+                                            <Col xs={12} style={{ justifyContent: "center", marginLeft: "50px" }}>
                                                 <RoundViewer
                                                     roundViewer={roundViewer}
                                                     setRoundViewer={setRoundViewer}
