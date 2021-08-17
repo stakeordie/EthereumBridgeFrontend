@@ -418,3 +418,136 @@ $font-family: Poppins;
         }
     }
 }
+
+
+.box-previous-round{
+    background:$secret-background;
+    height: 992px;
+    width: 742px;
+    margin-top: 16px;
+    border-radius: 16px;
+    padding: 26px;
+
+    display: grid;
+    grid-template-rows: 3 auto;
+    grid-row-gap: 26px;
+
+    .round-navigation{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+
+    .round-result-container{
+        background:$secret-swap-green-03;
+        padding: 16px;
+        border-radius: 16px;
+        height: auto;
+        height: 805px;
+        width: 690px;
+
+        .round-result-header{
+            display: grid;
+            grid-template-columns: repeat(3, auto);
+            grid-column-gap: 10px;
+            padding: 10px;
+
+            .header-item{
+                display: grid;
+                grid-template-rows: 2 1fr;
+                grid-row-gap: 4px;
+            }
+        }
+
+        .table-titles{
+            margin-top: 16px;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: 33% 40% 27%;
+            // grid-column-gap: 20px;
+        }
+
+        .round-result-body{
+            margin-top: 16px;
+            display: grid;
+            grid-template-rows: 6 1fr;
+            grid-row-gap: 16px;
+            align-items: center;
+
+            .row-body{
+                display: grid;
+                padding: 10px;
+                grid-template-columns: 33% 40% 27%;
+                align-items: center;
+
+                .col-sequence{
+                    i{
+                        margin-right: 12px;
+
+                        :last-of-type{
+                            margin-right: 0px;
+                        }
+                    }
+                }
+
+                .col-dist-rewards{
+                    h4{
+                        text-align: right;
+                    }
+                    p{
+                        text-align: right;
+                        color: $secret-swap-neutral-03;
+                    }
+                }
+
+                .col-winners{
+                    h4{
+                        text-align: right;
+                    }
+                }
+            }
+        }
+
+        .round-result-footer{
+            margin-top: 16px;
+
+            .row-body{
+                padding: 10px;
+                display: grid;
+                grid-template-columns: 33% 40% 27%;
+                align-items: center;
+
+                .col-sequence{
+                    h4{
+                        color:$secret-swap-red-01;
+                        text-align: left;
+                    }
+                }
+
+                .col-dist-rewards{
+                    h4{
+                        text-align: right;
+                    }
+
+                    p{
+                        text-align: right;
+                        color:$secret-swap-neutral-03;
+                    }
+                }
+
+                .col-winners{
+                    h4{
+                        text-align: right;
+                    }
+                }
+
+                
+
+
+            }
+        }
+
+        
+    }
+}

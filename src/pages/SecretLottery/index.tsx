@@ -19,6 +19,7 @@ import BuyTicketModal from 'components/SecretLottery/BuyTicketModal';
 // Styles
 import './index.scss';
 import YourTickets from 'components/SecretLottery/YourTickets';
+import PreviousRound from 'components/SecretLottery/PreviousRound';
 
 const SecretLottery = observer(() => {
 
@@ -53,6 +54,10 @@ const SecretLottery = observer(() => {
                                         <YourTickets>
 
                                         </YourTickets>
+
+                                        <PreviousRound>
+
+                                        </PreviousRound>
 
                                     </div>
                                 </Box>
