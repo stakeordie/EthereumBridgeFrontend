@@ -55,11 +55,11 @@ const Lottery = () => {
                         <ViewKeyContextProvider>
                             <BalancesContextProvices>
                                 <ConfigsContextProvider>
-                                    <ReactNotification />
                                     <Box className={`${theme.currentTheme}`}
                                         pad={{ horizontal: '136px', top: 'small' }}
                                         style={{ alignItems: 'center' }}
                                     >
+                                        <ReactNotification />
                                         <KeplrSetup />
                                         <NavBar menu={"SEFI"} />
                                         <CreateViewkey menu={"SEFI"} />
@@ -69,23 +69,19 @@ const Lottery = () => {
                                                 paginationValues={paginationValues}
                                             />
 
+                                            <UserRounds
+                                                paginatedUserRounds={paginatedUserRounds}
+                                                getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
+                                                paginationValues={paginationValues}
+                                                setRoundViewer={setRoundViewer}
+                                            />
 
-                                            <Row>
-                                                <Col xs={12}>
-                                                    <UserRounds
-                                                        paginatedUserRounds={paginatedUserRounds}
-                                                        getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
-                                                        paginationValues={paginationValues}
-                                                        setRoundViewer={setRoundViewer}
-                                                    />
-                                                </Col>
-                                                <Col xs={12} style={{ justifyContent: "center" }}>
-                                                    <RoundViewer
-                                                        roundViewer={roundViewer}
-                                                        setRoundViewer={setRoundViewer}
-                                                    />
-                                                </Col>
-                                            </Row>
+
+                                            <RoundViewer
+                                                roundViewer={roundViewer}
+                                                setRoundViewer={setRoundViewer}
+                                            />
+
                                         </div>
                                     </Box>
                                 </ConfigsContextProvider>
