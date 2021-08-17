@@ -424,7 +424,7 @@ $font-family: Poppins;
     background:$secret-background;
     height: 992px;
     width: 742px;
-    margin-top: 16px;
+    margin-top: 32px;
     border-radius: 16px;
     padding: 26px;
 
@@ -457,6 +457,18 @@ $font-family: Poppins;
                 display: grid;
                 grid-template-rows: 2 1fr;
                 grid-row-gap: 4px;
+
+                h3{
+                    color:$secret-swap-neutral-03;
+                }
+
+                p{
+                    color:$secret-swap-neutral-03;
+                }
+
+                #sefi-price{
+                    color:$secret-swap-green-01;
+                }
             }
         }
 
@@ -465,7 +477,22 @@ $font-family: Poppins;
             padding: 10px;
             display: grid;
             grid-template-columns: 33% 40% 27%;
-            // grid-column-gap: 20px;
+            
+            h6{
+                color:$secret-swap-neutral-03;
+            }
+
+            .title-sequence{
+                h6{
+                    text-align: left;
+                }
+            }
+
+            .title-winners{
+                h6{
+                    text-align: right;
+                }
+            }
         }
 
         .round-result-body{

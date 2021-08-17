@@ -19,7 +19,7 @@ const PreviousRound = ((props: any) => {
 
                     <div className="round-result-header">
                         <div className="header-item">
-                            <h3>20,886 SEFI</h3>
+                            <h3 id="sefi-price">20,886 SEFI</h3>
                             <p>Prize Pot</p>
                         </div>
                         <div className="header-item">
@@ -33,9 +33,15 @@ const PreviousRound = ((props: any) => {
                     </div>
 
                     <div className="table-titles">
-                        <h6>Sequence</h6>
-                        <h6>Distributed Rewards SEFI</h6>
-                        <h6>Winners</h6>
+                        <div className="title-sequence">
+                            <h6>Sequence</h6>
+                        </div>
+                        <div className="title-rewards">
+                            <h6>Distributed Rewards (SEFI)</h6>
+                        </div>
+                        <div className="title-winners">
+                            <h6>Winners</h6>
+                        </div>
                     </div>
 
                     <div className="round-result-body">
