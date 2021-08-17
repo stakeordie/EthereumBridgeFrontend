@@ -424,9 +424,11 @@ $font-family: Poppins;
     background:$secret-background;
     height: 992px;
     width: 742px;
-    margin-top: 32px;
+    // margin-top: 32px;
     border-radius: 16px;
     padding: 26px;
+    margin: 32px auto 0 auto;
+    // margin: 0 auto;
 
     display: grid;
     grid-template-rows: 3 auto;

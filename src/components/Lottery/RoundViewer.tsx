@@ -20,10 +20,186 @@ export default ({
     /*useEffect(() => {
         if (roundViewer) setSearchState("")
     }, [client, configs, roundViewer])*/
-    
+
+    console.log(roundViewer);
+
     return ( 
         <React.Fragment>
-            <Row style={{ justifyContent: "center", margin: "0px" }}>
+
+            {
+                roundViewer &&
+                <div className="box-previous-round">
+                    <div className="round-title">
+                        <h2>Previous Round</h2>
+                    </div>
+
+                    <div className="round-navigation">
+                        <button>Left</button>
+                        <h4>Round {roundViewer.round_number} </h4>
+                        <button>Right</button>
+                    </div>
+
+                    <div className="round-result-container">
+
+                        <div className="round-result-header">
+                            <div className="header-item">
+                                <h3 id="sefi-price">{formatNumber(parseInt(roundViewer.final_pot_size ? roundViewer.final_pot_size : "0") / 1000000)} SEFI</h3>
+                                <p>Prize Pot</p>
+                            </div>
+                            <div className="header-item">
+                                <h3>{roundViewer.ticket_count}</h3>
+                                <p>Total Tickets</p>
+                            </div>
+                            <div className="header-item">
+                                <h3>{roundViewer.drafted_ticket && roundViewer.drafted_ticket.split("").join(" ")}</h3>
+                                <p>Winning Ticket</p>
+                            </div>
+                        </div>
+
+                        <div className="table-titles">
+                            <div className="title-sequence">
+                                <h6>Sequence</h6>
+                            </div>
+                            <div className="title-rewards">
+                                <h6>Distributed Rewards (SEFI)</h6>
+                            </div>
+                            <div className="title-winners">
+                                <h6>Winners</h6>
+                            </div>
+                        </div>
+
+                        <div className="round-result-body">
+
+                            <div className="row-body">
+                                <div className="col-sequence">
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                </div>
+                                <div className="col-dist-rewards">
+                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_6_pot_size : "0") / 1000000)}</h4>
+                                    <p>$0</p>
+                                </div>
+                                <div className="col-winners">
+                                    <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_6_ticket_win_count : "0"}</h4>
+                                </div>
+                            </div>
+
+                            <div className="row-body">
+                                <div className="col-sequence">
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                </div>
+                                <div className="col-dist-rewards">
+                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_5_pot_size : "0") / 1000000)}</h4>
+                                    <p>$0</p>
+                                </div>
+                                <div className="col-winners">
+                                    <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_5_ticket_win_count : "0"}</h4>
+                                </div>
+                            </div>
+
+                            <div className="row-body">
+                                <div className="col-sequence">
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                </div>
+                                <div className="col-dist-rewards">
+                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_4_pot_size : "0") / 1000000)}</h4>
+                                    <p>$0</p>
+                                </div>
+                                <div className="col-winners">
+                                    <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_4_ticket_win_count : "0"}</h4>
+                                </div>
+                            </div>
+
+                            <div className="row-body">
+                                <div className="col-sequence">
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                </div>
+                                <div className="col-dist-rewards">
+                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_3_pot_size : "0") / 1000000)}</h4>
+                                    <p>$0</p>
+                                </div>
+                                <div className="col-winners">
+                                    <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_3_ticket_win_count : "0"}</h4>
+                                </div>
+                            </div>
+
+                            <div className="row-body">
+                                <div className="col-sequence">
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                </div>
+                                <div className="col-dist-rewards">
+                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_2_pot_size : "0") / 1000000)}</h4>
+                                    <p>$0</p>
+                                </div>
+                                <div className="col-winners">
+                                    <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_2_ticket_win_count : "0"}</h4>
+                                </div>
+                            </div>
+
+                            <div className="row-body">
+                                <div className="col-sequence">
+                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg"></i>
+                                </div>
+                                <div className="col-dist-rewards">
+                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_1_pot_size : "0") / 1000000)}</h4>
+                                    <p>$0</p>
+                                </div>
+                                <div className="col-winners">
+                                    <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_1_ticket_win_count : "0"}</h4>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="round-result-footer">
+                            <div className="row-body">
+                                <div className="col-sequence">
+                                    <h4>Burn</h4>
+                                </div>
+                                <div className="col-dist-rewards">
+                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.burn_pot_size : "0") / 1000000)}</h4>
+                                    <p>$36</p>
+                                </div>
+                                <div className="col-winners">
+                                    <h4>15</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+            {/* <Row style={{ justifyContent: "center", margin: "0px" }}>
                 <h2>Search previous Rounds</h2>
             </Row>
             {
@@ -142,24 +318,26 @@ export default ({
                         </Row>
                     </Col>
                 </Row>
-            }
-            <Row style={{ justifyContent: "flex-end", marginBottom: "20px" }}>
-                                    <Form.Control type="number" placeholder="Round" min={0} style={{ textAlign: "center", width: "20%", borderRadius: "0px", marginTop: "20px" }}
-                                        value={searchState}
-                                        onChange={(e) => setSearchState(e.target.value)}
-                                    />
-                                    <button type="button" style={{ width: "10%", borderRadius: "0px", marginTop: "20px" }}
-                                        disabled={
-                                            searchState === "" ||
-                                            parseInt(searchState) >= configs.current_round_number
-                                        }
-                                        onClick={async () => {
-                                            if (!client) return
-                                            const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [parseInt(searchState)])
-                                            setRoundViewer(response.rounds[0]);
-                                        }}
-                                        className="btn btn-info"><i className="fas fa-search"></i></button>
-                                </Row>
+            }*/}
+
+
+            <Row style={{ marginBottom: "20px" }}>
+                <Form.Control type="number" placeholder="Round" min={0} style={{ textAlign: "center", width: "20%", borderRadius: "0px", marginTop: "20px" }}
+                    value={searchState}
+                    onChange={(e) => setSearchState(e.target.value)}
+                />
+                <button type="button" style={{ width: "10%", borderRadius: "0px", marginTop: "20px" }}
+                    disabled={
+                        searchState === "" ||
+                        parseInt(searchState) >= configs.current_round_number
+                    }
+                    onClick={async () => {
+                        if (!client) return
+                        const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [parseInt(searchState)])
+                        setRoundViewer(response.rounds[0]);
+                    }}
+                    className="btn btn-info"><i className="fas fa-search"></i></button>
+            </Row>
         </React.Fragment>
     )
 }

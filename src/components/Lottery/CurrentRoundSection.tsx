@@ -46,6 +46,8 @@ export default ({
     const [autoTicketsCount, setAutoTicketsCount] = useState<string>("0");
     const [manualTickets, setManualTickets] = useState<string[]>([]);
 
+    console.log(currentRoundsState);
+
     useEffect(() => {
         if (client && viewkey) {
             getConfigsTrigger(client)

@@ -68,24 +68,25 @@ const Lottery = () => {
                                                 getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
                                                 paginationValues={paginationValues}
                                             />
-                                        </div>
 
-                                        <Row>
-                                            <Col xs={12}>
-                                                <UserRounds
-                                                    paginatedUserRounds={paginatedUserRounds}
-                                                    getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
-                                                    paginationValues={paginationValues}
-                                                    setRoundViewer={setRoundViewer}
-                                                />
-                                            </Col>
-                                            <Col xs={12} style={{ justifyContent: "center", marginLeft: "50px" }}>
-                                                <RoundViewer
-                                                    roundViewer={roundViewer}
-                                                    setRoundViewer={setRoundViewer}
-                                                />
-                                            </Col>
-                                        </Row>
+
+                                            <Row>
+                                                <Col xs={12}>
+                                                    <UserRounds
+                                                        paginatedUserRounds={paginatedUserRounds}
+                                                        getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
+                                                        paginationValues={paginationValues}
+                                                        setRoundViewer={setRoundViewer}
+                                                    />
+                                                </Col>
+                                                <Col xs={12} style={{ justifyContent: "center" }}>
+                                                    <RoundViewer
+                                                        roundViewer={roundViewer}
+                                                        setRoundViewer={setRoundViewer}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </div>
                                     </Box>
                                 </ConfigsContextProvider>
                             </BalancesContextProvices>
