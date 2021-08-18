@@ -729,41 +729,49 @@ $font-family: Poppins;
                 justify-content: space-evenly;
                 margin-bottom: 10px;
             }
-            
-            .ticket-button-win{
-                height: 40px;
-                width: 142px;
-                background-color: $secret-swap-green-03;
-                cursor: pointer;
-                border-radius: 10px;
-                padding: 8px;
-                color: $secret-swap-neutral-03;
-                text-align: center;
-                border: none;
-            }
-            
-            .ticket-button-no-win{
-                height: 40px;
-                width: 142px;
-                background-color: $secret-swap-red-02;
-                cursor: pointer;
-                border-radius: 10px;
-                padding: 8px;
-                color: $secret-swap-neutral-03;
-                text-align: center;
-                border: none;
-            }
     
-            .ticket-button-normal{
+            .ticket-button{
+                background-color: #F9FAFA;
                 height: 40px;
                 width: 142px;
-                background-color: #F9FAFA;
                 cursor: pointer;
                 border-radius: 10px;
                 padding: 8px;
                 color: $secret-swap-neutral-03;
                 text-align: center;
                 border: none;
+                font-size: 16px;
+                padding: 8px 41.8px;
+                font-weight: 600;
+
+                &-winner{
+                    background-color:$secret-swap-green-03;
+                    height: 40px;
+                    width: 142px;
+                    cursor: pointer;
+                    border-radius: 10px;
+                    padding: 8px;
+                    color: $secret-swap-neutral-03;
+                    text-align: center;
+                    border: none;
+                    font-size: 16px;
+                    padding: 8px 41.8px;
+                    font-weight: 600;
+                }
+
+                &-no-winner{
+                    background-color:$secret-swap-red-02;
+                    width: 142px;
+                    cursor: pointer;
+                    border-radius: 10px;
+                    padding: 8px;
+                    color: $secret-swap-neutral-03;
+                    text-align: center;
+                    border: none;
+                    font-size: 16px;
+                    padding: 8px 41.8px;
+                    font-weight: 600;
+                }
             }
         }
 

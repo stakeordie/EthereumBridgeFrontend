@@ -225,13 +225,13 @@ export default ({
                                         </Popover.Content>
                                     </Popover>
                                 }>
-                                    <button className={`ticket-button-${!ticketPrizes ? "normal" : ticketPrizes.sequence_1.length > 0 ? "win" : "no-win"}`}>
-                                        {userTicket.ticket.split('').join(' ')}
+                                    <button className={`ticket-button-${!ticketPrizes ? "normal" : ticketPrizes.sequence_1.length > 0 ? "winner" : "no-winner"}`}>
+                                        {userTicket.ticket}
                                     </button>
                                 </OverlayTrigger>
                                 :
-                                <button className='ticket-button-normal'>
-                                    {userTicket.ticket.split('').join(' ')}
+                                <button className='ticket-button'>
+                                    {userTicket.ticket}
                                 </button>
                         }
                     </div>
