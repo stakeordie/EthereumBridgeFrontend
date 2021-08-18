@@ -304,36 +304,38 @@ export default ({
                                 </div>
 
                                 <div className="earnings-info">
-                                    <div className="row-earnings">
-                                        <p>You Earned</p>
-                                        <h4>17.4689<span> SEFI</span></h4>
-                                    </div>
                                     {
                                         userRoundTickets && remainingRewardTickets &&
-                                        <div className="row-earning-sefi">
-                                            {
-                                                remainingRewardTickets.remainingPrizeToClaim > 0 ?
-                                                    <Button
-                                                        fluid
-                                                        color="black"
-                                                        disabled={loadingClaimReward}
-                                                        onClick={async () => {
-                                                            claimButtonLogic(round, userRoundTickets);
-                                                        }}>
-                                                        {
-                                                            loadingClaimReward ?
-                                                                <i className="fa fa-spinner fa-spin"></i> :
-                                                                `Claim ${formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)} SEFI`
-                                                        }
-                                                    </Button>
-                                                    :
-                                                    calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) > 0
-                                                        ?
-                                                        "Claimed " + formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000) + " SEFI"
+                                        <>
+                                            <div className="row-earnings">
+                                                <p>You Earned</p>
+                                                <h4>{formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)}<span> SEFI</span></h4>
+                                            </div>
+                                            <div className="row-earning-sefi">
+                                                {
+                                                    remainingRewardTickets.remainingPrizeToClaim > 0 ?
+                                                        <Button
+                                                            fluid
+                                                            color="black"
+                                                            disabled={loadingClaimReward}
+                                                            onClick={async () => {
+                                                                claimButtonLogic(round, userRoundTickets);
+                                                            }}>
+                                                            {
+                                                                loadingClaimReward ?
+                                                                    <i className="fa fa-spinner fa-spin"></i> :
+                                                                    `Claim ${formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)} SEFI`
+                                                            }
+                                                        </Button>
                                                         :
-                                                        " - "
-                                            }
-                                        </div>
+                                                        calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) > 0
+                                                            ?
+                                                            "Claimed " + formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000) + " SEFI"
+                                                            :
+                                                            " - "
+                                                }
+                                            </div>
+                                        </>
                                     }
 
                                     {/* {round.drafted_ticket ? round.drafted_ticket!.split('').join('  ') : "? ? ? ? ? ?"} */}
