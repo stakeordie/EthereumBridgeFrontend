@@ -210,6 +210,36 @@ $font-family: Poppins;
     background: #FFFFFF;
     box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12), 0px 10px 32px -4px rgba(24, 39, 75, 0.1);
     border-radius: 16px;
+    //Buy tickets manually
+    .thumb{
+        background: #ccc;
+    }
+    .inputs-container{
+        padding: .5rem .5rem;
+        min-height: 44px;
+        max-height: 184px;
+        height: 184px !important;
+        margin: 0;
+        div:first-child{
+            display: grid;
+            gap: 10px;
+            grid-template-columns: auto auto auto;
+            grid-template-rows: 45px 45px 45px ;
+        }
+        div{
+            &.manual-input{
+                display: -webkit-box;
+                width: fit-content;
+                height: fit-content;
+                input {
+                    min-height: 44px;
+                    max-height: 44px;
+                    min-width: 110px;
+                    min-width: 110px;
+                }
+            }
+        }
+    }
 
     .modal-header-buy{
         display: flex;
