@@ -7,6 +7,7 @@ $secret-swap-green-01: #3EA248;
 $secret-swap-green-02: #79CC81;
 $secret-swap-green-03: #E9F7EA;
 $secret-swap-red-01: #D94C48;
+$secret-swap-red-02: #FAE6E6;
 $secret-swap-neutral-01: #0E0E10;
 $secret-swap-neutral-03: #5F5F6B;
 
@@ -644,6 +645,37 @@ $font-family: Poppins;
         margin-top: 26px;
         padding: 0;
 
+        .active-round{
+            margin-bottom: 26px;
+            width: 276px;
+
+            p{
+                font-family: Poppins;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px;
+                letter-spacing: 0em;
+                text-align: left;
+                margin: 0;
+                color:$secret-swap-neutral-03
+            }
+
+            span{
+                
+                font-family: Poppins;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 24px;
+                letter-spacing: 0em;
+                text-align: right;
+                margin: 0;
+                color:$secret-swap-neutral-01;
+                    
+            }
+        }
+
         .body-container{
             margin-bottom: 26px;
             display: grid;
@@ -652,7 +684,7 @@ $font-family: Poppins;
             .tickets-info{
                
                 .tickets-info-container{
-                     display: grid;
+                    display: grid;
                     grid-template-rows: 3 1fr;
                     grid-row-gap: 16px;
                     width: 276px;
@@ -705,16 +737,105 @@ $font-family: Poppins;
                 display: grid;
                 grid-template-rows: 50% 50%;
                 grid-row-gap: 10px;
+                align-items: center;
 
                 .row-earnings{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
 
+                    p{
+                        color:$secret-swap-neutral-03;
+                        margin: 0;
+                    }
+
+                    h4{
+                        color:$secret-swap-green-01;
+                        font-family: Poppins;
+                        font-size: 36px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 54px;
+                        letter-spacing: 0em;
+                    }
+
+                    span{
+                        color:$secret-swap-neutral-03;
+                        font-family: Poppins;
+                        font-size: 22px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 29px;
+                        letter-spacing: 0em;
+                    }
                 }
 
                 .row-earning-sefi{
-
+                    button{
+                        height: 46px;
+                    }
                 }
             }
         }
+
+        .tickets-container{
+            max-height: 400px;
+            overflow-y: scroll;
+            overflow-anchor: .5px;
+            overflow-x: hidden;
+
+            .tickets-row{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-evenly;
+                margin-bottom: 10px;
+            }
+    
+            .ticket-button{
+                background-color: #F9FAFA;
+                height: 40px;
+                width: 142px;
+                cursor: pointer;
+                border-radius: 10px;
+                padding: 8px;
+                color: $secret-swap-neutral-03;
+                text-align: center;
+                border: none;
+                font-size: 16px;
+                padding: 8px 41.8px;
+                font-weight: 600;
+
+                &-winner{
+                    background-color:$secret-swap-green-03;
+                    height: 40px;
+                    width: 142px;
+                    cursor: pointer;
+                    border-radius: 10px;
+                    padding: 8px;
+                    color: $secret-swap-neutral-03;
+                    text-align: center;
+                    border: none;
+                    font-size: 16px;
+                    padding: 8px 41.8px;
+                    font-weight: 600;
+                }
+
+                &-no-winner{
+                    background-color:$secret-swap-red-02;
+                    width: 142px;
+                    cursor: pointer;
+                    border-radius: 10px;
+                    padding: 8px;
+                    color: $secret-swap-neutral-03;
+                    text-align: center;
+                    border: none;
+                    font-size: 16px;
+                    padding: 8px 41.8px;
+                    font-weight: 600;
+                }
+            }
+        }
+
 
     }
     
