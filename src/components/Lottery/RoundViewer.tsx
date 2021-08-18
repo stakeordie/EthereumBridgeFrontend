@@ -51,7 +51,7 @@ export default ({
                                 <p>Total Tickets</p>
                             </div>
                             <div className="header-item">
-                                <h3>{roundViewer.drafted_ticket && roundViewer.drafted_ticket.split("").join(" ")}</h3>
+                                <h3>{roundViewer.drafted_ticket && roundViewer.drafted_ticket}</h3>
                                 <p>Winning Ticket</p>
                             </div>
                         </div>
