@@ -580,3 +580,112 @@ $font-family: Poppins;
         
     }
 }
+
+.modal-content{
+    width: 100%;
+    background-color: $secret-background;
+    background-clip: none;
+    border-radius: 16px;
+    padding: 26px;
+    border: none;
+    box-shadow: 0px 10px 32px -4px #18274B1A;
+    box-shadow: 0px 6px 14px -6px #18274B1F;
+
+    .modal-header{
+        border: none;
+        padding: 0;
+
+        h6{
+            margin: 0;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+            color:$secret-swap-neutral-03;
+
+            strong{
+                color: #0E0E10;
+            }
+        }
+    }
+
+    .modal-body{
+        margin-top: 26px;
+        padding: 0;
+
+        .body-container{
+            margin-bottom: 26px;
+            display: grid;
+            grid-template-columns: 50% 50%;
+            
+            .tickets-info{
+               
+                .tickets-info-container{
+                     display: grid;
+                    grid-template-rows: 3 1fr;
+                    grid-row-gap: 16px;
+                    width: 276px;
+                    // height: 142px;
+                }
+
+                .info-item{
+                    display: flex;
+                    justify-content: space-between;
+
+                    p{
+                        font-family: Poppins;
+                        font-size: 16px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 24px;
+                        letter-spacing: 0em;
+                        text-align: left;
+                        margin: 0;
+                        color:$secret-swap-neutral-03
+                    }
+
+                    #winning-text{
+                        color:$secret-swap-neutral-01;
+                    }
+
+                    #winning-number{
+                        color:$secret-swap-green-01;
+                    }
+
+                    h6{
+                        font-family: Poppins;
+                        font-size: 16px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 24px;
+                        letter-spacing: 0em;
+                        text-align: right;
+                        margin: 0;
+                        color:$secret-swap-neutral-01;
+                    }
+                }
+            }
+    
+            .earnings-info{
+                background-color: $secret-swap-green-03;
+                border-radius: 16px;
+                height: 142px;
+                padding: 16px;
+                display: grid;
+                grid-template-rows: 50% 50%;
+                grid-row-gap: 10px;
+
+                .row-earnings{
+
+                }
+
+                .row-earning-sefi{
+
+                }
+            }
+        }
+
+    }
+    
+}

@@ -1,5 +1,6 @@
 import React, { Dispatch, useContext, useEffect, useState } from "react";
-import { Button, Col, Modal, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
+import { Col, Modal, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
+import { Button } from 'semantic-ui-react';
 import claimRewards from "../../pages/SecretLottery/api/claimRewards";
 import getBalance from "../../pages/SecretLottery/api/getBalance";
 import { IRound } from "../../pages/SecretLottery/api/getRounds";
@@ -174,7 +175,7 @@ export default ({
     }
 
     const RenderTickets = ({ userRoundTickets, round }: { userRoundTickets: IUserTicket[], round: IRound }) => {
-        let i, j, chunk = 4;
+        let i, j, chunk = 5;
         let renderSections = [];
         const userRoundTicketsCopy: IUserTicket[] = JSON.parse(JSON.stringify(userRoundTickets));
 
@@ -247,6 +248,7 @@ export default ({
         return <div style={{ maxHeight: "400px", overflowY: "scroll", overflowX: "hidden" }}>{renderSections.map((section) => section)}</div>
     }
 
+    // S T A R T - R E N D E R I N G - I N F O 
     if (userRoundTicketsModal.selectedUserRound && userRoundTicketsModal.userTicketsCount) {
         const round = userRoundTicketsModal.selectedUserRound;
         let winTicketsCount = null
@@ -259,49 +261,85 @@ export default ({
         }
 
         return (
-            <Modal size="lg" centered className="dimmer" show={userRoundTicketsModal.show} onHide={() => setUserRoundTicketsModal({ show: false, selectedUserRound: null, userTicketsCount: null })}>
-                <Modal.Header className="modal-header" closeButton>
-                    <Modal.Title>Round {round.round_number}</Modal.Title>
+            <Modal
+                size="lg" centered className="dimmer"
+                show={userRoundTicketsModal.show}
+                onHide={() => setUserRoundTicketsModal(
+                    { show: false, selectedUserRound: null, userTicketsCount: null }
+                )}>
+
+                <Modal.Header
+                    closeButton
+                    className="modal-header"
+                >
+                    <Modal.Title>
+                        <h6>Your Tickets <strong> Round {round.round_number}</strong></h6>
+                    </Modal.Title>
                 </Modal.Header>
+
                 <Modal.Body className="modal-body">
-                    <Row>
-                        <Col xs="7" style={{ fontSize: "2.5rem", textAlignLast: "center", alignSelf: "center" }}>
-                            {round.drafted_ticket ? round.drafted_ticket!.split('').join('  ') : "? ? ? ? ? ?"}
-                        </Col>
-                        <Col>
-                            <Row>Your Total Tickets: {userRoundTicketsModal.userTicketsCount}</Row>
-                            <Row>Your Winning Tickets: {winTicketsCount ? winTicketsCount : " - "}</Row>
+
+                    <div className="body-container">
+
+                        <div className="tickets-info">
+                            <div className="tickets-info-container">
+                                <div className="info-item">
+                                    <p>Your Total Tickets: </p>
+                                    <h6>{userRoundTicketsModal.userTicketsCount}</h6>
+                                </div>
+                                <div className="info-item">
+                                    <p>Your Winning Tickets:</p>
+                                    <h6>{winTicketsCount ? winTicketsCount : " - "}</h6>
+                                </div>
+                                <div className="info-item">
+                                    <p id="winning-text">Winning Ticket:</p>
+                                    <h6 id="winning-number">{round.drafted_ticket ? round.drafted_ticket!.split('').join('  ') : "? ? ? ? ? ?"}</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            className="earnings-info"
+                        >
+                            <div className="row-earnings">
+                                <p>You Earned</p>
+
+                            </div>
                             {
                                 userRoundTickets && remainingRewardTickets &&
-                                    <Row>
-                                        {
-                                            remainingRewardTickets.remainingPrizeToClaim > 0 ?
-                                                <button className="btn btn-success"
-                                                    disabled={loadingClaimReward}
-                                                    onClick={async () => {
-                                                        claimButtonLogic(round, userRoundTickets);
-                                                    }}>
-                                                    {
-                                                        loadingClaimReward ?
-                                                            <i className="fa fa-spinner fa-spin"></i> :
-                                                            `Claim ${formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)} SEFI`
-                                                    }
-                                                </button>
+                                <div className="row-earning-sefi">
+                                    {
+                                        remainingRewardTickets.remainingPrizeToClaim > 0 ?
+                                            <Button
+                                                fluid
+                                                color="black"
+                                                disabled={loadingClaimReward}
+                                                onClick={async () => {
+                                                    claimButtonLogic(round, userRoundTickets);
+                                                }}>
+                                                {
+                                                    loadingClaimReward ?
+                                                        <i className="fa fa-spinner fa-spin"></i> :
+                                                        `Claim ${formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)} SEFI`
+                                                }
+                                            </Button>
+                                            :
+                                            calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) > 0
+                                                ?
+                                                "Claimed " + formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000) + " SEFI"
                                                 :
-                                                calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) > 0 ?
-                                                    "Claimed " + formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000) + " SEFI" :
-                                                    " - "
-                                        }
-                                    </Row>
+                                                " - "
+                                    }
+                                </div>
                             }
-                        </Col>
-                    </Row>
-                    <Row>
-                        <div style={{ backgroundColor: "white", height: "1px", width: "100%", marginTop: "30px", marginBottom: "30px", }}>
+
+                            {/* {round.drafted_ticket ? round.drafted_ticket!.split('').join('  ') : "? ? ? ? ? ?"} */}
                         </div>
-                    </Row>
+                    </div>
+
                     {!userRoundTickets && <i className="fa fa-spinner fa-spin"></i>}
                     {userRoundTickets && <RenderTickets userRoundTickets={userRoundTickets} round={userRoundTicketsModal.selectedUserRound} />}
+
                 </Modal.Body>
             </Modal>
         )
