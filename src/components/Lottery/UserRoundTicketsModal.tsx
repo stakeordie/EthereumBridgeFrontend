@@ -303,7 +303,7 @@ export default ({
                         >
                             <div className="row-earnings">
                                 <p>You Earned</p>
-
+                                <h4>17.4689<span> SEFI</span></h4>
                             </div>
                             {
                                 userRoundTickets && remainingRewardTickets &&
