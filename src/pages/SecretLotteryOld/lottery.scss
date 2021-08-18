@@ -7,6 +7,7 @@ $secret-swap-green-01: #3EA248;
 $secret-swap-green-02: #79CC81;
 $secret-swap-green-03: #E9F7EA;
 $secret-swap-red-01: #D94C48;
+$secret-swap-red-02: #FAE6E6;
 $secret-swap-neutral-01: #0E0E10;
 $secret-swap-neutral-03: #5F5F6B;
 
@@ -715,6 +716,57 @@ $font-family: Poppins;
                 }
             }
         }
+
+        .tickets-container{
+            max-height: 400px;
+            overflow-y: scroll;
+            overflow-anchor: .5px;
+            overflow-x: hidden;
+
+            .tickets-row{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-evenly;
+                margin-bottom: 10px;
+            }
+            
+            .ticket-button-win{
+                height: 40px;
+                width: 142px;
+                background-color: $secret-swap-green-03;
+                cursor: pointer;
+                border-radius: 10px;
+                padding: 8px;
+                color: $secret-swap-neutral-03;
+                text-align: center;
+                border: none;
+            }
+            
+            .ticket-button-no-win{
+                height: 40px;
+                width: 142px;
+                background-color: $secret-swap-red-02;
+                cursor: pointer;
+                border-radius: 10px;
+                padding: 8px;
+                color: $secret-swap-neutral-03;
+                text-align: center;
+                border: none;
+            }
+    
+            .ticket-button-normal{
+                height: 40px;
+                width: 142px;
+                background-color: #F9FAFA;
+                cursor: pointer;
+                border-radius: 10px;
+                padding: 8px;
+                color: $secret-swap-neutral-03;
+                text-align: center;
+                border: none;
+            }
+        }
+
 
     }
     

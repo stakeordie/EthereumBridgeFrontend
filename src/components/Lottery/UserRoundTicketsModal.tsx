@@ -210,10 +210,10 @@ export default ({
                 }
 
                 return (
-                    <Col style={{ textAlignLast: "center" }}>
+                    <div className="ticket">
                         {
                             round.drafted_ticket ?
-                                <OverlayTrigger trigger="click" placement="right" rootClose overlay={
+                                <OverlayTrigger trigger="hover" placement="right" rootClose overlay={
                                     <Popover id="popover-basic">
                                         <Popover.Title as="h3">Ticket {userTicket.ticket.split('').join(' ')}</Popover.Title>
                                         <Popover.Content>
@@ -225,27 +225,29 @@ export default ({
                                         </Popover.Content>
                                     </Popover>
                                 }>
-                                    <button className={`btn btn-${!ticketPrizes ? "secondary" : ticketPrizes.sequence_1.length > 0 ? "success" : "danger"} m-1`}>
+                                    <button className={`ticket-button-${!ticketPrizes ? "normal" : ticketPrizes.sequence_1.length > 0 ? "win" : "no-win"}`}>
                                         {userTicket.ticket.split('').join(' ')}
                                     </button>
                                 </OverlayTrigger>
                                 :
-                                <button className={`btn btn-secondary m-1`}>
+                                <button className='ticket-button-normal'>
                                     {userTicket.ticket.split('').join(' ')}
                                 </button>
                         }
-                    </Col>
+                    </div>
                 )
             })
 
             renderSections.push(
-                <Row>
+                <div className="tickets-row">
                     {ticketColumns.map((col) => col)}
-                </Row>
+                </div>
             )
         }
 
-        return <div style={{ maxHeight: "400px", overflowY: "scroll", overflowX: "hidden" }}>{renderSections.map((section) => section)}</div>
+        return <div className="tickets-container">
+            {renderSections.map((section) => section)}
+        </div>
     }
 
     // S T A R T - R E N D E R I N G - I N F O 
@@ -338,7 +340,13 @@ export default ({
                     </div>
 
                     {!userRoundTickets && <i className="fa fa-spinner fa-spin"></i>}
-                    {userRoundTickets && <RenderTickets userRoundTickets={userRoundTickets} round={userRoundTicketsModal.selectedUserRound} />}
+
+                    {userRoundTickets &&
+                        <RenderTickets
+                            userRoundTickets={userRoundTickets}
+                            round={userRoundTicketsModal.selectedUserRound}
+                        />
+                    }
 
                 </Modal.Body>
             </Modal>
