@@ -201,12 +201,12 @@ export default ({
                     ticketPrizes = getPrizedTicketResults(round.drafted_ticket, [userTicket])
                     accumutatedTicketRewards = getPrizeValueFromTicket(round, ticketPrizes);
                     
-                    if (ticketPrizes.sequence_6.length) ticketSequence = "Matched 6 Sequence" 
-                    else if (ticketPrizes.sequence_5.length) ticketSequence = "Matched 5 Sequence" 
-                    else if (ticketPrizes.sequence_4.length) ticketSequence = "Matched 4 Sequence" 
-                    else if (ticketPrizes.sequence_3.length) ticketSequence = "Matched 3 Sequence" 
-                    else if (ticketPrizes.sequence_2.length) ticketSequence = "Matched 2 Sequence" 
-                    else if (ticketPrizes.sequence_1.length) ticketSequence = "Matched 1 Sequence" 
+                    if (ticketPrizes.sequence_6.length) ticketSequence = "Matched all 6"
+                    else if (ticketPrizes.sequence_5.length) ticketSequence = "Matched first 5"
+                    else if (ticketPrizes.sequence_4.length) ticketSequence = "Matched first 4"
+                    else if (ticketPrizes.sequence_3.length) ticketSequence = "Matched first 3"
+                    else if (ticketPrizes.sequence_2.length) ticketSequence = "Matched first 2"
+                    else if (ticketPrizes.sequence_1.length) ticketSequence = "Matched first 1"
                     else ticketSequence = "Matched 0 Sequence" 
                 }
 
@@ -214,15 +214,15 @@ export default ({
                     <div className="ticket">
                         {
                             round.drafted_ticket ?
-                                <OverlayTrigger trigger="hover" placement="right" rootClose overlay={
-                                    <Popover id="popover-basic">
-                                        <Popover.Title as="h3">Ticket {userTicket.ticket.split('').join(' ')}</Popover.Title>
+                                <OverlayTrigger placement="top" rootClose
+                                    overlay={
+                                        <Popover id="popover-basic">
                                         <Popover.Content>
-                                            <div>
-                                                {ticketSequence}
-                                                <br/>
-                                                {"Ticket Rewards: " + (accumutatedTicketRewards ? formatNumber(accumutatedTicketRewards! / 1000000) : 0) + " SEFI"}
-                                            </div>
+                                                <div className="popover-content">
+                                                    <p><strong>Ticket {userTicket.ticket}</strong></p>
+                                                    <p>{ticketSequence}</p>
+                                                    <p>Ticket Rewards: {(accumutatedTicketRewards ? formatNumber(accumutatedTicketRewards! / 1000000) : 0)} </p>
+                                                </div>
                                         </Popover.Content>
                                     </Popover>
                                 }>
