@@ -9,7 +9,7 @@ import getConfigs, { IConfigs } from "../../pages/SecretLottery/api/getConfigs";
 import getRounds, { IRound } from "../../pages/SecretLottery/api/getRounds";
 import getRoundStakingRewards, { IStakingRewads } from "../../pages/SecretLottery/api/getRoundStakingRewards";
 import getUserRoundsTicketCount from "../../pages/SecretLottery/api/getUserRoundsTicketCount";
-
+import Scrollbars from 'react-custom-scrollbars';
 import { BalancesDispatchContext } from "../../stores/lottery-context/BalancesContext";
 import { ClientContext, IClientState } from "../../stores/lottery-context/ClientContext";
 import { ConfigsContext, ConfigsDispatchContext } from "../../stores/lottery-context/LotteryConfigsContext";
@@ -19,6 +19,7 @@ import calcTotalPotSize from "../../utils/secret-lottery/calcTotalPotSize";
 import formatNumber from "../../utils/secret-lottery/formatNumber";
 import generateRandomTickets from "../../utils/secret-lottery/generateRandomTickets";
 import { errorNotification, successNotification } from "../../utils/secret-lottery/notifications";
+import { isNaN } from "lodash";
 
 export default ({
     getPaginatedUserTicketsTrigger,
@@ -43,10 +44,10 @@ export default ({
 
     const [loadingBuyTickets, setLoadingBuyTickets] = useState<boolean>(false)
     const [isManualTickets, setIsManualTickets] = useState<boolean>(false);
-    const [autoTicketsCount, setAutoTicketsCount] = useState<string>("0");
+    const [ticketsCount, setTicketsCount] = useState<string>("0");
     const [manualTickets, setManualTickets] = useState<string[]>([]);
 
-    console.log(currentRoundsState);
+    
 
     useEffect(() => {
         if (client && viewkey) {
@@ -56,6 +57,17 @@ export default ({
             }, 30000); // check 30 seconds
         }
     }, [client, viewkey])
+    useEffect(()=>{
+        const emptyArray=[];
+        for (let i = 0; i < parseFloat(ticketsCount); i++) {
+            if(manualTickets[i] !== ""){
+                emptyArray[i]= manualTickets[i];
+            }else{
+                emptyArray.push("");
+            }
+        }
+        setManualTickets(emptyArray);
+    },[ticketsCount])
 
     useEffect(() => {
         if (client && viewkey && configs) {
@@ -100,6 +112,14 @@ export default ({
         </div>
     )
     if (!viewkey) return null
+    
+
+    const renderThumbVertical=()=>{
+        //TODO: add dark support
+        return <div className={`thumb`}></div>
+    }
+    
+    //TODO: add dark support
     return (
         <React.Fragment>
             {
@@ -163,51 +183,73 @@ export default ({
                         </div>
 
                         <div className="modal-nav">
-                            <button className="active">Auto</button>
-                            <button className="inactive">Manual</button>
+                            <button onClick={()=>setIsManualTickets(false)} className={(isManualTickets)?'inactive':'active'}>Auto</button>
+                            <button onClick={()=>setIsManualTickets(true)} className={(isManualTickets)?'active':'inactive'}>Manual</button>
                         </div>
 
                         <div className="modal-body-buy">
                             <div className="modal-input">
-                                {
-                                    !isManualTickets &&
-                                    <Input
-                                        fluid
-                                        placeholder="000"
-                                        type="number"
-                                        value={autoTicketsCount}
-                                        onChange={(e) => {
-                                            if (!e.target.value || e.target.value === "") setAutoTicketsCount("0")
-                                            else if (parseInt(e.target.value) >= 500) setAutoTicketsCount("500")
-                                            else setAutoTicketsCount(e.target.value)
-                                        }}
-                                    >
-                                        <Button
-                                            type='submit'
-                                            onClick={() => {
-                                                if (parseInt(autoTicketsCount) > 0) setAutoTicketsCount("" + (parseInt(autoTicketsCount) - 1))
-                                            }}>-
-                                        </Button>
-                                        <input />
-                                        <Button
-                                            type='submit'
-                                            onClick={() => {
-                                                if (parseInt(autoTicketsCount) >= 500) setAutoTicketsCount("500")
-                                                else setAutoTicketsCount("" + (parseInt(autoTicketsCount) + 1))
-                                            }}>+
-                                        </Button>
-                                    </Input>
-                                }
+                                <Input
+                                    fluid
+                                    placeholder="000"
+                                    type="number"
+                                    value={ticketsCount}
+                                    onChange={(e) => {
+                                        if (!e.target.value || e.target.value === "") setTicketsCount("0")
+                                        else if (parseInt(e.target.value) >= 500) setTicketsCount("500")
+                                        else setTicketsCount(e.target.value)
+                                    }}
+                                >
+                                    <Button
+                                        type='submit'
+                                        onClick={() => {
+                                            if (parseInt(ticketsCount) > 0) setTicketsCount("" + (parseInt(ticketsCount) - 1))
+                                        }}>-
+                                    </Button>
+                                    <input />
+                                    <Button
+                                        type='submit'
+                                        onClick={() => {
+                                            if (parseInt(ticketsCount) >= 500) setTicketsCount("500")
+                                            else setTicketsCount("" + (parseInt(ticketsCount) + 1))
+                                        }}>+
+                                    </Button>
+                                </Input> 
                             </div>
+                            {
+                                (isManualTickets && parseFloat(ticketsCount)>0)&& 
+                                <Scrollbars autoHide renderThumbVertical={renderThumbVertical} className='inputs-container'>
+                                    {
+                                        manualTickets.map((currentValue:string,index:number)=>(
+                                            <Input
+                                                key={`input-${index}`}
+                                                className='manual-input' 
+                                                fluid
+                                                placeholder="000000"
+                                                type="number"
+                                                value={currentValue}
+                                                onChange={(e)=>{
+                                                    let value:any = e.target.value;
+                                                    let valueInt = parseInt(value);
+                                                    
+                                                    if(isNaN(valueInt) || value.length > 6 ) return;
+                                                    if(valueInt < 0) value = (valueInt * -1).toString()
 
+                                                    setManualTickets(manualTickets.map((v,i)=> i===index ? value : v ))
+                                                }}
+                                            />
+                                        ))
+                                    }
+                                </Scrollbars>
+                            }
                             <Button
                                 fluid
                                 color="black"
                                 type="button"
                                 disabled={
                                     loadingBuyTickets ||
-                                    (isManualTickets && manualTickets.length === 0) ||
-                                    (!isManualTickets && parseInt(autoTicketsCount) === 0)
+                                    (isManualTickets && manualTickets.filter((e)=>e?.length === 6).length !== manualTickets.length) ||
+                                    (!isManualTickets && parseInt(ticketsCount) === 0)
                                 }
                                 onClick={async () => {
                                     if (!configs) return
@@ -221,9 +263,9 @@ export default ({
                                             tickets = manualTickets;
                                             ticketPrice = "" + calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, manualTickets.length, currentRoundsState.round_ticket_price).finalPrice
                                         } else {
-                                            const autoGeneratedTickets = generateRandomTickets(parseInt(autoTicketsCount));
+                                            const autoGeneratedTickets = generateRandomTickets(parseInt(ticketsCount));
                                             tickets = autoGeneratedTickets;
-                                            ticketPrice = "" + calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(autoTicketsCount), currentRoundsState.round_ticket_price).finalPrice
+                                            ticketPrice = "" + calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(ticketsCount), currentRoundsState.round_ticket_price).finalPrice
                                         }
 
                                         await buyTickets(
@@ -238,7 +280,8 @@ export default ({
                                         await getPaginatedUserTicketsTrigger(client, viewkey, paginationValues.page, paginationValues.page_size)
                                         await getSEFIBalance()
                                         successNotification("Buy Tickets Success!")
-
+                                        setTicketsCount('0')
+                                        setManualTickets([])
                                         setLoadingBuyTickets(false)
                                     }
                                     catch (e) {
@@ -266,19 +309,17 @@ export default ({
                             <div className="row-footer">
                                 <p>Ticket Price</p>
                                 <h6>
-                                    {`${isManualTickets ?
-                                        formatNumber(calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, manualTickets.length, currentRoundsState.round_ticket_price).finalPrice / 1000000) :
-                                        formatNumber(calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(autoTicketsCount), currentRoundsState.round_ticket_price).finalPrice / 1000000)
-                                        } SEFI`}
+                                    {`${formatNumber(calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(ticketsCount), currentRoundsState.round_ticket_price).finalPrice / 1000000)} SEFI`}
                                 </h6>
                             </div>
                             <div className="row-footer">
                                 <p>Disccount</p>
                                 <h6>
                                     {
-                                        calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, isManualTickets ?
-                                            manualTickets.length :
-                                            parseInt(autoTicketsCount), currentRoundsState.round_ticket_price).discount + "%"
+                                        calcBulkDiscountTicketPrice(
+                                            configs.per_ticket_bulk_discount, 
+                                            parseInt(ticketsCount), 
+                                            currentRoundsState.round_ticket_price).discount + "%"
                                     }
                                 </h6>
                             </div>
@@ -299,7 +340,7 @@ export default ({
                                 size="sm"
                                 onChange={(checked: boolean) => {
                                     setIsManualTickets(checked);
-                                    setAutoTicketsCount("0");
+                                    setTicketsCount("0");
                                     setManualTickets([]);
                                 }}
                             />
@@ -318,23 +359,23 @@ export default ({
                                         <div style={{ display: "flex", justifyContent: "center", margin: "10px" }}>
                                             <button className="btn btn-dark" style={{ borderRadius: "0px", borderColor: "white" }}
                                                 onClick={() => {
-                                                if (parseInt(autoTicketsCount) > 0) setAutoTicketsCount("" + (parseInt(autoTicketsCount) - 1))
+                                                if (parseInt(ticketsCount) > 0) setTicketsCount("" + (parseInt(ticketsCount) - 1))
                                                 }}>
                                                 <i className="fas fa-minus"></i>
                                             </button>
                                             <input
                                                 style={{ textAlign: "center", width: "30%", backgroundColor: "transparent", color: "white" }}
                                                 type="number"
-                                                value={autoTicketsCount}
+                                                value={ticketsCount}
                                                 onChange={(e) => {
-                                                    if (!e.target.value || e.target.value === "") setAutoTicketsCount("0")
-                                                    else if (parseInt(e.target.value) >= 500) setAutoTicketsCount("500")
-                                                    else setAutoTicketsCount(e.target.value)
+                                                    if (!e.target.value || e.target.value === "") setTicketsCount("0")
+                                                    else if (parseInt(e.target.value) >= 500) setTicketsCount("500")
+                                                    else setTicketsCount(e.target.value)
                                                 }} />
                                             <button className="btn btn-dark" style={{ borderRadius: "0px", borderColor: "white" }}
                                                 onClick={() => {
-                                                if (parseInt(autoTicketsCount) >= 500) setAutoTicketsCount("500")
-                                                else setAutoTicketsCount("" + (parseInt(autoTicketsCount) + 1))
+                                                if (parseInt(ticketsCount) >= 500) setTicketsCount("500")
+                                                else setTicketsCount("" + (parseInt(ticketsCount) + 1))
                                                 }}>
                                                 <i className="fas fa-plus"></i>
                                             </button>
@@ -355,7 +396,7 @@ export default ({
                                     disabled={
                                         loadingBuyTickets ||
                                         (isManualTickets && manualTickets.length === 0) ||
-                                        (!isManualTickets && parseInt(autoTicketsCount) === 0)
+                                        (!isManualTickets && parseInt(ticketsCount) === 0)
                                     }
                                     onClick={async () => {
                                         if (!configs) return
@@ -369,9 +410,9 @@ export default ({
                                                 tickets = manualTickets;
                                                 ticketPrice = "" + calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, manualTickets.length, currentRoundsState.round_ticket_price).finalPrice
                                             } else {
-                                                const autoGeneratedTickets = generateRandomTickets(parseInt(autoTicketsCount));
+                                                const autoGeneratedTickets = generateRandomTickets(parseInt(ticketsCount));
                                                 tickets = autoGeneratedTickets;
-                                                ticketPrice = "" + calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(autoTicketsCount), currentRoundsState.round_ticket_price).finalPrice
+                                                ticketPrice = "" + calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(ticketsCount), currentRoundsState.round_ticket_price).finalPrice
                                             }
 
                                             await buyTickets(
@@ -405,7 +446,7 @@ export default ({
                                                 {
                                                     isManualTickets ?
                                                         formatNumber(calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, manualTickets.length, currentRoundsState.round_ticket_price).finalPrice / 1000000) :
-                                                        formatNumber(calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(autoTicketsCount), currentRoundsState.round_ticket_price).finalPrice / 1000000)
+                                                        formatNumber(calcBulkDiscountTicketPrice(configs.per_ticket_bulk_discount, parseInt(ticketsCount), currentRoundsState.round_ticket_price).finalPrice / 1000000)
                                                 } SEFI
                                             </div>
                                     }
