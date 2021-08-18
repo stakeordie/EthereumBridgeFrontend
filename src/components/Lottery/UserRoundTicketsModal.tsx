@@ -36,6 +36,7 @@ export default ({
         }
     }, [userRoundTicketsModal])
 
+
     const getUserRoundPaginatedTicketsTrigger = async (client: IClientState, viewkey: string, round: IRound, userTicketsCount: number) => {
         // To get all the tickets depending on the amount of tickets, we will section this by the max size of each request
         const requestsNumber = Math.ceil(userTicketsCount / ticketPageSize);
@@ -280,64 +281,72 @@ export default ({
                 </Modal.Header>
 
                 <Modal.Body className="modal-body">
+                    {
+                        round.drafted_ticket
+                            ?
+                            <div className="body-container">
 
-                    <div className="body-container">
+                                <div className="tickets-info">
+                                    <div className="tickets-info-container">
+                                        <div className="info-item">
+                                            <p>Your Total Tickets: </p>
+                                            <h6>{userRoundTicketsModal.userTicketsCount}</h6>
+                                        </div>
+                                        <div className="info-item">
+                                            <p>Your Winning Tickets:</p>
+                                            <h6>{winTicketsCount ? winTicketsCount : " - "}</h6>
+                                        </div>
+                                        <div className="info-item">
+                                            <p id="winning-text">Winning Ticket:</p>
+                                            <h6 id="winning-number">{round.drafted_ticket ? round.drafted_ticket!.split('').join('  ') : "? ? ? ? ? ?"}</h6>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <div className="tickets-info">
-                            <div className="tickets-info-container">
-                                <div className="info-item">
-                                    <p>Your Total Tickets: </p>
-                                    <h6>{userRoundTicketsModal.userTicketsCount}</h6>
-                                </div>
-                                <div className="info-item">
-                                    <p>Your Winning Tickets:</p>
-                                    <h6>{winTicketsCount ? winTicketsCount : " - "}</h6>
-                                </div>
-                                <div className="info-item">
-                                    <p id="winning-text">Winning Ticket:</p>
-                                    <h6 id="winning-number">{round.drafted_ticket ? round.drafted_ticket!.split('').join('  ') : "? ? ? ? ? ?"}</h6>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            className="earnings-info"
-                        >
-                            <div className="row-earnings">
-                                <p>You Earned</p>
-                                <h4>17.4689<span> SEFI</span></h4>
-                            </div>
-                            {
-                                userRoundTickets && remainingRewardTickets &&
-                                <div className="row-earning-sefi">
+                                <div className="earnings-info">
+                                    <div className="row-earnings">
+                                        <p>You Earned</p>
+                                        <h4>17.4689<span> SEFI</span></h4>
+                                    </div>
                                     {
-                                        remainingRewardTickets.remainingPrizeToClaim > 0 ?
-                                            <Button
-                                                fluid
-                                                color="black"
-                                                disabled={loadingClaimReward}
-                                                onClick={async () => {
-                                                    claimButtonLogic(round, userRoundTickets);
-                                                }}>
-                                                {
-                                                    loadingClaimReward ?
-                                                        <i className="fa fa-spinner fa-spin"></i> :
-                                                        `Claim ${formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)} SEFI`
-                                                }
-                                            </Button>
-                                            :
-                                            calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) > 0
-                                                ?
-                                                "Claimed " + formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000) + " SEFI"
-                                                :
-                                                " - "
+                                        userRoundTickets && remainingRewardTickets &&
+                                        <div className="row-earning-sefi">
+                                            {
+                                                remainingRewardTickets.remainingPrizeToClaim > 0 ?
+                                                    <Button
+                                                        fluid
+                                                        color="black"
+                                                        disabled={loadingClaimReward}
+                                                        onClick={async () => {
+                                                            claimButtonLogic(round, userRoundTickets);
+                                                        }}>
+                                                        {
+                                                            loadingClaimReward ?
+                                                                <i className="fa fa-spinner fa-spin"></i> :
+                                                                `Claim ${formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)} SEFI`
+                                                        }
+                                                    </Button>
+                                                    :
+                                                    calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) > 0
+                                                        ?
+                                                        "Claimed " + formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000) + " SEFI"
+                                                        :
+                                                        " - "
+                                            }
+                                        </div>
                                     }
-                                </div>
-                            }
 
-                            {/* {round.drafted_ticket ? round.drafted_ticket!.split('').join('  ') : "? ? ? ? ? ?"} */}
-                        </div>
-                    </div>
+                                    {/* {round.drafted_ticket ? round.drafted_ticket!.split('').join('  ') : "? ? ? ? ? ?"} */}
+                                </div>
+                            </div>
+
+                            :
+                            <div className="active-round">
+                                <p>Your Total Tickets    <span>{userRoundTicketsModal.userTicketsCount}</span> </p>
+                            </div>
+                    }
+
+
 
                     {!userRoundTickets && <i className="fa fa-spinner fa-spin"></i>}
 

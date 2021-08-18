@@ -615,6 +615,37 @@ $font-family: Poppins;
         margin-top: 26px;
         padding: 0;
 
+        .active-round{
+            margin-bottom: 26px;
+            width: 276px;
+
+            p{
+                font-family: Poppins;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px;
+                letter-spacing: 0em;
+                text-align: left;
+                margin: 0;
+                color:$secret-swap-neutral-03
+            }
+
+            span{
+                
+                font-family: Poppins;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 24px;
+                letter-spacing: 0em;
+                text-align: right;
+                margin: 0;
+                color:$secret-swap-neutral-01;
+                    
+            }
+        }
+
         .body-container{
             margin-bottom: 26px;
             display: grid;
@@ -623,7 +654,7 @@ $font-family: Poppins;
             .tickets-info{
                
                 .tickets-info-container{
-                     display: grid;
+                    display: grid;
                     grid-template-rows: 3 1fr;
                     grid-row-gap: 16px;
                     width: 276px;
