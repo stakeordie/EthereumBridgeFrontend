@@ -331,17 +331,18 @@ $font-family: Poppins;
             padding: 10px;
 
             .col-title{
-                
-                .burn{
-                    h4{
-                        color:$secret-swap-red-01 !important;
-                    }
-                }
 
                 h4{
                     text-align: left;
                     color:$secret-swap-neutral-03;                   
                 }
+
+                 #burn{
+                        
+                    color:$secret-swap-red-01;
+                    
+                }
+
             }
 
             .col-values{

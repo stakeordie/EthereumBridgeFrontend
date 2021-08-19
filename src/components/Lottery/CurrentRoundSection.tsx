@@ -594,7 +594,7 @@ export default ({
 
                                     <div className="row-match">
                                         <div className="col-title">
-                                            <h4 className="burn">Burn</h4>
+                                            <h4 id="burn">Burn</h4>
                                         </div>
                                         <div className="col-results">
 
