@@ -135,7 +135,7 @@ $font-family: Poppins;
     box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
     border-radius: 16px;
     padding: 26px;
-    height: 396px;
+    height: auto;
     width: 600px;
     // Center content
     margin: 0 auto;
@@ -152,11 +152,6 @@ $font-family: Poppins;
     
     .content-hero{
         z-index: 999;
-        .data-header{
-            h4{
-                color: $secret-swap-neutral-03;
-            }
-        }
     }
 
     .data{
@@ -174,6 +169,12 @@ $font-family: Poppins;
                 font-weight: 600;
                 line-height: 30px;
                 letter-spacing: 0em;
+            }
+        }
+
+        .data-footer{
+            h4{
+                color: $secret-swap-neutral-03;
             }
         }
     }
@@ -196,6 +197,17 @@ $font-family: Poppins;
                 letter-spacing: 0em;
                 text-align: center;
             }
+        }
+    }
+
+    .round-footer-tickets{
+        margin-top: 42px;
+        display: grid;
+        grid-template-columns: 50% 50%;
+
+        p{
+            color:$secret-swap-neutral-03;
+            margin: 0px 0px 4px 0px;
         }
     }
 
@@ -341,17 +353,18 @@ $font-family: Poppins;
             padding: 10px;
 
             .col-title{
-                
-                .burn{
-                    h4{
-                        color:$secret-swap-red-01 !important;
-                    }
-                }
 
                 h4{
                     text-align: left;
                     color:$secret-swap-neutral-03;                   
                 }
+
+                 #burn{
+                        
+                    color:$secret-swap-red-01;
+                    
+                }
+
             }
 
             .col-values{
@@ -432,8 +445,7 @@ $font-family: Poppins;
     }
 
     .tickets-result{
-
-        margin-top: 36px;
+        margin-top: 26px;
         display: grid;
         grid-template-columns: (4,1fr);
         grid-column-gap: 20px;
@@ -441,11 +453,17 @@ $font-family: Poppins;
         align-items: center;
         justify-items: center;
 
-        h6{
-            margin: 0;
+        #title{
+            color: $secret-swap-neutral-03;
         }
 
-        button{
+        h6{
+            margin: 0;
+            color:$secret-swap-neutral-01;
+        }
+
+       
+         #ticket-button{
             cursor: pointer;
             background-color: white;
             height: 46px;
@@ -457,6 +475,7 @@ $font-family: Poppins;
             font-weight: 600px;
             font-size: 16px;
         }
+        
     }
 }
 
@@ -805,7 +824,6 @@ $font-family: Poppins;
                 background-color: #F9FAFA;
                 height: 40px;
                 width: 142px;
-                cursor: pointer;
                 border-radius: 10px;
                 padding: 8px;
                 color: $secret-swap-neutral-03;
@@ -814,12 +832,12 @@ $font-family: Poppins;
                 font-size: 16px;
                 padding: 8px 41.8px;
                 font-weight: 600;
+                outline: none;
 
                 &-winner{
                     background-color:$secret-swap-green-03;
                     height: 40px;
                     width: 142px;
-                    cursor: pointer;
                     border-radius: 10px;
                     padding: 8px;
                     color: $secret-swap-neutral-03;
@@ -828,12 +846,12 @@ $font-family: Poppins;
                     font-size: 16px;
                     padding: 8px 41.8px;
                     font-weight: 600;
+                    outline: none;
                 }
 
                 &-no-winner{
                     background-color:$secret-swap-red-02;
                     width: 142px;
-                    cursor: pointer;
                     border-radius: 10px;
                     padding: 8px;
                     color: $secret-swap-neutral-03;
@@ -842,6 +860,7 @@ $font-family: Poppins;
                     font-size: 16px;
                     padding: 8px 41.8px;
                     font-weight: 600;
+                    outline: none;
                 }
             }
         }
@@ -849,4 +868,37 @@ $font-family: Poppins;
 
     }
     
+}
+
+.popover{
+
+    background-color: $secret-swap-neutral-03;
+    width: 199px;
+    border-radius: 4px;
+    
+    .popover-body{
+        
+        padding: 10px;
+        color: #F9FAFA;
+        
+        p{
+            font-family: Poppins;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 18px;
+            letter-spacing: 0em;
+            text-align: left;
+            margin: 0;
+        }
+    
+        strong{
+            font-weight: 600;
+        }
+    }
+
+    .arrow::after {
+        bottom: 1px;
+        border-top-color: $secret-swap-neutral-03;
+    }
 }

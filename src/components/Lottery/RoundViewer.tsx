@@ -21,7 +21,7 @@ export default ({
         if (roundViewer) setSearchState("")
     }, [client, configs, roundViewer])*/
 
-    console.log(roundViewer);
+    // console.log(roundViewer);
 
     return ( 
         <React.Fragment>
@@ -51,7 +51,7 @@ export default ({
                                 <p>Total Tickets</p>
                             </div>
                             <div className="header-item">
-                                <h3>{roundViewer.drafted_ticket && roundViewer.drafted_ticket.split("").join(" ")}</h3>
+                                <h3>{roundViewer.drafted_ticket && roundViewer.drafted_ticket}</h3>
                                 <p>Winning Ticket</p>
                             </div>
                         </div>
@@ -190,7 +190,19 @@ export default ({
                                     <p>$36</p>
                                 </div>
                                 <div className="col-winners">
-                                    <h4>15</h4>
+                                    <h4>
+                                        {
+                                            roundViewer.reward_distribution ?
+                                                roundViewer.reward_distribution.sequence_1_ticket_win_count +
+                                                roundViewer.reward_distribution.sequence_2_ticket_win_count +
+                                                roundViewer.reward_distribution.sequence_3_ticket_win_count +
+                                                roundViewer.reward_distribution.sequence_4_ticket_win_count +
+                                                roundViewer.reward_distribution.sequence_5_ticket_win_count +
+                                                roundViewer.reward_distribution.sequence_6_ticket_win_count
+                                                :
+                                                "0"
+                                        }
+                                    </h4>
                                 </div>
                             </div>
                         </div>

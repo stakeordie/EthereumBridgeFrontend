@@ -4,6 +4,7 @@ import { IRound } from "../../pages/SecretLottery/api/getRounds";
 import { ClientContext, IClientState } from "../../stores/lottery-context/ClientContext";
 import { ViewKeyContext } from "../../stores/lottery-context/ViewKeyContext";
 import UserRoundTicketsModal from "./UserRoundTicketsModal";
+import moment from 'moment';
 
 export default ({
     paginatedUserRounds,
@@ -28,7 +29,6 @@ export default ({
         userTicketsCount: null
     })
 
-
     useEffect(() => {
         if (client && viewkey) {
             getPaginatedUserTicketsTrigger(client, viewkey, paginationValues.page, paginationValues.page_size)
@@ -36,6 +36,8 @@ export default ({
     }, [client, viewkey])
 
     if (!client || !viewkey || !paginatedUserRounds) return null;
+
+    // console.log(paginatedUserRounds);
 
     return (
         <React.Fragment>
@@ -48,19 +50,20 @@ export default ({
 
                 <div className="tickets-result">
 
-                    <h6>Round</h6>
-                    <h6>End Date</h6>
-                    <h6>Winning Ticket</h6>
-                    <h6>My Tickets</h6>
+                    <h6 id="title">Round</h6>
+                    <h6 id="title">End Date</h6>
+                    <h6 id="title">Winning Ticket</h6>
+                    <h6 id="title">My Tickets</h6>
 
                     {
                         paginatedUserRounds &&
                         paginatedUserRounds.rounds.map((userRound, index) =>
                             <>
                                 <h6 key={index}>{userRound.round_number}</h6>
-                                <h6>{ }</h6>
-                                <h6>{userRound.drafted_ticket ? userRound.drafted_ticket!.split('').join(' ') : " - "}</h6>
+                                <h6>{userRound.round_expected_end_timestamp ? moment.unix(userRound.round_expected_end_timestamp).format('ddd D MMM, HH:mm') : " - "}</h6>
+                                <h6>{userRound.drafted_ticket ? userRound.drafted_ticket! : " - "}</h6>
                                 <button
+                                    id="ticket-button"
                                     onClick={
                                         () => setUserRoundTicketsModal({
                                             show: true,
