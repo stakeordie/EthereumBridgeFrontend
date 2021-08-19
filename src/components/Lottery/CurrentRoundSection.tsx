@@ -20,6 +20,8 @@ import formatNumber from "../../utils/secret-lottery/formatNumber";
 import generateRandomTickets from "../../utils/secret-lottery/generateRandomTickets";
 import { errorNotification, successNotification } from "../../utils/secret-lottery/notifications";
 import { isNaN } from "lodash";
+import moment from 'moment';
+import Countdown from 'react-countdown';
 
 export default ({
     getPaginatedUserTicketsTrigger,
@@ -118,7 +120,7 @@ export default ({
         //TODO: add dark support
         return <div className={`thumb`}></div>
     }
-    
+
     //TODO: add dark support
     return (
         <React.Fragment>
@@ -169,8 +171,12 @@ export default ({
                         </Row> */}
                     </div>
 
+                    {/* Round Ends Countdown */}
                     <div className="counter-row">
-                        <h4>Round {currentRoundsState.round_number} ends in <span>3h 24 m</span></h4>
+                        <h4>
+                            Round {currentRoundsState.round_number} ends in
+                            <span> <Countdown date={(moment.unix(currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} /></span>
+                        </h4>
                     </div>
 
 
