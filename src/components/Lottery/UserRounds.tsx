@@ -37,7 +37,7 @@ export default ({
 
     if (!client || !viewkey || !paginatedUserRounds) return null;
 
-    console.log(paginatedUserRounds);
+    // console.log(paginatedUserRounds);
 
     return (
         <React.Fragment>
