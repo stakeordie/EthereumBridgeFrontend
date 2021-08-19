@@ -135,7 +135,7 @@ $font-family: Poppins;
     box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
     border-radius: 16px;
     padding: 26px;
-    height: 396px;
+    height: auto;
     width: 600px;
     // Center content
     margin: 0 auto;
@@ -152,11 +152,6 @@ $font-family: Poppins;
     
     .content-hero{
         z-index: 999;
-        .data-header{
-            h4{
-                color: $secret-swap-neutral-03;
-            }
-        }
     }
 
     .data{
@@ -174,6 +169,12 @@ $font-family: Poppins;
                 font-weight: 600;
                 line-height: 30px;
                 letter-spacing: 0em;
+            }
+        }
+
+        .data-footer{
+            h4{
+                color: $secret-swap-neutral-03;
             }
         }
     }
@@ -196,6 +197,16 @@ $font-family: Poppins;
                 letter-spacing: 0em;
                 text-align: center;
             }
+        }
+    }
+
+    .round-footer-tickets{
+        margin-top: 42px;
+        display: grid;
+        grid-template-columns: 50% 50%;
+
+        p{
+            margin: 0px 0px 4px 0px;
         }
     }
 

@@ -132,17 +132,21 @@ export default ({
                 <React.Fragment>
                     {/* Prize Pot */}
                     <div className="box-round">
+
                         <div className="data-header">
                             <h4>Pot Size</h4>
                         </div>
-                        <div className="data-body">
-                            <h1>
-                                {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}
-                                <span>SEFI</span>
-                            </h1>
-                        </div>
-                        <div className="data-footer">
-                            <h4>$65,599</h4>
+
+                        <div className="data">
+                            <div className="data-body">
+                                <h1>
+                                    {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}
+                                    <span> SEFI</span>
+                                </h1>
+                            </div>
+                            <div className="data-footer">
+                                <h4>$65,599</h4>
+                            </div>
                         </div>
 
                         <div className="round-bottom">
@@ -152,10 +156,18 @@ export default ({
                                 </button>
                                 <div className="round-bottom-footer">
                                     <p>You have bought <span>{currentRoundUserTicketsCount} tickets</span> for this round</p>
-                                    <p>Total Tickets <span>{currentRoundsState.ticket_count}</span> for this round</p>
-                                    <p>Minimun Tickets Count:  <span>{configs.min_ticket_count_per_round}</span></p>
-                                    {/* <p>Round {currentRoundsState.round_number} : <span>{currentRoundsState.ticket_count}</span> Tickets</p> */}
                                 </div>
+                            </div>
+                        </div>
+
+                        <div className="round-footer-tickets">
+                            <div className="round-footer-tickets-item">
+                                <p>Minimum Ticket Count</p>
+                                <h3>{configs.min_ticket_count_per_round}</h3>
+                            </div>
+                            <div className="round-footer-tickets-item">
+                                <p>Current Tickets</p>
+                                <h3>{currentRoundsState.ticket_count}</h3>
                             </div>
                         </div>
 
