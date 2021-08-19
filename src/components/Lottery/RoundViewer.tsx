@@ -15,13 +15,22 @@ export default ({
     const client = useContext(ClientContext);
     const configs = useContext(ConfigsContext);
     const [searchState, setSearchState] = useState<string>("");
-    if (!configs || !client) return null
 
     /*useEffect(() => {
         if (roundViewer) setSearchState("")
     }, [client, configs, roundViewer])*/
 
-    // console.log(roundViewer);
+    useEffect(() => {
+        if (!client) return
+        (async () => {
+            const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [(configs.current_round_number - 1)]);
+            setRoundViewer(response.rounds[0]);
+        })()
+    }, [client, configs])
+
+    if (!configs || !client) return null;
+
+    console.log(roundViewer);
 
     return ( 
         <React.Fragment>
@@ -34,9 +43,31 @@ export default ({
                     </div>
 
                     <div className="round-navigation">
-                        <button>Left</button>
+
+                        <button
+                            disabled={
+                                roundViewer.round_number === 1
+                            }
+                            onClick={async () => {
+                                if (!client) return
+                                const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [(roundViewer.round_number - 1)])
+                                setRoundViewer(response.rounds[0]);
+                            }}
+                        >Previous
+                        </button>
+
                         <h4>Round {roundViewer.round_number} </h4>
-                        <button>Right</button>
+                        <button
+                            disabled={
+                                roundViewer.round_number + 1 >= configs.current_round_number
+                            }
+                            onClick={async () => {
+                                if (!client) return
+                                const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [(roundViewer.round_number + 1)])
+                                setRoundViewer(response.rounds[0]);
+                            }}
+                        >Next
+                        </button>
                     </div>
 
                     <div className="round-result-container">
@@ -51,7 +82,7 @@ export default ({
                                 <p>Total Tickets</p>
                             </div>
                             <div className="header-item">
-                                <h3>{roundViewer.drafted_ticket && roundViewer.drafted_ticket}</h3>
+                                <h3>{roundViewer.drafted_ticket ? roundViewer.drafted_ticket : "-"}</h3>
                                 <p>Winning Ticket</p>
                             </div>
                         </div>
@@ -210,6 +241,25 @@ export default ({
                 </div>
             }
 
+            {/* <Row style={{ marginBottom: "20px" }}>
+                <Form.Control type="number" placeholder="Round" min={0} style={{ textAlign: "center", width: "20%", borderRadius: "0px", marginTop: "20px" }}
+                    value={searchState}
+                    onChange={(e) => setSearchState(e.target.value)}
+                />
+                <button type="button" style={{ width: "10%", borderRadius: "0px", marginTop: "20px" }}
+                    disabled={
+                        searchState === "" ||
+                        parseInt(searchState) >= configs.current_round_number
+                    }
+                    onClick={async () => {
+                        if (!client) return
+                        const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [parseInt(searchState)])
+                        console.log(response);
+                        setRoundViewer(response.rounds[0]);
+                    }}
+                    className="btn btn-info"><i className="fas fa-search"></i></button>
+            </Row> */}
+
 
             {/* <Row style={{ justifyContent: "center", margin: "0px" }}>
                 <h2>Search previous Rounds</h2>
@@ -333,23 +383,7 @@ export default ({
             }*/}
 
 
-            <Row style={{ marginBottom: "20px" }}>
-                <Form.Control type="number" placeholder="Round" min={0} style={{ textAlign: "center", width: "20%", borderRadius: "0px", marginTop: "20px" }}
-                    value={searchState}
-                    onChange={(e) => setSearchState(e.target.value)}
-                />
-                <button type="button" style={{ width: "10%", borderRadius: "0px", marginTop: "20px" }}
-                    disabled={
-                        searchState === "" ||
-                        parseInt(searchState) >= configs.current_round_number
-                    }
-                    onClick={async () => {
-                        if (!client) return
-                        const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [parseInt(searchState)])
-                        setRoundViewer(response.rounds[0]);
-                    }}
-                    className="btn btn-info"><i className="fas fa-search"></i></button>
-            </Row>
+
         </React.Fragment>
     )
 }
