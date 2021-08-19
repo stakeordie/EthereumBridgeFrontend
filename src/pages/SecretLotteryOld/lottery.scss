@@ -202,15 +202,18 @@ $font-family: Poppins;
 }
 
 .modal-container{
-    margin: 32px auto 0 auto;
-    // height: 418px;
-    height: auto;
-    width: 420px;
-    border-radius: 16px;
-    padding: 26px;
-    background: #FFFFFF;
-    box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12), 0px 10px 32px -4px rgba(24, 39, 75, 0.1);
-    border-radius: 16px;
+    &.modal{
+        margin: auto;
+        // height: 418px;
+        height: fit-content;
+        width: 420px;
+        border-radius: 16px;
+        padding: 26px;
+        background: #FFFFFF;
+        box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12), 0px 10px 32px -4px rgba(24, 39, 75, 0.1);
+        border-radius: 16px;
+
+    }
     //Buy tickets manually
     .thumb{
         background: #ccc;
@@ -245,6 +248,13 @@ $font-family: Poppins;
     .modal-header-buy{
         display: flex;
         justify-content: space-between;
+        h6{
+            display: flex;
+            align-items: center;
+        }
+        h3{
+            cursor: pointer;
+        }
     }
     
     .modal-nav{
