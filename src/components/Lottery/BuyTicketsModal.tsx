@@ -206,10 +206,10 @@ const BuyTicketsModal = ({
         >
           Buy
         </Button>
-        <div>
+        <div className="purchased-tickets">
           {currentRoundUserTicketsCount && currentRoundUserTicketsCount > 0 ? (
             <h6>
-              You have bought <span>{currentRoundUserTicketsCount}</span> tickets for this round
+              You have bought <span>{currentRoundUserTicketsCount} tickets</span> for this round
             </h6>
           ) : null}
         </div>
