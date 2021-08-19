@@ -431,11 +431,17 @@ $font-family: Poppins;
         align-items: center;
         justify-items: center;
 
-        h6{
-            margin: 0;
+        #title{
+            color: $secret-swap-neutral-03;
         }
 
-        button{
+        h6{
+            margin: 0;
+            color:$secret-swap-neutral-01;
+        }
+
+       
+         #ticket-button{
             cursor: pointer;
             background-color: white;
             height: 46px;
@@ -447,6 +453,7 @@ $font-family: Poppins;
             font-weight: 600px;
             font-size: 16px;
         }
+        
     }
 }
 
