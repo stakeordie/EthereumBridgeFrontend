@@ -10,7 +10,7 @@ export default async (
 ) => {
     try {
         let queryMsg = { get_paginated_user_rounds: { address: client.accountData.address, key: key, page, page_size } };
-        const response = await client.execute.queryContractSmart(contractAddress, queryMsg);
+        const response = await client.query.queryContractSmart(contractAddress, queryMsg);
         const responseJSON = JSON.parse(atob(response)).get_paginated_user_rounds
         return responseJSON
     } catch (e){

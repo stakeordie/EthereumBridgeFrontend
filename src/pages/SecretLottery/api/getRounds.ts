@@ -7,7 +7,7 @@ export default async (
     round_numbers: number[]
 ) => {
     let queryMsg = { get_rounds: { round_numbers } };
-    const response = await client.execute.queryContractSmart(contractAddress, queryMsg);
+    const response = await client.query.queryContractSmart(contractAddress, queryMsg);
     return JSON.parse(atob(response)).get_rounds
 }
 

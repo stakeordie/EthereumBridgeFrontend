@@ -10,7 +10,7 @@ export default async (
 ) => {
     try {
         let queryMsg = { get_user_round_paginated_tickets: { address: client.accountData.address, key, round_number, page, page_size } };
-        const response = await client.execute.queryContractSmart(contractAddress, queryMsg);
+        const response = await client.query.queryContractSmart(contractAddress, queryMsg);
         const responseJSON =  JSON.parse(atob(response)).get_user_round_paginated_tickets
         return responseJSON
     } catch (e){

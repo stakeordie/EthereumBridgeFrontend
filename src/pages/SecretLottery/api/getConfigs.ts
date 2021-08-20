@@ -6,7 +6,7 @@ export default async (
     contractAddress: string,
 ) => {
     let queryMsg = { get_configs: { } };
-    const response = await client.execute.queryContractSmart(contractAddress, queryMsg);
+    const response = await client.query.queryContractSmart(contractAddress, queryMsg);
     return JSON.parse(atob(response)).get_configs
 }
 
