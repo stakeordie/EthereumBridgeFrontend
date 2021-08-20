@@ -126,93 +126,412 @@ $font-family: Poppins;
         text-align: center;
         margin: 0;
     }
+
+    // POT SIZE
+    .box-round{
+        background-color: $secret-background;
+        box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
+        border-radius: 16px;
+        padding: 26px;
+        height: auto;
+        width: 600px;
+        // Center content
+        margin: 0 auto;
     
-}
-
-// Lottery Component
-.box-round{
-    background-color: $secret-background;
-    box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
-    border-radius: 16px;
-    padding: 26px;
-    height: auto;
-    width: 600px;
-    // Center content
-    margin: 0 auto;
-
-    .hero-lottery{
-        background: url("../../../public/static/lottery-icons.png");
-        background-repeat: no-repeat;
-        background-size: auto;
-        height: 129px;
-        display: grid;
-        justify-content: center;
-        align-items: end;
-    }
-    
-    .content-hero{
-        z-index: 999;
-    }
-
-    .data{
-        display: grid;
-        grid-template-rows: 2 1fr;
-        grid-row-gap: 4px;
-
-        .data-body{
-
-        color: $secret-swap-green-01;
-
-            span{
-                font-size: 20px;
-                font-style: normal;
-                font-weight: 600;
-                line-height: 30px;
-                letter-spacing: 0em;
-            }
+        .hero-lottery{
+            background: url("../../../public/static/lottery-icons.png");
+            background-repeat: no-repeat;
+            background-size: auto;
+            height: 129px;
+            display: grid;
+            justify-content: center;
+            align-items: end;
         }
-
-        .data-footer{
-            h4{
-                color: $secret-swap-neutral-03;
-            }
-        }
-    }
-
-    .round-bottom{
-        margin-top: 37px;
         
-        .round-bottom-content{
-
+        .content-hero{
+            z-index: 999;
+        }
+    
+        .data{
             display: grid;
             grid-template-rows: 2 1fr;
-            grid-row-gap: 16px;
-
-            span {
-                color: $secret-swap-neutral-03;
-                font-size: 16px;
-                font-style: normal;
-                font-weight: 600;
-                line-height: 24px;
-                letter-spacing: 0em;
-                text-align: center;
+            grid-row-gap: 4px;
+    
+            .data-body{
+    
+            color: $secret-swap-green-01;
+    
+                span{
+                    font-size: 20px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 30px;
+                    letter-spacing: 0em;
+                }
             }
+    
+            .data-footer{
+                h4{
+                    color: $secret-swap-neutral-03;
+                }
+            }
+        }
+    
+        .round-bottom{
+            margin-top: 37px;
+            
+            .round-bottom-content{
+    
+                display: grid;
+                grid-template-rows: 2 1fr;
+                grid-row-gap: 16px;
+    
+                span {
+                    color: $secret-swap-neutral-03;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 24px;
+                    letter-spacing: 0em;
+                    text-align: center;
+                }
+            }
+        }
+    
+        .round-footer-tickets{
+            margin-top: 42px;
+            display: grid;
+            grid-template-columns: 50% 50%;
+    
+            p{
+                color:$secret-swap-neutral-03;
+                margin: 0px 0px 4px 0px;
+            }
+        }
+    
+    }
+
+    
+    // ROUND POT DISTRIBUTION
+    .box-round-pot{ 
+    
+        margin-top: 32px;
+    
+        background-color:$secret-background;
+        // height: 989px;
+        height: auto;
+        width: 742px;
+        border-radius: 16px;
+        padding: 26px;
+        box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
+    
+        .round-info-container{
+            margin-top: 26px;
+            display: grid;
+            grid-template-rows: 8 1fr;
+            grid-row-gap: 16px;
+    
+            .row-match{
+                display: grid;
+                grid-template-columns: 35% 30% 35%;
+                align-items: center;
+                padding: 10px;
+    
+                .col-title{
+    
+                    h4{
+                        text-align: left;
+                        color:$secret-swap-neutral-03;                   
+                    }
+    
+                     #burn{
+                            
+                        color:$secret-swap-red-01;
+                        
+                    }
+    
+                }
+    
+                .col-values{
+                    h4{
+                        text-align: right;
+                    }
+                    p{
+                        text-align: right;
+                        color:$secret-swap-neutral-03;
+                    }
+                    span{
+                        color:$secret-swap-neutral-03;
+                    }
+                }
+    
+                .col-results{
+                    i{
+                        margin-right: 12px;
+    
+                        :last-of-type{
+                            margin-right: 0px;
+                        }
+                    }
+                }
+            }
+    
+        }
+    
+        .box-pot-size{
+            margin-top: 36px;
+            border-radius: 16px;
+            padding: 16px;
+            background-color:$secret-swap-green-03;
+            
+            height: auto;
+            width: auto;
+    
+            .box-pot-size-container{
+                display: grid;
+                grid-template-columns: 50% 50%;
+                align-items: center;
+                // grid-column-gap: 26px;
+    
+                .col-pot-results{
+                    display: grid;
+                    grid-template-rows: (3, 1fr);
+                    grid-gap: 4px;
+    
+                    h5{
+                        color:$secret-swap-green-01;
+                    }
+    
+                    span{
+                        font-size: 20px;
+                    }
+    
+                    h6{
+                        color:$secret-swap-neutral-03;
+                    }
+                }
+    
+            }
+        }  
+    }
+
+    // YOUR TICKETS
+    .box-tickets{
+        margin-top: 32px;
+        background:$secret-swap-white ;
+        box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
+        border-radius: 16px;
+        padding: 26px;
+        width: 742px;
+        margin: 32px auto 0px auto;
+        height: auto;
+    
+        h2{
+            text-align: center;
+        }
+    
+        .tickets-result{
+            margin-top: 26px;
+            display: grid;
+            grid-template-columns: (4,1fr);
+            grid-column-gap: 20px;
+            grid-row-gap: 16px;
+            align-items: center;
+            justify-items: center;
+    
+            #title{
+                color: $secret-swap-neutral-03;
+            }
+    
+            h6{
+                margin: 0;
+                color:$secret-swap-neutral-01;
+            }
+    
+           
+             #ticket-button{
+                cursor: pointer;
+                background-color: white;
+                height: 46px;
+                width: 152.5px;
+                border-radius: 4px;
+                padding: 11px, 42px, 11px, 42px;
+                color:$secret-swap-neutral-01;
+                border: 1px solid $secret-swap-neutral-01;
+                font-weight: 600px;
+                font-size: 16px;
+            }
+            
         }
     }
 
-    .round-footer-tickets{
-        margin-top: 42px;
+    // PREVIOUS ROUNDS
+    .box-previous-round{
+        background:$secret-background;
+        height: 992px;
+        width: 742px;
+        // margin-top: 32px;
+        border-radius: 16px;
+        padding: 26px;
+        margin: 32px auto 0 auto;
+        // margin: 0 auto;
+    
         display: grid;
-        grid-template-columns: 50% 50%;
-
-        p{
-            color:$secret-swap-neutral-03;
-            margin: 0px 0px 4px 0px;
+        grid-template-rows: 3 auto;
+        grid-row-gap: 26px;
+    
+        .round-navigation{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    
+    
+        .round-result-container{
+            background:$secret-swap-green-03;
+            padding: 16px;
+            border-radius: 16px;
+            height: auto;
+            height: 805px;
+            width: 690px;
+    
+            .round-result-header{
+                display: grid;
+                grid-template-columns: repeat(3, auto);
+                grid-column-gap: 10px;
+                padding: 10px;
+    
+                .header-item{
+                    display: grid;
+                    grid-template-rows: 2 1fr;
+                    grid-row-gap: 4px;
+    
+                    h3{
+                        color:$secret-swap-neutral-03;
+                    }
+    
+                    p{
+                        color:$secret-swap-neutral-03;
+                    }
+    
+                    #sefi-price{
+                        color:$secret-swap-green-01;
+                    }
+                }
+            }
+    
+            .table-titles{
+                margin-top: 16px;
+                padding: 10px;
+                display: grid;
+                grid-template-columns: 33% 40% 27%;
+                
+                h6{
+                    color:$secret-swap-neutral-03;
+                }
+    
+                .title-sequence{
+                    h6{
+                        text-align: left;
+                    }
+                }
+    
+                .title-winners{
+                    h6{
+                        text-align: right;
+                    }
+                }
+            }
+    
+            .round-result-body{
+                margin-top: 16px;
+                display: grid;
+                grid-template-rows: 6 1fr;
+                grid-row-gap: 16px;
+                align-items: center;
+    
+                .row-body{
+                    display: grid;
+                    padding: 10px;
+                    grid-template-columns: 33% 40% 27%;
+                    align-items: center;
+    
+                    .col-sequence{
+                        i{
+                            margin-right: 12px;
+    
+                            :last-of-type{
+                                margin-right: 0px;
+                            }
+                        }
+                    }
+    
+                    .col-dist-rewards{
+                        h4{
+                            text-align: right;
+                        }
+                        p{
+                            text-align: right;
+                            color: $secret-swap-neutral-03;
+                        }
+                    }
+    
+                    .col-winners{
+                        h4{
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+    
+            .round-result-footer{
+                margin-top: 16px;
+    
+                .row-body{
+                    padding: 10px;
+                    display: grid;
+                    grid-template-columns: 33% 40% 27%;
+                    align-items: center;
+    
+                    .col-sequence{
+                        h4{
+                            color:$secret-swap-red-01;
+                            text-align: left;
+                        }
+                    }
+    
+                    .col-dist-rewards{
+                        h4{
+                            text-align: right;
+                        }
+    
+                        p{
+                            text-align: right;
+                            color:$secret-swap-neutral-03;
+                        }
+                    }
+    
+                    .col-winners{
+                        h4{
+                            text-align: right;
+                        }
+                    }
+    
+                    
+    
+    
+                }
+            }
+    
+            
         }
     }
 
 }
 
+// M O D A L S
+
+// MODAL BUY TICKETS
 .modal-container{
     &.modal{
         margin: auto;
@@ -357,319 +676,8 @@ $font-family: Poppins;
     }
 }
 
-.box-round-pot{ 
 
-    margin-top: 32px;
-
-    background-color:$secret-background;
-    // height: 989px;
-    height: auto;
-    width: 742px;
-    border-radius: 16px;
-    padding: 26px;
-    box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
-
-    .round-info-container{
-        margin-top: 26px;
-        display: grid;
-        grid-template-rows: 8 1fr;
-        grid-row-gap: 16px;
-
-        .row-match{
-            display: grid;
-            grid-template-columns: 35% 30% 35%;
-            align-items: center;
-            padding: 10px;
-
-            .col-title{
-
-                h4{
-                    text-align: left;
-                    color:$secret-swap-neutral-03;                   
-                }
-
-                 #burn{
-                        
-                    color:$secret-swap-red-01;
-                    
-                }
-
-            }
-
-            .col-values{
-                h4{
-                    text-align: right;
-                }
-                p{
-                    text-align: right;
-                    color:$secret-swap-neutral-03;
-                }
-                span{
-                    color:$secret-swap-neutral-03;
-                }
-            }
-
-            .col-results{
-                i{
-                    margin-right: 12px;
-
-                    :last-of-type{
-                        margin-right: 0px;
-                    }
-                }
-            }
-        }
-
-    }
-
-    .box-pot-size{
-        margin-top: 36px;
-        border-radius: 16px;
-        padding: 16px;
-        background-color:$secret-swap-green-03;
-        
-        height: auto;
-        width: auto;
-
-        .box-pot-size-container{
-            display: grid;
-            grid-template-columns: 50% 50%;
-            align-items: center;
-            // grid-column-gap: 26px;
-
-            .col-pot-results{
-                display: grid;
-                grid-template-rows: (3, 1fr);
-                grid-gap: 4px;
-
-                h5{
-                    color:$secret-swap-green-01;
-                }
-
-                span{
-                    font-size: 20px;
-                }
-
-                h6{
-                    color:$secret-swap-neutral-03;
-                }
-            }
-
-        }
-    }  
-}
-
-.box-tickets{
-    margin-top: 32px;
-    background:$secret-swap-white ;
-    box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
-    border-radius: 16px;
-    padding: 26px;
-    width: 742px;
-    margin: 32px auto 0px auto;
-    height: auto;
-
-    h2{
-        text-align: center;
-    }
-
-    .tickets-result{
-        margin-top: 26px;
-        display: grid;
-        grid-template-columns: (4,1fr);
-        grid-column-gap: 20px;
-        grid-row-gap: 16px;
-        align-items: center;
-        justify-items: center;
-
-        #title{
-            color: $secret-swap-neutral-03;
-        }
-
-        h6{
-            margin: 0;
-            color:$secret-swap-neutral-01;
-        }
-
-       
-         #ticket-button{
-            cursor: pointer;
-            background-color: white;
-            height: 46px;
-            width: 152.5px;
-            border-radius: 4px;
-            padding: 11px, 42px, 11px, 42px;
-            color:$secret-swap-neutral-01;
-            border: 1px solid $secret-swap-neutral-01;
-            font-weight: 600px;
-            font-size: 16px;
-        }
-        
-    }
-}
-
-
-.box-previous-round{
-    background:$secret-background;
-    height: 992px;
-    width: 742px;
-    // margin-top: 32px;
-    border-radius: 16px;
-    padding: 26px;
-    margin: 32px auto 0 auto;
-    // margin: 0 auto;
-
-    display: grid;
-    grid-template-rows: 3 auto;
-    grid-row-gap: 26px;
-
-    .round-navigation{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-
-    .round-result-container{
-        background:$secret-swap-green-03;
-        padding: 16px;
-        border-radius: 16px;
-        height: auto;
-        height: 805px;
-        width: 690px;
-
-        .round-result-header{
-            display: grid;
-            grid-template-columns: repeat(3, auto);
-            grid-column-gap: 10px;
-            padding: 10px;
-
-            .header-item{
-                display: grid;
-                grid-template-rows: 2 1fr;
-                grid-row-gap: 4px;
-
-                h3{
-                    color:$secret-swap-neutral-03;
-                }
-
-                p{
-                    color:$secret-swap-neutral-03;
-                }
-
-                #sefi-price{
-                    color:$secret-swap-green-01;
-                }
-            }
-        }
-
-        .table-titles{
-            margin-top: 16px;
-            padding: 10px;
-            display: grid;
-            grid-template-columns: 33% 40% 27%;
-            
-            h6{
-                color:$secret-swap-neutral-03;
-            }
-
-            .title-sequence{
-                h6{
-                    text-align: left;
-                }
-            }
-
-            .title-winners{
-                h6{
-                    text-align: right;
-                }
-            }
-        }
-
-        .round-result-body{
-            margin-top: 16px;
-            display: grid;
-            grid-template-rows: 6 1fr;
-            grid-row-gap: 16px;
-            align-items: center;
-
-            .row-body{
-                display: grid;
-                padding: 10px;
-                grid-template-columns: 33% 40% 27%;
-                align-items: center;
-
-                .col-sequence{
-                    i{
-                        margin-right: 12px;
-
-                        :last-of-type{
-                            margin-right: 0px;
-                        }
-                    }
-                }
-
-                .col-dist-rewards{
-                    h4{
-                        text-align: right;
-                    }
-                    p{
-                        text-align: right;
-                        color: $secret-swap-neutral-03;
-                    }
-                }
-
-                .col-winners{
-                    h4{
-                        text-align: right;
-                    }
-                }
-            }
-        }
-
-        .round-result-footer{
-            margin-top: 16px;
-
-            .row-body{
-                padding: 10px;
-                display: grid;
-                grid-template-columns: 33% 40% 27%;
-                align-items: center;
-
-                .col-sequence{
-                    h4{
-                        color:$secret-swap-red-01;
-                        text-align: left;
-                    }
-                }
-
-                .col-dist-rewards{
-                    h4{
-                        text-align: right;
-                    }
-
-                    p{
-                        text-align: right;
-                        color:$secret-swap-neutral-03;
-                    }
-                }
-
-                .col-winners{
-                    h4{
-                        text-align: right;
-                    }
-                }
-
-                
-
-
-            }
-        }
-
-        
-    }
-}
-
+// MODAL TICKETS
 .modal-content{
     width: 100%;
     background-color: $secret-background;
@@ -899,6 +907,8 @@ $font-family: Poppins;
     
 }
 
+
+// POP OVER FOR MODAL
 .popover{
 
     background-color: $secret-swap-neutral-03;
