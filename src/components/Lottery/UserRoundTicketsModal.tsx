@@ -1,4 +1,5 @@
 import React, { Dispatch, useContext, useEffect, useState } from "react";
+import { useStores } from 'stores';
 import { Col, Modal, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
 import { Button } from 'semantic-ui-react';
 import claimRewards from "../../pages/SecretLottery/api/claimRewards";
@@ -21,6 +22,9 @@ export default ({
     userRoundTicketsModal: { show: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null },
     setUserRoundTicketsModal: Dispatch<{ show: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null }>
 }) => {
+
+    let { theme } = useStores();
+
     const client = useContext(ClientContext);
     const viewkey = useContext(ViewKeyContext);
     const balancesDispatch = useContext(BalancesDispatchContext);
@@ -265,7 +269,7 @@ export default ({
 
         return (
             <Modal
-                size="lg" centered className="dimmer"
+                size="lg" centered className={`dimmer ${theme.currentTheme}`}
                 show={userRoundTicketsModal.show}
                 onHide={() => setUserRoundTicketsModal(
                     { show: false, selectedUserRound: null, userTicketsCount: null }
