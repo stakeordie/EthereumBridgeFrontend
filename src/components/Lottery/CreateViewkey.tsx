@@ -1,6 +1,7 @@
 import getBalance from "pages/SecretLottery/api/getBalance";
 import React, { useContext, useEffect, useState } from "react";
 import { BalancesDispatchContext } from "stores/lottery-context/BalancesContext";
+import { Button } from 'semantic-ui-react'
 import createViewKey from "../../pages/SecretLottery/api/createViewKey";
 import { ClientContext } from "../../stores/lottery-context/ClientContext";
 import { ViewKeyContext, ViewKeyDispatchContext } from "../../stores/lottery-context/ViewKeyContext";
@@ -40,34 +41,36 @@ export default ({
         })
     }
         return (
-            <div style={{ width: "100%", marginTop: "50px" }}>
+            <div style={{ marginBottom: '16px' }}>
                 {
                     (client?.execute && !viewkey) ? 
-                    <button 
-                        type="button" 
-                        className="btn btn-light"
-                        onClick={async() => {
-                            setCreateViewKeyLoading(true)
-                            try {
-                                let contract = process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS;
-                                const response = await createViewKey(client, contract)
-                                successNotification("View Key Created!")
-                                console.log(response)
-                                viewkeyDispatchState(response.create_viewing_key.key)
-                                localStorage.setItem(`${menu}_` + client.accountData.address,response.create_viewing_key.key)
-                            } catch (e) {
-                                errorNotification(e);
-                            } 
-                            setCreateViewKeyLoading(false)
-                        }}
-                    > {
-                        createViewKeyLoading ?
-                        <i className="fa fa-spinner fa-spin"></i>
-                             : 
-                        "Create View Key"
-                    } </button>
-                    :
-                    "Keplr connection failed"
+                        <Button
+                            type="button"
+                            color="black"
+                            fluid
+                            onClick={async () => {
+                                setCreateViewKeyLoading(true)
+                                try {
+                                    let contract = process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS;
+                                    const response = await createViewKey(client, contract)
+                                    successNotification("View Key Created!")
+                                    console.log(response)
+                                    viewkeyDispatchState(response.create_viewing_key.key)
+                                    localStorage.setItem(`${menu}_` + client.accountData.address, response.create_viewing_key.key)
+                                } catch (e) {
+                                    errorNotification(e);
+                                }
+                                setCreateViewKeyLoading(false)
+                            }}
+                        > {
+                                createViewKeyLoading ?
+                                    <i className="fa fa-spinner fa-spin"></i>
+                                    :
+                                    "Create Viewing Key"
+                            }
+                        </Button>
+                        :
+                        null
                 }
             </div>
         )
