@@ -595,8 +595,6 @@ $font-family: Poppins;
         padding: 26px;
         background: #FFFFFF;
         box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12), 0px 10px 32px -4px rgba(24, 39, 75, 0.1);
-        border-radius: 16px;
-
     }
     //Buy tickets manually
     .thumb{
@@ -630,15 +628,28 @@ $font-family: Poppins;
     }
 
     .modal-header-buy{
+        
         display: flex;
         justify-content: space-between;
+
         h6{
             display: flex;
             align-items: center;
+            margin: 0;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: $secret-swap-neutral-03;
         }
         h3{
             cursor: pointer;
             margin: 0;
+            color: #000000;
+            font-size: 22px;
+            color:$secret-swap-neutral-01;
         }
     }
     
@@ -689,10 +700,9 @@ $font-family: Poppins;
             text-align: center;
 
             h6{
-                color:$secret-swap-green-03;
+                color:$secret-swap-neutral-03;
                 font-size: 16px;
                 font-style: normal;
-                font-weight: 400;
                 line-height: 24px;
                 letter-spacing: 0em;
                 text-align: center;
@@ -720,11 +730,38 @@ $font-family: Poppins;
         width: 368px;
         border-radius: 8px;
         padding: 10px;
+        display: grid;
+        grid-template-rows: 2 50%;
+        grid-row-gap: 10px;
         
         .row-footer{
             display: flex;
             justify-content: space-between;
         }
+
+        p{
+            color: $secret-swap-neutral-03;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: 0em;
+            text-align: center;
+            margin: 0;
+        }
+
+        h6{
+            color: #1B1B1B;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: 0em;
+            text-align: right;
+            margin: 0;
+        }
+
+        
 
     }
 }
