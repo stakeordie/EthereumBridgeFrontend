@@ -30,12 +30,12 @@ export default ({
     })
 
     useEffect(() => {
-        if (client && viewkey) {
+        if ( viewkey) {
             getPaginatedUserTicketsTrigger(client, viewkey, paginationValues.page, paginationValues.page_size)
         }
     }, [client, viewkey])
 
-    if (!client || !paginatedUserRounds) return null;
+    if (!paginatedUserRounds) return null;
 
     // console.log(paginatedUserRounds);
 

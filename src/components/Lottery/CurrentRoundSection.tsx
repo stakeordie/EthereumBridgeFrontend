@@ -42,12 +42,10 @@ export default ({
     const [manualTickets, setManualTickets] = useState<string[]>([]);
 
     useEffect(() => {
-        if (client) {
+        getConfigsTrigger(client)
+        setInterval(() => {
             getConfigsTrigger(client)
-            setInterval(() => {
-                getConfigsTrigger(client)
-            }, 30000); // check 30 seconds
-        }
+        }, 30000); // check 30 seconds
     }, [client])
 
     useEffect(()=>{
@@ -63,11 +61,11 @@ export default ({
     },[ticketsCount])
 
     useEffect(() => {
-        if(client && viewkey && configs){
+        if(viewkey && configs){
             getUserTicketsRound(client, viewkey, configs.current_round_number);
         }
 
-        if (client && configs) {
+        if (configs) {
             getCurrentRound(client, configs.current_round_number);
             getRoundStakingRewardsTrigger(client, configs)
         }
@@ -115,7 +113,7 @@ export default ({
     }
 
     const getSEFIBalance = async () => {
-        if (!client) return null
+        // if (!client) return null
         const response = await getBalance(client, process.env.SCRT_GOV_TOKEN_ADDRESS)
         const accountData = await client.execute.getAccount(client.accountData.address);
         balancesDispatch({
@@ -124,12 +122,6 @@ export default ({
         })
     }
 
-    if (!client) return (
-        <div>
-            <i className="fa fa-spinner fa-spin" style={{ color: "white" }}></i>
-        </div>
-    )
-    // if (!viewkey) return null
 
     return (
         <React.Fragment>
@@ -176,7 +168,7 @@ export default ({
                                 manualTickets={manualTickets}
                                 setManualTickets={setManualTickets}
                             >
-                                <button disabled={(!viewkey)} className="button-primary-lg">
+                                <button disabled={!viewkey || !client.execute} className="button-primary-lg">
                                     Buy Tickets
                                 </button>
                             </BuyTicketsModal>
@@ -413,7 +405,7 @@ export default ({
                                                 manualTickets={manualTickets}
                                                 setManualTickets={setManualTickets}
                                             >
-                                                <button disabled={(!viewkey)} className="button-primary-lg">
+                                                <button disabled={!viewkey || !client.execute} className="button-primary-lg">
                                                     Buy Tickets
                                                 </button>
                                             </BuyTicketsModal>

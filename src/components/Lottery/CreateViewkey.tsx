@@ -1,4 +1,6 @@
-import React, { useContext, useState } from "react";
+import getBalance from "pages/SecretLottery/api/getBalance";
+import React, { useContext, useEffect, useState } from "react";
+import { BalancesDispatchContext } from "stores/lottery-context/BalancesContext";
 import createViewKey from "../../pages/SecretLottery/api/createViewKey";
 import { ClientContext } from "../../stores/lottery-context/ClientContext";
 import { ViewKeyContext, ViewKeyDispatchContext } from "../../stores/lottery-context/ViewKeyContext";
@@ -13,12 +15,34 @@ export default ({
     const viewkey = useContext(ViewKeyContext);
     const viewkeyDispatchState = useContext(ViewKeyDispatchContext);
     const [createViewKeyLoading, setCreateViewKeyLoading] = useState<Boolean>(false)
+    const balancesDispatch = useContext(BalancesDispatchContext);
 
-    if (client && !viewkey) {
+    useEffect(() => {
+        if (client) {
+            viewkeyDispatchState(null);
+
+            if (menu === "SEFI") {
+                getSEFIBalance()
+                if (localStorage.getItem("SEFI_" + client.accountData.address)) {
+                    viewkeyDispatchState(localStorage.getItem("SEFI_" + client.accountData.address))
+                }
+            }
+        }
+    }, [client, menu])
+    const getSEFIBalance = async () => {
+        if (!client) return null
+        const response = await getBalance(client, process.env.SCRT_GOV_TOKEN_ADDRESS);
+        const accountData = await client.execute.getAccount(client.accountData.address);
+        balancesDispatch({
+            native: parseInt(accountData ? accountData.balance[0].amount : "0"),
+            sSCRT: null,
+            SEFI: response
+        })
+    }
         return (
             <div style={{ width: "100%", marginTop: "50px" }}>
                 {
-                    client ? 
+                    (client?.execute && !viewkey) ? 
                     <button 
                         type="button" 
                         className="btn btn-light"
@@ -47,7 +71,5 @@ export default ({
                 }
             </div>
         )
-    } else {
-        return null
-    }
+    
 }
