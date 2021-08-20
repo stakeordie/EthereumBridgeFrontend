@@ -1,25 +1,30 @@
-import { Dispatch, useContext, useEffect } from "react";
-import { BroadcastMode, SigningCosmWasmClient } from "secretjs";
-import { useStores } from "stores";
-import { ClientDispatchContext } from "../../stores/lottery-context/ClientContext"
+import { observer } from 'mobx-react';
+import { useContext, useEffect } from 'react';
+import { useStores } from 'stores';
+import { ClientDispatchContext } from '../../stores/lottery-context/ClientContext';
 
-export default () => {
-    const clientDispatchState = useContext(ClientDispatchContext);
-    const {user}=useStores();
-    useEffect(() => {
-        setupKeplr(clientDispatchState);
-    }, [])
+export const KeplrSetup = observer(() => {
+  const clientDispatchState = useContext(ClientDispatchContext);
+  const { user } = useStores();
 
-    return null
-}
+  useEffect(() => {
+    clientDispatchState({
+      execute: user.secretjsSend,
+      query: user.secretjs,
+      accountData: {
+        address: user.address,
+        balance: user.balanceSCRT,
+      },
+    });
+  }, [clientDispatchState, user.address, user.balanceSCRT, user.secretjs, user.secretjsSend]);
+  return null;
+});
 
-export 
-
- 
-const setupKeplr = async (setClient: any) => {
-  //TODO : Pass app properties to this context
-}
-  
-  declare global {
-    interface Window { keplr: any, getOfflineSigner: any, getEnigmaUtils: any }
+export default KeplrSetup;
+declare global {
+  interface Window {
+    keplr: any;
+    getOfflineSigner: any;
+    getEnigmaUtils: any;
   }
+}
