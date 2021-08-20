@@ -63,7 +63,7 @@ export default ({
                                 <h6>{userRound.round_expected_end_timestamp ? moment.unix(userRound.round_expected_end_timestamp).format('ddd D MMM, HH:mm') : " - "}</h6>
                                 <h6>{userRound.drafted_ticket ? userRound.drafted_ticket! : " - "}</h6>
                                 <button
-                                    id="ticket-button"
+                                    id="button-outline"
                                     onClick={
                                         () => setUserRoundTicketsModal({
                                             show: true,

@@ -23,36 +23,6 @@ $secret-swap-neutral-03-dark: #DEDEDE;
 //Fonts
 $font-family: Poppins;
 
-//Buttons
-.button-primary-lg {
-    width: 100%;
-    background-color: $secret-swap-green-02;
-    border: 1px solid  $secret-swap-green-02;
-    border-radius: 4px;
-    padding: 12px 104.5px;
-    font-size: 16px;
-    cursor: pointer;
-    outline: none;
-
-    &:hover{
-        background-color: var(--secret-swap-green-01);
-        outline: none;
-    }
-
-}
-
-.button-primary-sm {
-    color: $secret-swap-white;
-    background-color:  $secret-swap-green-02;
-    border: 1px solid $secret-swap-green-02;
-    border-radius: 3px;
-    cursor: pointer;
-
-    &:hover{
-        background-color: var(--secret-swap-green-01);
-    }
-}
-
 .trans{
     border: 1px solid var(--secret-swap-neutral-01);
     border-radius: 4px;
@@ -153,6 +123,49 @@ $font-family: Poppins;
         letter-spacing: 0em;
         text-align: center;
         margin: 0;
+    }
+
+    //Buttons
+    .button-primary-lg {
+        width: 100%;
+        background-color: $secret-swap-green-02;
+        border: 1px solid  $secret-swap-green-02;
+        border-radius: 4px;
+        padding: 12px 104.5px;
+        font-size: 16px;
+        cursor: pointer;
+        outline: none;
+
+        &:hover{
+            background-color: var(--secret-swap-green-01);
+            outline: none;
+        }
+
+    }
+
+    .button-primary-sm {
+        color: $secret-swap-white;
+        background-color:  $secret-swap-green-02;
+        border: 1px solid $secret-swap-green-02;
+        border-radius: 3px;
+        cursor: pointer;
+
+        &:hover{
+            background-color: var(--secret-swap-green-01);
+        }
+    }
+
+    #button-outline{
+        cursor: pointer;
+        background-color: transparent;
+        height: 46px;
+        width: 152.5px;
+        border-radius: 4px;
+        padding: 11px, 42px, 11px, 42px;
+        color:var(--secret-swap-neutral-01);
+        border: 1px solid var(--secret-swap-neutral-01);
+        font-weight: 600px;
+        font-size: 16px;
     }
 
     // POT SIZE
@@ -395,18 +408,7 @@ $font-family: Poppins;
             }
     
            
-             #ticket-button{
-                cursor: pointer;
-                background-color: white;
-                height: 46px;
-                width: 152.5px;
-                border-radius: 4px;
-                padding: 11px, 42px, 11px, 42px;
-                color:var(--secret-swap-neutral-01);
-                border: 1px solid var(--secret-swap-neutral-01);
-                font-weight: 600px;
-                font-size: 16px;
-            }
+             
             
         }
     }
