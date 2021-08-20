@@ -63,7 +63,7 @@ const Lottery = () => {
                                         <KeplrSetup />
                                         <NavBar menu={"SEFI"} />
                                         <CreateViewkey menu={"SEFI"} />
-                                        <div className="lottery-container">
+                                        <div className={`lottery-container ${theme.currentTheme}`}>
                                             <CurrentRoundSection
                                                 getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
                                                 paginationValues={paginationValues}
