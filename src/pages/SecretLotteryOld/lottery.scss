@@ -12,6 +12,8 @@ $secret-swap-neutral-01: #0E0E10;
 $secret-swap-neutral-03: #5F5F6B;
 $secret-swap-neutral-07: #F9FAFA;
 
+$secret-swap-modal-footer-container: #FCF9F3;
+
 // Dark Colors
 $secret-background-dark: #000000;
 $secret-swap-green-01-dark: #3EA248;
@@ -19,6 +21,8 @@ $secret-swap-green-01-dark: #3EA248;
 $secret-swap-green-03-dark: #151517;;
 $secret-swap-neutral-01-dark: #FFFFFF;
 $secret-swap-neutral-03-dark: #DEDEDE;
+
+$secret-swap-modal-footer-container-dark: #0E0E10;
 
 //Fonts
 $font-family: Poppins;
@@ -586,14 +590,36 @@ $font-family: Poppins;
 
 // MODAL BUY TICKETS
 .modal-container{
+
+    --secret-background: #{$secret-background};
+    --secret-swap-green-01: #{$secret-swap-green-01};
+
+    --secret-swap-green-03: #{$secret-swap-green-03};
+    --secret-swap-neutral-01: #{$secret-swap-neutral-01};
+    --secret-swap-neutral-03: #{$secret-swap-neutral-03};
+
+    --secret-swap-modal-footer-container: #{$secret-swap-modal-footer-container};
+
+
+   
+    &.dark{
+        --secret-background: #{$secret-background-dark};
+        --secret-swap-green-01: #{$secret-swap-green-01-dark};
+
+        --secret-swap-green-03: #{$secret-swap-green-03-dark};
+        --secret-swap-neutral-01: #{$secret-swap-neutral-01-dark};
+        --secret-swap-neutral-03: #{$secret-swap-neutral-03-dark};
+
+        --secret-swap-modal-footer-container: #{$secret-swap-modal-footer-container-dark};
+    }
+
     &.modal{
         margin: auto;
-        // height: 418px;
         height: fit-content;
         width: 420px;
         border-radius: 16px;
         padding: 26px;
-        background: #FFFFFF;
+        background: var(--secret-background);
         box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12), 0px 10px 32px -4px rgba(24, 39, 75, 0.1);
     }
     //Buy tickets manually
@@ -628,7 +654,6 @@ $font-family: Poppins;
     }
 
     .modal-header-buy{
-        
         display: flex;
         justify-content: space-between;
 
@@ -642,14 +667,13 @@ $font-family: Poppins;
             line-height: 24px;
             letter-spacing: 0em;
             text-align: left;
-            color: $secret-swap-neutral-03;
+            color: var(--secret-swap-neutral-03);
         }
         h3{
             cursor: pointer;
             margin: 0;
-            color: #000000;
             font-size: 22px;
-            color:$secret-swap-neutral-01;
+            color:var(--secret-swap-neutral-01);
         }
     }
     
@@ -679,8 +703,8 @@ $font-family: Poppins;
                 width: 184px;
                 height: 40px;
                 border: none;
-                color:$secret-swap-neutral-03;
-                background:none;
+                color:var(--secret-swap-neutral-03);
+                background:var(--secret-background);
                 cursor: pointer;
                 border: transparent !important;
                 outline: none;
@@ -700,7 +724,7 @@ $font-family: Poppins;
             text-align: center;
 
             h6{
-                color:$secret-swap-neutral-03;
+                color:var(--secret-swap-neutral-03);
                 font-size: 16px;
                 font-style: normal;
                 line-height: 24px;
@@ -710,7 +734,7 @@ $font-family: Poppins;
             }
 
             span{
-                color:$secret-swap-neutral-03;
+                color:var(--secret-swap-neutral-03);
                 font-size: 16px;
                 font-style: normal;
                 font-weight: 600;
@@ -721,11 +745,9 @@ $font-family: Poppins;
         }
     }
 
-
-
     .modal-footer-container{
         margin-top: 16px;
-        background: #FCF9F3;
+        background: var(--secret-swap-modal-footer-container);
         height: 78px;
         width: 368px;
         border-radius: 8px;
@@ -740,7 +762,7 @@ $font-family: Poppins;
         }
 
         p{
-            color: $secret-swap-neutral-03;
+            color: var(--secret-swap-neutral-03);
             font-size: 16px;
             font-style: normal;
             font-weight: 400;
@@ -751,7 +773,7 @@ $font-family: Poppins;
         }
 
         h6{
-            color: #1B1B1B;
+            color: var(--secret-swap-neutral-01);
             font-size: 16px;
             font-style: normal;
             font-weight: 600;
@@ -760,8 +782,6 @@ $font-family: Poppins;
             text-align: right;
             margin: 0;
         }
-
-        
 
     }
 }

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Button, Input, Modal } from 'semantic-ui-react';
+import { useStores } from 'stores';
 import Scrollbars from 'react-custom-scrollbars';
 import { IConfigs } from 'pages/SecretLottery/api/getConfigs';
 import { BalancesDispatchContext } from '../../stores/lottery-context/BalancesContext';
@@ -56,13 +57,14 @@ const BuyTicketsModal = ({
   const [open, setOpen] = useState<boolean>(false);
   const [loadingBuyTickets, setLoadingBuyTickets] = useState<boolean>(false)
   const [isManualTickets, setIsManualTickets] = useState<boolean>(false);
+  let { theme } = useStores();
 
   return (
     <Modal
       open={open}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
-      className={`modal-container`}
+      className={`modal-container ${theme.currentTheme}`}
       trigger={children}
     >
       <div className="modal-header-buy">
