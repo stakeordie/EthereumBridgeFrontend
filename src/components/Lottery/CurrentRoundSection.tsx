@@ -42,13 +42,13 @@ export default ({
     const [manualTickets, setManualTickets] = useState<string[]>([]);
 
     useEffect(() => {
-        if (client && viewkey) {
+        if (client) {
             getConfigsTrigger(client)
             setInterval(() => {
                 getConfigsTrigger(client)
             }, 30000); // check 30 seconds
         }
-    }, [client, viewkey])
+    }, [client])
 
     useEffect(()=>{
         const emptyArray=[];
@@ -63,8 +63,12 @@ export default ({
     },[ticketsCount])
 
     useEffect(() => {
-        if (client && viewkey && configs) {
-            getCurrentRoundTrigger(client, viewkey, configs.current_round_number);
+        if(client && viewkey && configs){
+            getUserTicketsRound(client, viewkey, configs.current_round_number);
+        }
+
+        if (client && configs) {
+            getCurrentRound(client, configs.current_round_number);
             getRoundStakingRewardsTrigger(client, configs)
         }
     }, [configs])
@@ -74,14 +78,35 @@ export default ({
         configsDispatch(configs)
     }
 
-    const getCurrentRoundTrigger = async (client: IClientState, viewkey: string, current_round: number) => {
-        const currentRoundPromise = getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
-        const currentRoundUserTicketsCountPromise = getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
+    const getUserTicketsRound = async (client: IClientState, viewkey: string, current_round: number) => {
+        try {
+    
+            const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
+            setCurrentRoundUserTicketsCount(currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+        } catch (error) {
+            console.error(error)
+        }
 
-        const [currentRound, currentRoundUserTicketsCount] = await Promise.all([currentRoundPromise, currentRoundUserTicketsCountPromise]);
+    }
+    const getCurrentRound = async (client: IClientState, current_round: number) => {
+        try {
+            const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
+            setCurrentRoundsState(currentRound.rounds[0])
+            
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
-        setCurrentRoundsState(currentRound.rounds[0])
-        setCurrentRoundUserTicketsCount(currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+    const getCurrentRoundTrigger = async(client: IClientState, viewkey: string, current_round: number)=>{
+        try {
+            const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
+            setCurrentRoundUserTicketsCount(currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+            const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
+            setCurrentRoundsState(currentRound.rounds[0])
+        } catch (error) {
+           console.error(error) 
+        }
     }
 
     const getRoundStakingRewardsTrigger = async (client: IClientState, configs: IConfigs) => {
@@ -104,15 +129,8 @@ export default ({
             <i className="fa fa-spinner fa-spin" style={{ color: "white" }}></i>
         </div>
     )
-    if (!viewkey) return null
-    
+    // if (!viewkey) return null
 
-    const renderThumbVertical=()=>{
-        //TODO: add dark support
-        return <div className={`thumb`}></div>
-    }
-
-    //TODO: add dark support
     return (
         <React.Fragment>
             {
@@ -158,7 +176,7 @@ export default ({
                                 manualTickets={manualTickets}
                                 setManualTickets={setManualTickets}
                             >
-                                <button className="button-primary-lg">
+                                <button disabled={(!viewkey)} className="button-primary-lg">
                                     Buy Tickets
                                 </button>
                             </BuyTicketsModal>
@@ -395,7 +413,7 @@ export default ({
                                                 manualTickets={manualTickets}
                                                 setManualTickets={setManualTickets}
                                             >
-                                                <button className="button-primary-lg">
+                                                <button disabled={(!viewkey)} className="button-primary-lg">
                                                     Buy Tickets
                                                 </button>
                                             </BuyTicketsModal>

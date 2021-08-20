@@ -1,11 +1,11 @@
 import React, { useState, createContext } from "react";
-import { SigningCosmWasmClient } from "secretjs";
+import { CosmWasmClient, SigningCosmWasmClient } from "secretjs";
 
-export const ClientContext = createContext<IClientState | null>(null);
+export const ClientContext = createContext<IClientState >(null);
 export const ClientDispatchContext = createContext<Function>(() => null);
 
 export default (props: any) => {
-    const [ClientState, setClientState] = useState<IClientState | null>(null) 
+    const [ClientState, setClientState] = useState<IClientState>(null) 
 
     return (
         <ClientContext.Provider value={ClientState}>
@@ -18,7 +18,8 @@ export default (props: any) => {
 
 
   export interface IClientState {
-    execute: SigningCosmWasmClient,
+    execute: SigningCosmWasmClient | null,
+    query:CosmWasmClient,
     accountData: {
       address: string,
       balance: string
