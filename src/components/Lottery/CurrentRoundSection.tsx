@@ -195,8 +195,7 @@ export default ({
                     {/* Round Ends Countdown */}
                     <div className="counter-row">
                         <h4>
-                            Round {currentRoundsState.round_number} ends in
-                            <span> <Countdown date={(moment.unix(currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} /></span>
+                            Round {currentRoundsState.round_number} ends in <Countdown date={(moment.unix(currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} />
                         </h4>
                     </div>
 
@@ -263,7 +262,7 @@ export default ({
                                             <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                             <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                             <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                            <i className="far fa-circle fa-lg"></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                         </div>
                                         <div className="col-values">
                                             <h4>
@@ -282,8 +281,8 @@ export default ({
                                             <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                             <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                             <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                            <i className="far fa-circle fa-lg"></i>
-                                            <i className="far fa-circle fa-lg"></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                         </div>
                                         <div className="col-values">
                                             <h4>
@@ -301,9 +300,9 @@ export default ({
                                             <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                             <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                             <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                            <i className="far fa-circle fa-lg"></i>
-                                            <i className="far fa-circle fa-lg"></i>
-                                            <i className="far fa-circle fa-lg"></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                         </div>
                                         <div className="col-values">
                                             <h4>
@@ -321,10 +320,10 @@ export default ({
                                         <div className="col-results">
                                             <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                             <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                            <i className="far fa-circle fa-lg"></i>
-                                            <i className="far fa-circle fa-lg"></i>
-                                            <i className="far fa-circle fa-lg"></i>
-                                            <i className="far fa-circle fa-lg"></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                            <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                         </div>
                                         <div className="col-values">
                                             <h4>

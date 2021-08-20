@@ -144,7 +144,7 @@ export default ({
                                     <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                     <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                     <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
                                     <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_4_pot_size : "0") / 1000000)}</h4>
@@ -161,8 +161,8 @@ export default ({
                                     <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                     <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                     <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                    <i className="far fa-circle fa-lg"></i>
-                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
                                     <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_3_pot_size : "0") / 1000000)}</h4>
@@ -178,9 +178,9 @@ export default ({
                                     <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                     <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                     <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                    <i className="far fa-circle fa-lg"></i>
-                                    <i className="far fa-circle fa-lg"></i>
-                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
                                     <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_2_pot_size : "0") / 1000000)}</h4>
@@ -195,10 +195,10 @@ export default ({
                                 <div className="col-sequence">
                                     <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                     <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                    <i className="far fa-circle fa-lg"></i>
-                                    <i className="far fa-circle fa-lg"></i>
-                                    <i className="far fa-circle fa-lg"></i>
-                                    <i className="far fa-circle fa-lg"></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
                                     <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_1_pot_size : "0") / 1000000)}</h4>
