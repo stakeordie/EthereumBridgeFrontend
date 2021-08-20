@@ -151,6 +151,7 @@ const BuyTicketsModal = ({
           fluid
           color="black"
           type="button"
+          size="big"
           disabled={
             loadingBuyTickets ||
             (isManualTickets && manualTickets.filter(e => e?.length === 6).length !== manualTickets.length) ||

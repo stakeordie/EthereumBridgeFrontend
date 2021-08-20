@@ -719,6 +719,41 @@ $font-family: Poppins;
         grid-template-rows: (3, 1fr);
         grid-row-gap: 16px;
 
+        button{
+            background-color: transparent;
+            color: #FF726E;
+
+            &:hover{
+                background-color: transparent;
+            }
+
+            &:focus{
+                background-color:unset;
+            }
+        }
+
+        .input{
+            input{
+                font-size: 28px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 42px;
+                letter-spacing: 0.01em;
+                text-align: center;
+                color: #D6D6D6;
+                background: transparent;
+
+                &::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+
+                 &:focus{
+                    border-color: #D6D6D6;
+                }
+            }
+        }
+
         .purchased-tickets{
 
             text-align: center;
