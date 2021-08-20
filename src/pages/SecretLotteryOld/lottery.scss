@@ -435,6 +435,10 @@ $font-family: Poppins;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+
+            h4{
+                color: var(--secret-swap-neutral-01);
+            }
         }
     
     

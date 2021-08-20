@@ -36,7 +36,7 @@ export default ({
         <React.Fragment>
 
             {
-                roundViewer &&
+                roundViewer ?
                 <div className="box-previous-round">
                     <div className="round-title">
                         <h2>Previous Round</h2>
@@ -238,7 +238,8 @@ export default ({
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div>
+                    : null
             }
 
             {/* <Row style={{ marginBottom: "20px" }}>
