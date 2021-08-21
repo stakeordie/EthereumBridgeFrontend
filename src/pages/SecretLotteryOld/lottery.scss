@@ -277,8 +277,14 @@ $font-family: Poppins;
 
     // COUNTER ROW
     .counter-row{
+        margin-top: 26px;
+
         h4{
             color: var(--secret-swap-neutral-03);
+        }
+
+        span{
+            color: var(--secret-swap-green-01);
         }
     }
 
