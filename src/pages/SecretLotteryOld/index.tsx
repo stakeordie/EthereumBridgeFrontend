@@ -70,7 +70,6 @@ const Lottery = observer(props => {
                   >
                     <ReactNotification />
                     <KeplrSetup />
-                    {/* <NavBar menu={'SEFI'} /> */}
                     <CreateViewkey menu={'SEFI'} />
                     <div className={`lottery-container ${theme.currentTheme}`}>
                       <CurrentRoundSection

@@ -5,6 +5,7 @@ import { ClientContext, IClientState } from "../../stores/lottery-context/Client
 import { ViewKeyContext } from "../../stores/lottery-context/ViewKeyContext";
 import UserRoundTicketsModal from "./UserRoundTicketsModal";
 import moment from 'moment';
+import CreateViewkey from "./CreateViewkey";
 
 export default ({
     paginatedUserRounds,
@@ -35,7 +36,7 @@ export default ({
         }
     }, [client, viewkey])
 
-    if (!paginatedUserRounds) return null;
+    // if (!paginatedUserRounds) return null;
 
     // console.log(paginatedUserRounds);
 
@@ -48,7 +49,10 @@ export default ({
                     <h2>Your Tickets</h2>
                 </div>
                 {(!viewkey)
-                    ? <div>Connect Wallet</div>
+                    ? <div className='connect-wallet-container'> 
+                        <span>Connect your wallet to view your tickets</span> 
+                        <CreateViewkey menu='SEFI' />
+                      </div>
                     : <div className="tickets-result">
                             <h6 id="title">Round</h6>
                             <h6 id="title">End Date</h6>

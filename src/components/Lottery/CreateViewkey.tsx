@@ -41,10 +41,11 @@ export default ({
         })
     }
         return (
-            <div style={{ marginBottom: '16px' }}>
+            <div style={{width:"100%",justifyContent:'center',padding:'1rem 0',display:'flex'}}>
                 {
                     (client?.execute && !viewkey) ? 
                         <Button
+                            style={{width:"210px"}}
                             type="button"
                             color="black"
                             fluid

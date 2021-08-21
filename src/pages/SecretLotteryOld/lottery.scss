@@ -38,7 +38,16 @@ $font-family: Poppins;
 }
 
 // Box Round Data
-
+.connect-wallet-container{
+    display: grid;
+    margin-top: 26px;
+    row-gap: 16px;
+    justify-content: center;
+    span{
+        align-items: center;
+        display: flex;
+    }
+}
 .lottery-container{
 
     --secret-background: #{$secret-background};
