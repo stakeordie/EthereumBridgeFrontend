@@ -154,9 +154,8 @@ export default ({
                 currentRoundsState && configs && stakingRewards &&
                 <React.Fragment>
                     {/* Prize Pot */}
-                    <div className="box-round">
-
-                        <div className="data-header">
+                    <div className="box-round">      
+                        <div className="data-header hero-lottery">
                             <h4>Pot Size</h4>
                         </div>
 

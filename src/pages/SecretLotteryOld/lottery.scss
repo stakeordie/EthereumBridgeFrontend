@@ -202,21 +202,22 @@ $font-family: Poppins;
         // Center content
         margin: 0 auto;
     
-        .hero-lottery{
-            background: url("../../../public/static/lottery-icons.png");
-            background-repeat: no-repeat;
-            background-size: auto;
-            height: 129px;
-            display: grid;
-            justify-content: center;
-            align-items: end;
-        }
+        
         
         .content-hero{
             z-index: 999;
         }
 
         .data-header{
+            &.hero-lottery{
+                background-image: url('https://i.ibb.co/Rvf9vCr/lottery-icons.png');
+                background-repeat: no-repeat;
+                background-size: auto;
+                height: 129px;
+                display: grid;
+                justify-content: center;
+                align-items: end;
+            }
             h4{
                 color: var(--secret-swap-neutral-01);
             }
