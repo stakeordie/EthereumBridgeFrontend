@@ -196,6 +196,7 @@ const BuyTicketsModal = ({
               await getCurrentRoundTrigger(client, viewkey, configs.current_round_number);
               await getPaginatedUserTicketsTrigger(client, viewkey, paginationValues.page, paginationValues.page_size);
               await getSEFIBalance();
+              setOpen(false)
               successNotification('Buy Tickets Success!');
               setTicketsCount('0');
               setManualTickets([]);

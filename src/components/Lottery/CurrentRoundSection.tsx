@@ -16,7 +16,10 @@ import { errorNotification, successNotification } from "../../utils/secret-lotte
 import BuyTicketsModal from "./BuyTicketsModal";
 import moment from 'moment';
 import Countdown from 'react-countdown';
-
+import { useStores } from "stores";
+import { sleep } from "utils";
+import axios from "axios";
+import numeral from 'numeral';
 export default ({
     getPaginatedUserTicketsTrigger,
     paginationValues
@@ -35,8 +38,10 @@ export default ({
     const configsDispatch = useContext(ConfigsDispatchContext);
 
     const [currentRoundsState, setCurrentRoundsState] = useState<IRound | null>(null)
+    const [sefiPrice, setSefiPrice] = useState<number>(0)
     const [currentRoundUserTicketsCount, setCurrentRoundUserTicketsCount] = useState<number | null>(null)
     const [stakingRewards, setStakingRewards] = useState<IStakingRewads | null>(null)
+    const {tokens}=useStores();
 
     const [ticketsCount, setTicketsCount] = useState<string>("0");
     const [manualTickets, setManualTickets] = useState<string[]>([]);
@@ -48,6 +53,20 @@ export default ({
         }, 30000); // check 30 seconds
     }, [client])
 
+    useEffect(()=>{
+        //GET sefi price
+        (async()=>{
+            try {
+                const { data } = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=sefi&vs_currencies=usd');
+                setSefiPrice(data.sefi.usd)                
+            } catch (error) {
+                setSefiPrice(0.05)
+                console.error(error);
+            }
+            
+        })()
+    },[])
+    
     useEffect(()=>{
         const emptyArray=[];
         for (let i = 0; i < parseFloat(ticketsCount); i++) {
@@ -121,7 +140,13 @@ export default ({
             SEFI: response
         })
     }
+    const getEstimateSEFI = (n:number):number =>{
+        return Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100
+    }
 
+    const getEstimateUSD = (n:number):number =>{
+        return numeral(Math.round((formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100)* sefiPrice) / 100).format('$0.00');
+    }
 
     return (
         <React.Fragment>
@@ -146,7 +171,7 @@ export default ({
                                 </h1>
                             </div>
                             <div className="data-footer">
-                                <h4>$65,599</h4>
+                                <h4>{currentRoundsState && numeral((formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)*sefiPrice)).format('$0,0.00')}</h4>
                             </div>
                         </div>
 
@@ -234,10 +259,8 @@ export default ({
                                             <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                         </div>
                                         <div className="col-values">
-                                            <h4>
-                                                {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.sequence_6 * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
-                                            </h4>
-                                            <p>$26,239</p>
+                                            <h4>{getEstimateSEFI(6)} <span>SEFI</span> </h4>
+                                            <p> {getEstimateUSD(6)}</p>
                                         </div>
                                     </div>
 
@@ -255,10 +278,8 @@ export default ({
                                             <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
                                         </div>
                                         <div className="col-values">
-                                            <h4>
-                                                {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.sequence_5 * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
-                                            </h4>
-                                            <p>$26,239</p>
+                                            <h4>{getEstimateSEFI(5)} <span>SEFI</span> </h4>
+                                            <p> {getEstimateUSD(5)}</p>
                                         </div>
                                     </div>
 
@@ -275,10 +296,8 @@ export default ({
                                             <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                         </div>
                                         <div className="col-values">
-                                            <h4>
-                                                {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.sequence_4 * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
-                                            </h4>
-                                            <p>$26,239</p>
+                                            <h4>{getEstimateSEFI(4)} <span>SEFI</span> </h4>
+                                            <p> {getEstimateUSD(4)}</p>
                                         </div>
                                     </div>
 
@@ -295,10 +314,8 @@ export default ({
                                             <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                         </div>
                                         <div className="col-values">
-                                            <h4>
-                                                {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.sequence_3 * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
-                                            </h4>
-                                            <p>$26,239</p>
+                                            <h4>{getEstimateSEFI(3)} <span>SEFI</span> </h4>
+                                            <p> {getEstimateUSD(3)}</p>
                                         </div>
                                     </div>
 
@@ -315,10 +332,8 @@ export default ({
                                             <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                         </div>
                                         <div className="col-values">
-                                            <h4>
-                                                {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.sequence_2 * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
-                                            </h4>
-                                            <p>$26,239</p>
+                                            <h4>{getEstimateSEFI(2)} <span>SEFI</span> </h4>
+                                            <p> {getEstimateUSD(2)}</p>
                                         </div>
                                     </div>
 
@@ -336,10 +351,8 @@ export default ({
                                             <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                         </div>
                                         <div className="col-values">
-                                            <h4>
-                                                {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.sequence_1 * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
-                                            </h4>
-                                            <p>$26,239</p>
+                                            <h4>{getEstimateSEFI(1)} <span>SEFI</span> </h4>
+                                            <p> {getEstimateUSD(1)}</p>
                                         </div>
                                     </div>
 
@@ -354,7 +367,7 @@ export default ({
                                             <h4>
                                                 {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
                                             </h4>
-                                            <p>$26,239</p>
+                                            <p>{numeral((Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100)*sefiPrice).format('$0.00')}</p>
                                         </div>
                                     </div>
 
@@ -372,7 +385,7 @@ export default ({
                                             <h4>
                                                 {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
                                             </h4>
-                                            <p>$26,239</p>
+                                            <p>{numeral((Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100)*sefiPrice).format('$0.00')}</p>
                                         </div>
                                     </div>
 
@@ -386,7 +399,7 @@ export default ({
                                                 {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}
                                                 <span> SEFI</span>
                                             </h5>
-                                            <h6>$65,599</h6>
+                                            <h6>{currentRoundsState && numeral(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)).format('$0,0.00')}</h6>
                                         </div>
                                         <div className="col-pot-button">
                                             <BuyTicketsModal 

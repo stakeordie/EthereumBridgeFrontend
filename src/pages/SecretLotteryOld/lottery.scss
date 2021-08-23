@@ -1,5 +1,4 @@
 // VARIABLES
-
 // Colors Light
 $secret-background: #FFFFFF;
 $secret-swap-white: #FFFFFF;
@@ -411,7 +410,7 @@ $font-family: Poppins;
         .tickets-result{
             margin-top: 26px;
             display: grid;
-            grid-template-columns: (4,1fr);
+            grid-template-columns: repeat(4,1fr);
             grid-column-gap: 20px;
             grid-row-gap: 16px;
             align-items: center;
