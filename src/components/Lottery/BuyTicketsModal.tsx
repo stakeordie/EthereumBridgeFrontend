@@ -16,6 +16,7 @@ import buyTickets from 'pages/SecretLottery/api/buyTickets';
 import { errorNotification, successNotification } from 'utils/secret-lottery/notifications';
 import getRoundStakingRewards, { IStakingRewads } from 'pages/SecretLottery/api/getRoundStakingRewards';
 import getBalance from 'pages/SecretLottery/api/getBalance';
+import { isNaN } from 'lodash';
 
 interface BuyTicketsProps {
   children: JSX.Element; 
@@ -40,7 +41,7 @@ const BuyTicketsModal = ({
   const [loadingBuyTickets, setLoadingBuyTickets] = useState<boolean>(false)
   const [isManualTickets, setIsManualTickets] = useState<boolean>(false);
   const [currentRoundUserTicketsCount, setCurrentRoundUserTicketsCount] = useState<number | null>(null)
-  const [ticketsCount, setTicketsCount] = useState<string>("0");
+  const [ticketsCount, setTicketsCount] = useState<string>("");
   const [manualTickets, setManualTickets] = useState<string[]>([]);
   const [currentRoundsState, setCurrentRoundsState] = useState<IRound | null>(null)
   const [stakingRewards, setStakingRewards] = useState<IStakingRewads | null>(null)
@@ -154,7 +155,7 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
             value={ticketsCount}
             onChange={e => {
               if (!e.target.value || e.target.value === '') {
-                setTicketsCount('0');
+                setTicketsCount('');
               } else if (parseInt(e.target.value) >= 500) {
                 setTicketsCount('500');
               } else {
@@ -167,6 +168,8 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
               onClick={() => {
                 if (parseInt(ticketsCount) > 0) {
                   setTicketsCount('' + (parseInt(ticketsCount) - 1));
+                }else if(!ticketsCount){
+                  setTicketsCount('0')
                 }
               }}
             >
@@ -180,6 +183,9 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
                   setTicketsCount('500');
                 } else {
                   setTicketsCount('' + (parseInt(ticketsCount) + 1));
+                }
+                if(!ticketsCount){
+                  setTicketsCount('1')
                 }
               }}
             >
@@ -221,7 +227,7 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
           disabled={
             loadingBuyTickets ||
             (isManualTickets && manualTickets.filter(e => e?.length === 6).length !== manualTickets.length) ||
-            parseInt(ticketsCount) === 0
+            parseInt(ticketsCount) === 0 || !ticketsCount
           }
           onClick={async () => {
             if (!configs) {
@@ -291,7 +297,7 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
             {`${formatNumber(
               calcBulkDiscountTicketPrice(
                 configs.per_ticket_bulk_discount,
-                parseInt(ticketsCount),
+                parseInt(ticketsCount) | 0,
                 currentRoundsState.round_ticket_price,
               ).finalPrice / 1000000,
             )} SEFI`}
@@ -302,7 +308,7 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
           <h6>
             {calcBulkDiscountTicketPrice(
               configs.per_ticket_bulk_discount,
-              parseInt(ticketsCount),
+              parseInt(ticketsCount) | 0,
               currentRoundsState.round_ticket_price,
             ).discount + '%'}
           </h6>
