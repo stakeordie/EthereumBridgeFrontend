@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Input, Modal } from 'semantic-ui-react';
 import { useStores } from 'stores';
 import Scrollbars from 'react-custom-scrollbars';
-import { IConfigs } from 'pages/SecretLottery/api/getConfigs';
+import getConfigs, { IConfigs } from 'pages/SecretLottery/api/getConfigs';
 import { BalancesDispatchContext } from '../../stores/lottery-context/BalancesContext';
 import { ClientContext, IClientState } from '../../stores/lottery-context/ClientContext';
 import { ConfigsContext, ConfigsDispatchContext } from '../../stores/lottery-context/LotteryConfigsContext';
@@ -10,23 +10,17 @@ import { ViewKeyContext } from '../../stores/lottery-context/ViewKeyContext';
 import formatNumber from '../../utils/secret-lottery/formatNumber';
 import calcBulkDiscountTicketPrice from '../../utils/secret-lottery/calcBulkDiscountTicketPrice';
 import generateRandomTickets from '../../utils/secret-lottery/generateRandomTickets';
+import getRounds, { IRound } from 'pages/SecretLottery/api/getRounds';
+import getUserRoundsTicketCount from 'pages/SecretLottery/api/getUserRoundsTicketCount';
+import buyTickets from 'pages/SecretLottery/api/buyTickets';
+import { errorNotification, successNotification } from 'utils/secret-lottery/notifications';
+import getRoundStakingRewards, { IStakingRewads } from 'pages/SecretLottery/api/getRoundStakingRewards';
+import getBalance from 'pages/SecretLottery/api/getBalance';
 
 interface BuyTicketsProps {
-  children: JSX.Element;
-  currentRoundsState: any;
-  buyTickets: Function;
-  getRoundStakingRewardsTrigger: Function;
-  getCurrentRoundTrigger: Function;
-  getPaginatedUserTicketsTrigger: Function;
-  getSEFIBalance: Function;
-  paginationValues: any;
-  successNotification: Function;
-  errorNotification: Function;
-  currentRoundUserTicketsCount: any;
-  ticketsCount:string,
-  setTicketsCount:Function,
-  manualTickets:Array<string>,
-  setManualTickets:Function,
+  children: JSX.Element; 
+  getPaginatedUserTicketsTrigger: Function; 
+  paginationValues: any; 
 }
 
 const renderThumbVertical = () => {
@@ -36,20 +30,8 @@ const renderThumbVertical = () => {
 
 const BuyTicketsModal = ({
   children,
-  currentRoundsState,
-  buyTickets,
-  getRoundStakingRewardsTrigger,
-  getCurrentRoundTrigger,
   getPaginatedUserTicketsTrigger,
-  getSEFIBalance,
   paginationValues,
-  successNotification,
-  errorNotification,
-  currentRoundUserTicketsCount,
-  ticketsCount,
-  setTicketsCount,
-  manualTickets,
-  setManualTickets,
 }: BuyTicketsProps) => {
   const client = useContext(ClientContext);
   const viewkey = useContext(ViewKeyContext);
@@ -57,8 +39,92 @@ const BuyTicketsModal = ({
   const [open, setOpen] = useState<boolean>(false);
   const [loadingBuyTickets, setLoadingBuyTickets] = useState<boolean>(false)
   const [isManualTickets, setIsManualTickets] = useState<boolean>(false);
+  const [currentRoundUserTicketsCount, setCurrentRoundUserTicketsCount] = useState<number | null>(null)
+  const [ticketsCount, setTicketsCount] = useState<string>("0");
+  const [manualTickets, setManualTickets] = useState<string[]>([]);
+  const [currentRoundsState, setCurrentRoundsState] = useState<IRound | null>(null)
+  const [stakingRewards, setStakingRewards] = useState<IStakingRewads | null>(null)
+  const balancesDispatch = useContext(BalancesDispatchContext);
+  const configsDispatch = useContext(ConfigsDispatchContext);
   let { theme } = useStores();
 
+  useEffect(() => {
+    getConfigsTrigger(client)
+    setInterval(() => {
+        getConfigsTrigger(client)
+    }, 30000); // check 30 seconds
+}, [client])
+
+  useEffect(()=>{
+      const emptyArray=[];
+      for (let i = 0; i < parseFloat(ticketsCount); i++) {
+          if(manualTickets[i] !== ""){
+              emptyArray[i]= manualTickets[i];
+          }else{
+              emptyArray.push("");
+          }
+      }
+      setManualTickets(emptyArray);
+  },[ticketsCount])
+
+  useEffect(() => {
+    if(viewkey && configs){
+        getUserTicketsRound(client, viewkey, configs.current_round_number);
+    }
+
+    if (configs) {
+        getCurrentRound(client, configs.current_round_number);
+        getRoundStakingRewardsTrigger(client, configs)
+    }
+}, [configs])
+
+const getUserTicketsRound = async (client: IClientState, viewkey: string, current_round: number) => {
+  try {
+
+      const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
+      setCurrentRoundUserTicketsCount(currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+  } catch (error) {
+      console.error(error)
+  }
+
+}
+const getCurrentRound = async (client: IClientState, current_round: number) => {
+  try {
+      const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
+      setCurrentRoundsState(currentRound.rounds[0])
+      
+  } catch (error) {
+      console.error(error)
+  }
+}
+  const getConfigsTrigger = async (client: IClientState) => {
+    const configs = await getConfigs(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS)
+    configsDispatch(configs)
+  }
+  const getCurrentRoundTrigger = async(client: IClientState, viewkey: string, current_round: number)=>{
+    try {
+        const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
+        setCurrentRoundUserTicketsCount(currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+        const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
+        setCurrentRoundsState(currentRound.rounds[0])
+    } catch (error) {
+       console.error(error) 
+    }
+  }
+  const getRoundStakingRewardsTrigger = async (client: IClientState, configs: IConfigs) => {
+    const roundStakingRewards = await getRoundStakingRewards(client, configs.staking_contract.address, configs.staking_vk)
+    setStakingRewards(roundStakingRewards);
+  }
+  const getSEFIBalance = async () => {
+    // if (!client) return null
+    const response = await getBalance(client, process.env.SCRT_GOV_TOKEN_ADDRESS)
+    const accountData = await client.execute.getAccount(client.accountData.address);
+    balancesDispatch({
+        native: parseInt(accountData ? accountData.balance[0].amount : "0"),
+        SEFI: response
+    })
+}
+  if(!configs || !currentRoundsState)return null;
   return (
     <Modal
       open={open}

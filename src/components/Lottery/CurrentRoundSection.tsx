@@ -1,6 +1,5 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
-import buyTickets from "../../pages/SecretLottery/api/buyTickets";
 import getBalance from "../../pages/SecretLottery/api/getBalance";
 import getConfigs, { IConfigs } from "../../pages/SecretLottery/api/getConfigs";
 import getRounds, { IRound } from "../../pages/SecretLottery/api/getRounds";
@@ -12,12 +11,10 @@ import { ConfigsContext, ConfigsDispatchContext } from "../../stores/lottery-con
 import { ViewKeyContext } from "../../stores/lottery-context/ViewKeyContext";
 import calcTotalPotSize from "../../utils/secret-lottery/calcTotalPotSize";
 import formatNumber from "../../utils/secret-lottery/formatNumber";
-import { errorNotification, successNotification } from "../../utils/secret-lottery/notifications";
 import BuyTicketsModal from "./BuyTicketsModal";
 import moment from 'moment';
 import Countdown from 'react-countdown';
 import { useStores } from "stores";
-import { sleep } from "utils";
 import axios from "axios";
 import numeral from 'numeral';
 export default ({
@@ -178,20 +175,8 @@ export default ({
                         <div className="round-bottom">
                             <div className="round-bottom-content">
                             <BuyTicketsModal 
-                                currentRoundsState={currentRoundsState}
-                                buyTickets={buyTickets}
-                                getRoundStakingRewardsTrigger={getRoundStakingRewardsTrigger}
-                                getCurrentRoundTrigger={getCurrentRoundTrigger}
                                 getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
-                                getSEFIBalance={getSEFIBalance}
                                 paginationValues={paginationValues}
-                                successNotification={successNotification}
-                                errorNotification={errorNotification}
-                                currentRoundUserTicketsCount={currentRoundUserTicketsCount}
-                                ticketsCount={ticketsCount}
-                                setTicketsCount={setTicketsCount}
-                                manualTickets={manualTickets}
-                                setManualTickets={setManualTickets}
                             >
                                 <button disabled={!viewkey || !client.execute} className="button-primary-lg">
                                     Buy Tickets
@@ -403,20 +388,8 @@ export default ({
                                         </div>
                                         <div className="col-pot-button">
                                             <BuyTicketsModal 
-                                                currentRoundsState={currentRoundsState}
-                                                buyTickets={buyTickets}
-                                                getRoundStakingRewardsTrigger={getRoundStakingRewardsTrigger}
-                                                getCurrentRoundTrigger={getCurrentRoundTrigger}
                                                 getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
-                                                getSEFIBalance={getSEFIBalance}
                                                 paginationValues={paginationValues}
-                                                successNotification={successNotification}
-                                                errorNotification={errorNotification}
-                                                currentRoundUserTicketsCount={currentRoundUserTicketsCount}
-                                                ticketsCount={ticketsCount}
-                                                setTicketsCount={setTicketsCount}
-                                                manualTickets={manualTickets}
-                                                setManualTickets={setManualTickets}
                                             >
                                                 <button disabled={!viewkey || !client.execute} className="button-primary-lg">
                                                     Buy Tickets
