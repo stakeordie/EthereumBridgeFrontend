@@ -1,11 +1,20 @@
 import React, { Dispatch, useContext, useEffect, useState } from "react"
 import getPaginatedUserRounds, { IPaginatedUserRounds } from "../../pages/SecretLottery/api/getPaginatedUserRounds";
-import { IRound } from "../../pages/SecretLottery/api/getRounds";
+import getRounds, { IRound } from "../../pages/SecretLottery/api/getRounds";
 import { ClientContext, IClientState } from "../../stores/lottery-context/ClientContext";
 import { ViewKeyContext } from "../../stores/lottery-context/ViewKeyContext";
 import UserRoundTicketsModal from "./UserRoundTicketsModal";
 import moment from 'moment';
 import CreateViewkey from "./CreateViewkey";
+import BuyTicketsModal from "./BuyTicketsModal";
+import buyTickets from "pages/SecretLottery/api/buyTickets";
+import { errorNotification, successNotification } from "utils/secret-lottery/notifications";
+import getUserRoundsTicketCount from "pages/SecretLottery/api/getUserRoundsTicketCount";
+import getRoundStakingRewards, { IStakingRewads } from "pages/SecretLottery/api/getRoundStakingRewards";
+import getBalance from "pages/SecretLottery/api/getBalance";
+import { BalancesDispatchContext } from "stores/lottery-context/BalancesContext";
+import { ConfigsContext, ConfigsDispatchContext } from "stores/lottery-context/LotteryConfigsContext";
+import getConfigs, { IConfigs } from "pages/SecretLottery/api/getConfigs";
 
 export default ({
     paginatedUserRounds,
@@ -36,10 +45,6 @@ export default ({
         }
     }, [client, viewkey])
 
-    // if (!paginatedUserRounds) return null;
-
-    // console.log(paginatedUserRounds);
-
     return (
         <React.Fragment>
 
@@ -54,14 +59,15 @@ export default ({
                         <CreateViewkey menu='SEFI' />
                       </div>
                     : <div className="tickets-result">
-                            <h6 id="title">Round</h6>
-                            <h6 id="title">End Date</h6>
-                            <h6 id="title">Winning Ticket</h6>
-                            <h6 id="title">My Tickets</h6>
 
                             {
-                                paginatedUserRounds &&
-                                paginatedUserRounds.rounds.map((userRound, index) =>
+                                paginatedUserRounds && paginatedUserRounds.rounds.length > 0 ?
+                                <>
+                                <h6 id="title">Round</h6>
+                                <h6 id="title">End Date</h6>
+                                <h6 id="title">Winning Ticket</h6>
+                                <h6 id="title">My Tickets</h6>
+                                {paginatedUserRounds.rounds.map((userRound, index) =>
                                     <>
                                         <h6 key={index}>{userRound.round_number}</h6>
                                         <h6>{userRound.round_expected_end_timestamp ? moment.unix(userRound.round_expected_end_timestamp).format('ddd D MMM, HH:mm') : " - "}</h6>
@@ -78,6 +84,32 @@ export default ({
                                         </button>
                                     </>
                                 )
+                            }
+                                </>
+                                : <div className='no-tickets-container'>
+                                    <img src='/static/empty-ticket.png' alt="empty ticket" width='100px' />
+                                    <p> You haven't bought any tickets yet</p>
+                                    {/* <BuyTicketsModal 
+                                        currentRoundsState={currentRoundsState}
+                                        buyTickets={buyTickets}
+                                        getRoundStakingRewardsTrigger={getRoundStakingRewardsTrigger}
+                                        getCurrentRoundTrigger={getCurrentRoundTrigger}
+                                        getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
+                                        getSEFIBalance={getSEFIBalance}
+                                        paginationValues={paginationValues}
+                                        successNotification={successNotification}
+                                        errorNotification={errorNotification}
+                                        currentRoundUserTicketsCount={currentRoundUserTicketsCount}
+                                        ticketsCount={ticketsCount}
+                                        setTicketsCount={setTicketsCount}
+                                        manualTickets={manualTickets}
+                                        setManualTickets={setManualTickets}
+                                    > */}
+                                        <button disabled={!viewkey || !client.execute} className="button-primary-lg">
+                                            Buy Tickets
+                                        </button>
+                                    {/* </BuyTicketsModal> */}
+                                </div>
                             }
                         </div>
                 }
