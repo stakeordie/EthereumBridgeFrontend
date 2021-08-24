@@ -7,7 +7,7 @@ const DropdownSelector = () => {
     return (
         <Dropdown text='Applications'>
             <Dropdown.Menu>
-                <Dropdown.Item text='Secret Lottery' as={Link} to='/lottery' />
+                <Dropdown.Item text='Lottery' as={Link} to='/lottery' />
             </Dropdown.Menu>
         </Dropdown>
     );
