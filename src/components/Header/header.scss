@@ -73,9 +73,41 @@
         margin-left: 3rem;
       }
 
-      .ui.dropdown>.text {
-        font-weight: bold;
+      .ui.dropdown{
+
+        .text{
+          font-weight: bold;
+        }
+
+        .menu{
+          height: auto; 
+          background-color: #FF726E;
+          padding: 16px;
+          width: 200px; 
+
+          .item{
+            font-family: Poppins;
+            color: #FFFFFF;
+            padding: 0px !important;
+            font-weight: 600;
+            font-style: normal;
+            line-height: 24px;
+            margin-bottom: 32px;
+            background-color: transparent;
+            
+            &:last-child{
+              margin-bottom: 0;
+            }
+            
+            &:hover{
+              background-color: transparent;
+            }
+          }
+
+        }
       }
+        
+
     }
 
     .menu-right {
