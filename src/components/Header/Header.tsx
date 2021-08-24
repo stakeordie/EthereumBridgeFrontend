@@ -16,14 +16,16 @@ import DropdownSelector from './DropdownSelector';
 const Header = observer(({forceUpdate}:{forceUpdate:any}) =>{
     const history = useHistory(); 
     const governancePaths = ['governance','proposal','sefistaking']
+    const applicationsPaths = ['/lottery']
     const { user, tokens,userMetamask,theme } = useStores();
     const isSwap = history.location.pathname === '/swap';
     const isPool = history.location.pathname === '/pool';
     const isEarn = history.location.pathname === '/earn';
     const isCashback = history.location.pathname === '/cashback';
     const isGovernance = governancePaths.map((string) => (history.location.pathname.match(string)) ? true : false).includes(true);
+    const isApplications = applicationsPaths.map((string) => (history.location.pathname.match(string)) ? true : false).includes(true);
     // const isApplications = history.location.pathname === '/secret-lottery';
-    const isApplications = history.location.pathname === '/lottery';
+    // const isApplications = history.location.pathname === '/lottery';
     
 
     const handleSignIn = async()=>{
