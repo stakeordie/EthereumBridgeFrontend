@@ -463,6 +463,22 @@ $font-family: Poppins;
             flex-direction: row;
             justify-content: space-between;
 
+    
+            button{
+                cursor: pointer;
+                background-color: transparent;
+                border-radius: none;
+                border: none;
+                outline: none;
+
+                &:disabled {
+                    opacity: 0.4;
+                    cursor: default;
+                }    
+                
+            }
+
+
             h4{
                 color: var(--secret-swap-neutral-01);
             }

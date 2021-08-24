@@ -4,6 +4,8 @@ import getRounds, { IRound } from "../../pages/SecretLottery/api/getRounds";
 import { ClientContext } from "../../stores/lottery-context/ClientContext";
 import { ConfigsContext } from "../../stores/lottery-context/LotteryConfigsContext";
 import formatNumber from "../../utils/secret-lottery/formatNumber";
+import ArrowLeft from '../../../public/static/arrow-left.svg';
+import ArrowRight from '../../../public/static/arrow-right.svg';
 
 export default ({
     roundViewer,
@@ -32,12 +34,13 @@ export default ({
                 roundViewer ?
                 <div className="box-previous-round">
                     <div className="round-title">
-                        <h2>Previous Round</h2>
+                        <h2>Previous Rounds</h2>
                     </div>
 
                     <div className="round-navigation">
 
                         <button
+                            
                             disabled={
                                 roundViewer.round_number === 1
                             }
@@ -45,11 +48,12 @@ export default ({
                                 const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [(roundViewer.round_number - 1)])
                                 setRoundViewer(response.rounds[0]);
                             }}
-                        >Previous
+                        ><img src={'/static/arrow-left-lottery.svg'} alt="arrowleft"/>
                         </button>
 
                         <h4>Round {roundViewer.round_number} </h4>
                         <button
+                            className="logo-img"
                             disabled={
                                 roundViewer.round_number + 1 >= configs.current_round_number
                             }
@@ -57,7 +61,7 @@ export default ({
                                 const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [(roundViewer.round_number + 1)])
                                 setRoundViewer(response.rounds[0]);
                             }}
-                        >Next
+                        ><img src={'/static/arrow-right-lottery.svg'} alt="arrow right"/>
                         </button>
                     </div>
 
