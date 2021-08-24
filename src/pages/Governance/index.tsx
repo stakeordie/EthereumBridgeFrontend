@@ -151,7 +151,7 @@ export const Governance = observer(() => {
   //fetch total locked and Staking APY
   useEffect(() => {
     (async () => {
-      const sefi_reward_token = await user.getRewardToken('SEFI')
+      const sefi_reward_token = await user.getRewardToken(process.env.SEFI_STAKING_CONTRACT)
       const { total_locked } = await user?.secretjs?.queryContractSmart(process.env.SEFI_STAKING_CONTRACT, { "total_locked": {} })
       const totalLocked = total_locked?.amount;
       const convertTotalLocked = totalLocked / (Math.pow(10, 6));

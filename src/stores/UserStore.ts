@@ -725,7 +725,7 @@ export class UserStoreEx extends StoreConstructor {
       [],
       getFeeForExecute(450_000))
 
-    const newPoll = result.logs[0]?.events[1]?.attributes[5]?.value;
+    const newPoll = result.logs[0]?.events[1]?.attributes.find((e)=>e.key==='new_poll').value;
     if (newPoll) {
       await axios.post(`${process.env.BACKEND_URL}/secret_votes/${newPoll}`);
     }
@@ -1169,7 +1169,7 @@ export class UserStoreEx extends StoreConstructor {
   //
   // this.ethRate = ethusdt.body.lastPrice;
   //}
-  @action public async getRewardToken(tokenSymbol: string): Promise<RewardsToken> {
+  @action public async getRewardToken(tokenAddress: string): Promise<RewardsToken> {
     try {
       stores.rewards.init({
         isLocal: true,
@@ -1199,18 +1199,10 @@ export class UserStoreEx extends StoreConstructor {
       while (!stores.user.secretjs || stores.tokens.isPending) {
         await sleep(100);
       }
-      await stores.user.updateBalanceForSymbol(tokenSymbol);
+      await stores.user.refreshTokenBalanceByAddress(tokenAddress);
       const reward_tokens = mappedRewards
         .slice()
-        .sort((a, b) => {
-          /* SEFI first */
-          if (a.reward.inc_token.symbol === tokenSymbol) {
-            return -1;
-          }
-
-          return 0;
-        })
-        ?.filter(rewardToken => (process.env.TEST_COINS ? true : !rewardToken.reward.hidden))
+        .filter(rewardToken => (process.env.TEST_COINS ? true : !rewardToken.reward.hidden))
         //@ts-ignore
         .map(rewardToken => {
           if (Number(rewardToken.reward.deadline) < 2_000_000) {
@@ -1239,11 +1231,11 @@ export class UserStoreEx extends StoreConstructor {
             rewardsSymbol: 'SEFI',
           };
 
-          if (rewardsToken.lockedAsset === tokenSymbol) {
+          if (rewardsToken.rewardsContract === tokenAddress) {
             return rewardsToken;
           }
         });
-      return reward_tokens[0];
+      return reward_tokens.filter(e => e !== undefined)[0];
     } catch (error) {
       console.error(error)
       return undefined;

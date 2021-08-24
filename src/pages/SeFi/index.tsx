@@ -321,14 +321,25 @@ export const SeFiPage = observer(() => {
           <Box direction="column" align="center" justify="center" className={styles.base}>
             {rewardsData
               .slice()
-              .sort((a, b) => {
-                /* SEFI first */
-                if (a.reward.inc_token.symbol === 'SEFI') {
-                  return -1;
-                }
-
-                return 0;
-              })
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SMANA' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SDOT(BSC)' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SYFI' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SRUNE' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SOCEAN' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SRSR' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SLINK' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SBNB(BSC)' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SDAI' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SETH-SWBTC' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SEFI-SUSDC' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SEFI-SXMR' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SEFI' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SWBTC' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SETH' ? -1 : 0) //
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SSCRT-SUSDT' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SETH-SETH(BSC)' ? -1 : 0)
+              .sort((a, b) => a.reward.inc_token.symbol.toUpperCase() === 'LP-SUSDC-SUSDC(BSC)' ? -1 : 0)
+              .sort((a,b)=>(a.reward.inc_token.symbol === 'SEFI') ? -1: 0)
               .filter(rewardToken => (process.env.TEST_COINS ? true : !rewardToken.reward.hidden))
               .map((rewardToken,i) => {
                 if (Number(rewardToken.reward.deadline) < 2_000_000) {
