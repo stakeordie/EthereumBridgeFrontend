@@ -62,9 +62,12 @@ const CreateProposal = observer((props) => {
 
   function isValid() {
     return !formData.title
-      || !formData.description
       || !formData.vote_type
+      || !formData.author_alias 
+      || !formData.description
+      || formData.title.length < 2
       || formData.description.length < 10
+      || formData.author_alias.length < 3
   }
 
   function formatErrors() {
@@ -76,20 +79,30 @@ const CreateProposal = observer((props) => {
   }
 
   function validateForm() {
+
     const result = [];
 
-    if (!formData.title || !formData.description || !formData.vote_type) {
+    if (!formData.title ||!formData.vote_type || !formData.author_alias || !formData.description)  {
       result.push({
         type: 'field',
         msg: `All fields are required`
       });
+    }else if (formData.title.length < 2 ){
+      result.push({
+        type: 'field',
+        msg: `Minimum characteres required in title field is 2`
+      })
+    }else if (formData.author_alias.length < 3){
+      result.push({
+        type: 'field',
+        msg: `Minimum characteres required in proposer name field is 3`
+      })
     } else if (formData.description.length < 10) {
       result.push({
         type: 'field',
         msg: `Minimum characteres required in description field is 10`
       });
     }
-
     setErrors(result);
   }
 
