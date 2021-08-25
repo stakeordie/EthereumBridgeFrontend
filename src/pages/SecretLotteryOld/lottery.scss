@@ -162,29 +162,32 @@ $shadow-dark: none;
     .button-primary-lg {
         width: 100%;
         background-color: $secret-swap-green-02;
-        border: 1px solid  $secret-swap-green-02;
         border-radius: 4px;
         padding: 12px 104.5px;
         font-size: 16px;
         cursor: pointer;
         outline: none;
+        color: $secret-swap-neutral-07;
+        border: none;
 
-        &:hover{
-            background-color: var(--secret-swap-green-01);
-            outline: none;
+        &:disabled{
+            cursor: default;
+            color: $secret-swap-neutral-03;
         }
 
     }
 
     .button-primary-sm {
-        color: $secret-swap-white;
         background-color:  $secret-swap-green-02;
-        border: 1px solid $secret-swap-green-02;
         border-radius: 3px;
         cursor: pointer;
+        outline: none;
+        color: $secret-swap-neutral-07;
+        border: none;
 
-        &:hover{
-            background-color: var(--secret-swap-green-01);
+        &:disabled{
+            cursor: default;
+            color: $secret-swap-neutral-03;
         }
     }
 
