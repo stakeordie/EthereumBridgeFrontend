@@ -26,6 +26,10 @@ $secret-swap-modal-footer-container-dark: #0E0E10;
 //Fonts
 $font-family: Poppins;
 
+//Shadow
+$shadow-light: 4px 4px 32px rgba(140, 140, 140, 0.25);
+$shadow-dark: none;
+
 .trans{
     border: 1px solid var(--secret-swap-neutral-01);
     border-radius: 4px;
@@ -68,6 +72,8 @@ $font-family: Poppins;
     --secret-swap-green-03: #{$secret-swap-green-03};
     --secret-swap-neutral-01: #{$secret-swap-neutral-01};
     --secret-swap-neutral-03: #{$secret-swap-neutral-03};
+
+    --secret-swap-shadow: #{$shadow-light};
    
     &.dark{
         --secret-background: #{$secret-background-dark};
@@ -76,6 +82,8 @@ $font-family: Poppins;
         --secret-swap-green-03: #{$secret-swap-green-03-dark};
         --secret-swap-neutral-01: #{$secret-swap-neutral-01-dark};
         --secret-swap-neutral-03: #{$secret-swap-neutral-03-dark};
+
+        --secret-swap-shadow: #{$shadow-dark};
     }
 
      p{
@@ -196,7 +204,7 @@ $font-family: Poppins;
     // POT SIZE
     .box-round{
         background-color: var(--secret-background);
-        box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
+        box-shadow: var(--secret-swap-shadow);
         border-radius: 16px;
         padding: 26px;
         height: auto;
@@ -310,7 +318,7 @@ $font-family: Poppins;
         width: 742px;
         border-radius: 16px;
         padding: 26px;
-        box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
+        box-shadow: var(--secret-swap-shadow);
     
         .round-info-container{
             margin-top: 26px;
@@ -410,7 +418,7 @@ $font-family: Poppins;
     .box-tickets{
         margin-top: 32px;
         background: var(--secret-background);
-        box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
+        box-shadow: var(--secret-swap-shadow);
         border-radius: 16px;
         padding: 26px;
         width: 742px;
@@ -450,7 +458,7 @@ $font-family: Poppins;
         background:var(--secret-background);
         height: 992px;
         width: 742px;
-        box-shadow: 4px 4px 32px rgba(140, 140, 140, 0.25);
+        box-shadow: var(--secret-swap-shadow);
         border-radius: 16px;
         padding: 26px;
         margin: 32px auto 0 auto;
