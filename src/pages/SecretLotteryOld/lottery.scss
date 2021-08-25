@@ -43,6 +43,7 @@ $font-family: Poppins;
     row-gap: 16px;
     justify-content: center;
     span{
+        color: var(--secret-swap-neutral-01);
         align-items: center;
         display: flex;
     }
@@ -58,6 +59,7 @@ $font-family: Poppins;
     row-gap: 8px;
     text-align: center;
 }
+
 .lottery-container{
 
     --secret-background: #{$secret-background};
@@ -368,7 +370,7 @@ $font-family: Poppins;
             margin-top: 36px;
             border-radius: 16px;
             padding: 16px;
-            background-color: var(--secret-swap-green-03);
+            background-color: var(--secret- swap-green-03);
             height: auto;
             width: auto;
     
