@@ -162,14 +162,14 @@ export default ({
                         </div>
 
                         <div className="data">
+                            <div className="data-footer">
+                                <h4>{currentRoundsState && numeral((formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000) * sefiPrice)).format('$0,0.00')}</h4>
+                            </div>
                             <div className="data-body">
                                 <h1>
                                     {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}
                                     <span> SEFI</span>
                                 </h1>
-                            </div>
-                            <div className="data-footer">
-                                <h4>{currentRoundsState && numeral((formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)*sefiPrice)).format('$0,0.00')}</h4>
                             </div>
                         </div>
 

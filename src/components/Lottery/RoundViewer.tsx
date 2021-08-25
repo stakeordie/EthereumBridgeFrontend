@@ -4,8 +4,8 @@ import getRounds, { IRound } from "../../pages/SecretLottery/api/getRounds";
 import { ClientContext } from "../../stores/lottery-context/ClientContext";
 import { ConfigsContext } from "../../stores/lottery-context/LotteryConfigsContext";
 import formatNumber from "../../utils/secret-lottery/formatNumber";
-import ArrowLeft from '../../../public/static/arrow-left.svg';
-import ArrowRight from '../../../public/static/arrow-right.svg';
+import axios from 'axios';
+import numeral from 'numeral';
 
 export default ({
     roundViewer,
@@ -16,6 +16,7 @@ export default ({
 }) => {
     const client = useContext(ClientContext);
     const configs = useContext(ConfigsContext);
+    const [sefiPrice, setSefiPrice] = useState<number>(0)
     const [searchState, setSearchState] = useState<string>("");
 
     useEffect(() => {
@@ -24,6 +25,21 @@ export default ({
             setRoundViewer(response.rounds[0]);
         })()
     }, [client, configs])
+
+    useEffect(() => {
+        //GET sefi price
+        (async () => {
+            try {
+                const { data } = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=sefi&vs_currencies=usd');
+                setSefiPrice(data.sefi.usd)
+            } catch (error) {
+                setSefiPrice(0.05)
+                console.error(error);
+            }
+
+        })()
+    }, [])
+
 
     if (!configs) return null;
 
@@ -106,8 +122,8 @@ export default ({
                                     <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
-                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_6_pot_size : "0") / 1000000)}</h4>
-                                    <p>$0</p>
+                                        <p>{numeral(formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_6_pot_size : "0") / 1000000) * sefiPrice).format(('$0.00'))}</p>
+                                        <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_6_pot_size : "0") / 1000000)}</h4>
                                 </div>
                                 <div className="col-winners">
                                     <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_6_ticket_win_count : "0"}</h4>
@@ -124,8 +140,8 @@ export default ({
                                     <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
-                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_5_pot_size : "0") / 1000000)}</h4>
-                                    <p>$0</p>
+                                        <p>{numeral(formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_5_pot_size : "0") / 1000000) * sefiPrice).format(('$0.00'))}</p>
+                                        <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_5_pot_size : "0") / 1000000)}</h4>
                                 </div>
                                 <div className="col-winners">
                                     <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_5_ticket_win_count : "0"}</h4>
@@ -142,8 +158,8 @@ export default ({
                                     <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
-                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_4_pot_size : "0") / 1000000)}</h4>
-                                    <p>$0</p>
+                                        <p>{numeral(formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_4_pot_size : "0") / 1000000) * sefiPrice).format(('$0.00'))}</p>
+                                        <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_4_pot_size : "0") / 1000000)}</h4>
                                 </div>
                                 <div className="col-winners">
                                     <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_4_ticket_win_count : "0"}</h4>
@@ -160,8 +176,8 @@ export default ({
                                     <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
-                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_3_pot_size : "0") / 1000000)}</h4>
-                                    <p>$0</p>
+                                        <p>{numeral(formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_3_pot_size : "0") / 1000000) * sefiPrice).format(('$0.00'))}</p>
+                                        <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_3_pot_size : "0") / 1000000)}</h4>
                                 </div>
                                 <div className="col-winners">
                                     <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_3_ticket_win_count : "0"}</h4>
@@ -178,8 +194,8 @@ export default ({
                                     <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
-                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_2_pot_size : "0") / 1000000)}</h4>
-                                    <p>$0</p>
+                                        <p>{numeral(formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_2_pot_size : "0") / 1000000) * sefiPrice).format(('$0.00'))}</p>
+                                        <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_2_pot_size : "0") / 1000000)}</h4>
                                 </div>
                                 <div className="col-winners">
                                     <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_2_ticket_win_count : "0"}</h4>
@@ -196,8 +212,8 @@ export default ({
                                     <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                 </div>
                                 <div className="col-dist-rewards">
-                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_1_pot_size : "0") / 1000000)}</h4>
-                                    <p>$0</p>
+                                        <p>{numeral(formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_1_pot_size : "0") / 1000000) * sefiPrice).format(('$0.00'))}</p>
+                                        <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_1_pot_size : "0") / 1000000)}</h4>
                                 </div>
                                 <div className="col-winners">
                                     <h4>{roundViewer.reward_distribution ? roundViewer.reward_distribution.sequence_1_ticket_win_count : "0"}</h4>
@@ -212,8 +228,8 @@ export default ({
                                     <h4>Burn</h4>
                                 </div>
                                 <div className="col-dist-rewards">
-                                    <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.burn_pot_size : "0") / 1000000)}</h4>
-                                    <p>$36</p>
+                                        <p>{numeral(formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.burn_pot_size : "0") / 1000000) * sefiPrice).format(('$0.00'))}</p>
+                                        <h4>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.burn_pot_size : "0") / 1000000)}</h4>
                                 </div>
                                 <div className="col-winners">
                                     <h4>
