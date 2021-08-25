@@ -274,6 +274,7 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
               setManualTickets([]);
               setLoadingBuyTickets(false);
             } catch (e) {
+              setOpen(false)
               setLoadingBuyTickets(false);
               errorNotification(e);
             }

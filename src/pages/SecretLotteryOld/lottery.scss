@@ -60,8 +60,13 @@ $shadow-dark: none;
     align-items: center;
     grid-column: 1 / 5;
     max-width: 50%;
-    row-gap: 8px;
+    row-gap: 26px;
     text-align: center;
+
+    p{
+        margin: 0px;
+        color: var(--secret-swap-neutral-03);
+    }
 }
 
 .lottery-container{
