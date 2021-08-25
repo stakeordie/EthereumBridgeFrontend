@@ -30,6 +30,18 @@ $font-family: Poppins;
 $shadow-light: 4px 4px 32px rgba(140, 140, 140, 0.25);
 $shadow-dark: none;
 
+.round-pot-title{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    i{
+        color: inherit;
+        font-size: 20px;
+        color: $secret-swap-neutral-03;
+    }
+
+}
+
 .trans{
     border: 1px solid var(--secret-swap-neutral-01);
     border-radius: 4px;
