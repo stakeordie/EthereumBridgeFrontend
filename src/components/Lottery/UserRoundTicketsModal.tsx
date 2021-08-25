@@ -336,7 +336,7 @@ export default ({
                                                             ?
                                                             "Claimed " + formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000) + " SEFI"
                                                             :
-                                                            " - "
+                                                            "No Winner Tickets"
                                                 }
                                             </div>
                                         </>
