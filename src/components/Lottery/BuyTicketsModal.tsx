@@ -41,7 +41,7 @@ const BuyTicketsModal = ({
   const [loadingBuyTickets, setLoadingBuyTickets] = useState<boolean>(false)
   const [isManualTickets, setIsManualTickets] = useState<boolean>(false);
   const [currentRoundUserTicketsCount, setCurrentRoundUserTicketsCount] = useState<number | null>(null)
-  const [ticketsCount, setTicketsCount] = useState<string>("");
+  const [ticketsCount, setTicketsCount] = useState<string>(configs?.min_ticket_count_per_round.toString());
   const [manualTickets, setManualTickets] = useState<string[]>([]);
   const [currentRoundsState, setCurrentRoundsState] = useState<IRound | null>(null)
   const [stakingRewards, setStakingRewards] = useState<IStakingRewads | null>(null)
@@ -154,9 +154,7 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
             type="number"
             value={ticketsCount}
             onChange={e => {
-              if (!e.target.value || e.target.value === '') {
-                setTicketsCount('');
-              } else if (parseInt(e.target.value) >= 500) {
+              if (parseInt(e.target.value) >= 500) {
                 setTicketsCount('500');
               } else {
                 setTicketsCount(e.target.value);
@@ -166,10 +164,10 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
             <Button
               type="submit"
               onClick={() => {
-                if (parseInt(ticketsCount) > 0) {
+                if (parseInt(ticketsCount) > configs?.min_ticket_count_per_round) {
                   setTicketsCount('' + (parseInt(ticketsCount) - 1));
-                }else if(!ticketsCount){
-                  setTicketsCount('0')
+                }else {
+                  setTicketsCount(configs?.min_ticket_count_per_round.toString());
                 }
               }}
             >
@@ -183,9 +181,6 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
                   setTicketsCount('500');
                 } else {
                   setTicketsCount('' + (parseInt(ticketsCount) + 1));
-                }
-                if(!ticketsCount){
-                  setTicketsCount('1')
                 }
               }}
             >
@@ -227,7 +222,7 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
           disabled={
             loadingBuyTickets ||
             (isManualTickets && manualTickets.filter(e => e?.length === 6).length !== manualTickets.length) ||
-            parseInt(ticketsCount) === 0 || !ticketsCount
+            parseInt(ticketsCount) <= configs.min_ticket_count_per_round || !ticketsCount
           }
           onClick={async () => {
             if (!configs) {
