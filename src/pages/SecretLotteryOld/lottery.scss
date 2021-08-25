@@ -890,7 +890,7 @@ $shadow-dark: none;
 
 // MODAL TICKETS
 
-.dimmer{
+.modal-tickets{
 
     --secret-background: #{$secret-background};
     --secret-swap-green-01: #{$secret-swap-green-01};
@@ -918,7 +918,7 @@ $shadow-dark: none;
         box-shadow: 0px 10px 32px -4px #18274B1A;
         box-shadow: 0px 6px 14px -6px #18274B1F;
     
-        .modal-header{
+        .modal-tickets-header{
             border: none;
             padding: 0;
     
@@ -937,7 +937,7 @@ $shadow-dark: none;
             }
         }
     
-        .modal-body{
+        .modal-tickets-body{
             margin-top: 26px;
             padding: 0;
     
@@ -968,7 +968,7 @@ $shadow-dark: none;
                 }
             }
     
-            .body-container{
+            .body-content{
                 margin-bottom: 26px;
                 display: grid;
                 grid-template-columns: 50% 50%;

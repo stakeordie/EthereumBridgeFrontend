@@ -269,7 +269,7 @@ export default ({
 
         return (
             <Modal
-                size="lg" centered className={`dimmer ${theme.currentTheme}`}
+                size="lg" centered className={`modal-tickets ${theme.currentTheme}`}
                 show={userRoundTicketsModal.show}
                 onHide={() => setUserRoundTicketsModal(
                     { show: false, selectedUserRound: null, userTicketsCount: null }
@@ -277,18 +277,18 @@ export default ({
 
                 <Modal.Header
                     closeButton
-                    className="modal-header"
+                    className="modal-tickets-header"
                 >
                     <Modal.Title>
                         <h6>Your Tickets <strong> Round {round.round_number}</strong></h6>
                     </Modal.Title>
                 </Modal.Header>
 
-                <Modal.Body className="modal-body">
+                <Modal.Body className="modal-tickets-body">
                     {
                         round.drafted_ticket
                             ?
-                            <div className="body-container">
+                            <div className="body-content">
 
                                 <div className="tickets-info">
                                     <div className="tickets-info-container">
