@@ -190,6 +190,13 @@ export default ({
                             </div>
                         </div>
 
+                        {/* Round Ends Countdown */}
+                        <div className="counter-row">
+                            <h4>
+                                Round {currentRoundsState.round_number} ends in <Countdown date={(moment.unix(currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} />
+                            </h4>
+                        </div>
+
                         <div className="round-footer-tickets">
                             <div className="round-footer-tickets-item">
                                 <p>Minimum Ticket Count</p>
@@ -213,12 +220,7 @@ export default ({
                         </Row> */}
                     </div>
 
-                    {/* Round Ends Countdown */}
-                    <div className="counter-row">
-                        <h4>
-                            Round {currentRoundsState.round_number} ends in <Countdown date={(moment.unix(currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} />
-                        </h4>
-                    </div>
+
 
 
 
