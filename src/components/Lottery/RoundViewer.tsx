@@ -6,7 +6,7 @@ import { ConfigsContext } from "../../stores/lottery-context/LotteryConfigsConte
 import formatNumber from "../../utils/secret-lottery/formatNumber";
 import axios from 'axios';
 import numeral from 'numeral';
-import { Accordion, Icon } from "semantic-ui-react";
+import { Accordion, Icon, Button } from "semantic-ui-react";
 
 export default ({
     roundViewer,
@@ -90,8 +90,8 @@ export default ({
                                         <p>Prize Pot</p>
                                     </div>
                                     <div className="header-item">
-                                        <h3>{roundViewer.drafted_ticket ? roundViewer.drafted_ticket : "-"}</h3>
-                                        <p>Burned</p>
+                                        <h3>{formatNumber(parseInt(roundViewer.reward_distribution ? roundViewer.reward_distribution.burn_pot_size : "0") / 1000000)} SEFI</h3>
+                                        <p>Burn</p>
                                     </div>
                                     <div className="header-item">
                                         <h3>{roundViewer.ticket_count}</h3>
@@ -105,7 +105,10 @@ export default ({
 
                                 <Accordion.Title active={active} onClick={() => setActive(!active)}>
                                     <div className="show-detail">
-                                        <h4>Round Detail <Icon name='dropdown' /></h4>
+                                        <Button color="black" fluid >
+                                            Round Detail
+                                            <Icon name='dropdown' style={{ marginRight: '10px' }} />
+                                        </Button>
                                     </div>
                                 </Accordion.Title>
 

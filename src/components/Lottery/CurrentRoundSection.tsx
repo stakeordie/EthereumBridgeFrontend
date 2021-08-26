@@ -17,7 +17,7 @@ import Countdown from 'react-countdown';
 import { useStores } from "stores";
 import axios from "axios";
 import numeral from 'numeral';
-import { Accordion, Icon } from "semantic-ui-react";
+import { Accordion, Icon, Button } from "semantic-ui-react";
 export default ({
     getPaginatedUserTicketsTrigger,
     paginationValues
@@ -227,38 +227,19 @@ export default ({
                     {/* Round Pot Distribution */}
                     <div className="box-round-pot">
                         <Accordion >
-                            <Accordion.Title active={active} onClick={()=> setActive(!active)}>
                                 <div className="round-pot-title">
                                     <h2>Round Pot Distribution </h2>
-                                    <h3><Icon  name="dropdown" /></h3>
+
                                 </div>
-                                {
-                                    configs && 
-                                    <>
-                                        <div className="box-pot-size">
-                                                <div className="box-pot-size-container">
-                                                    <div className="col-pot-results">
-                                                    <h4>Pot Size</h4>
-                                                        <h6>{currentRoundsState && numeral(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)).format('$0,0.00')}</h6>
-                                                    <h5> {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}  <span> SEFI</span></h5>
-                                                    </div>
-                                                    <div className="col-pot-button">
-                                                        <BuyTicketsModal 
-                                                            getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
-                                                            paginationValues={paginationValues}
-                                                        >
-                                                            <button disabled={!viewkey || !client.execute} className="button-primary-lg">
-                                                                Buy Tickets
-                                                            </button>
-                                                        </BuyTicketsModal>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                        
-                                    </>
-                                }
+                            <Accordion.Title active={active} onClick={() => setActive(!active)}>
+                                <div className="show-detail">
+                                    <Button color="black" fluid >
+                                        Round Pot Distribution Detail
+                                        <Icon name='dropdown' style={{ marginRight: '10px' }} />
+                                    </Button>
+                                </div>
                             </Accordion.Title>
+
                             <Accordion.Content active={active}>
                                 {
                                     configs &&
@@ -409,11 +390,34 @@ export default ({
 
                                         </div> {/* round-info-container */}
 
-                                    
                                     </>
-
                                 }
                             </Accordion.Content>
+
+                            {
+                                configs &&
+                                <>
+                                    <div className="box-pot-size">
+                                        <div className="box-pot-size-container">
+                                            <div className="col-pot-results">
+                                                <h4>Pot Size</h4>
+                                                <h6>{currentRoundsState && numeral(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)).format('$0,0.00')}</h6>
+                                                <h5> {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}  <span> SEFI</span></h5>
+                                            </div>
+                                            <div className="col-pot-button">
+                                                <BuyTicketsModal
+                                                    getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
+                                                    paginationValues={paginationValues}
+                                                >
+                                                    <button disabled={!viewkey || !client.execute} className="button-primary-lg">
+                                                        Buy Tickets
+                                                    </button>
+                                                </BuyTicketsModal>
+                                            </div>
+                                        </div>
+                                    </div> {/*Box Pot Size */}
+                                </>
+                            }
 
                         </Accordion>
                     </div>

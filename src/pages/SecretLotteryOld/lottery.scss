@@ -30,18 +30,6 @@ $font-family: Poppins;
 $shadow-light: 4px 4px 32px rgba(140, 140, 140, 0.25);
 $shadow-dark: none;
 
-.round-pot-title{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    i{
-        color: inherit;
-        font-size: 20px;
-        color: $secret-swap-neutral-03;
-    }
-
-}
-
 .trans{
     border: 1px solid var(--secret-swap-neutral-01);
     border-radius: 4px;
@@ -339,6 +327,10 @@ $shadow-dark: none;
         border-radius: 16px;
         padding: 26px;
         box-shadow: var(--secret-swap-shadow);
+
+        .show-detail{
+            margin-top: 26px;
+        }
     
         .round-info-container{
             margin-top: 26px;
@@ -396,10 +388,10 @@ $shadow-dark: none;
         }
     
         .box-pot-size{
-            margin-top: 36px;
+            margin-top: 26px;
             border-radius: 16px;
             padding: 16px;
-            background-color: var(--secret- swap-green-03);
+            background-color: var(--secret-swap-green-03);
             height: auto;
             width: auto;
     
@@ -493,8 +485,8 @@ $shadow-dark: none;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            margin-top: 26px;
 
-    
             button{
                 cursor: pointer;
                 background-color: transparent;
@@ -551,10 +543,7 @@ $shadow-dark: none;
                 }
             }
 
-            .show-detail{
-                margin: 10px 0px;
-
-            }
+            
     
             .table-titles{
                 padding: 10px;
