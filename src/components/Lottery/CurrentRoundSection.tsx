@@ -238,12 +238,9 @@ export default ({
                                         <div className="box-pot-size">
                                                 <div className="box-pot-size-container">
                                                     <div className="col-pot-results">
-                                                        <h4>Pot Size</h4>
-                                                        <h5>
-                                                            {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}
-                                                            <span> SEFI</span>
-                                                        </h5>
+                                                    <h4>Pot Size</h4>
                                                         <h6>{currentRoundsState && numeral(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)).format('$0,0.00')}</h6>
+                                                    <h5> {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}  <span> SEFI</span></h5>
                                                     </div>
                                                     <div className="col-pot-button">
                                                         <BuyTicketsModal 
@@ -280,8 +277,8 @@ export default ({
                                                     <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
                                                 </div>
                                                 <div className="col-values">
-                                                    <h4>{getEstimateSEFI(6)} <span>SEFI</span> </h4>
                                                     <p> {getEstimateUSD(6)}</p>
+                                                    <h4>{getEstimateSEFI(6)} <span>SEFI</span> </h4>
                                                 </div>
                                             </div>
 
@@ -299,8 +296,8 @@ export default ({
                                                     <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
                                                 </div>
                                                 <div className="col-values">
-                                                    <h4>{getEstimateSEFI(5)} <span>SEFI</span> </h4>
                                                     <p> {getEstimateUSD(5)}</p>
+                                                    <h4>{getEstimateSEFI(5)} <span>SEFI</span> </h4>
                                                 </div>
                                             </div>
 
@@ -317,8 +314,8 @@ export default ({
                                                     <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                                 </div>
                                                 <div className="col-values">
-                                                    <h4>{getEstimateSEFI(4)} <span>SEFI</span> </h4>
                                                     <p> {getEstimateUSD(4)}</p>
+                                                    <h4>{getEstimateSEFI(4)} <span>SEFI</span> </h4>
                                                 </div>
                                             </div>
 
@@ -335,8 +332,8 @@ export default ({
                                                     <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                                 </div>
                                                 <div className="col-values">
-                                                    <h4>{getEstimateSEFI(3)} <span>SEFI</span> </h4>
                                                     <p> {getEstimateUSD(3)}</p>
+                                                    <h4>{getEstimateSEFI(3)} <span>SEFI</span> </h4>
                                                 </div>
                                             </div>
 
@@ -353,8 +350,8 @@ export default ({
                                                     <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                                 </div>
                                                 <div className="col-values">
-                                                    <h4>{getEstimateSEFI(2)} <span>SEFI</span> </h4>
                                                     <p> {getEstimateUSD(2)}</p>
+                                                    <h4>{getEstimateSEFI(2)} <span>SEFI</span> </h4>
                                                 </div>
                                             </div>
 
@@ -372,8 +369,8 @@ export default ({
                                                     <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
                                                 </div>
                                                 <div className="col-values">
-                                                    <h4>{getEstimateSEFI(1)} <span>SEFI</span> </h4>
                                                     <p> {getEstimateUSD(1)}</p>
+                                                    <h4>{getEstimateSEFI(1)} <span>SEFI</span> </h4>
                                                 </div>
                                             </div>
 
@@ -385,10 +382,10 @@ export default ({
 
                                                 </div>
                                                 <div className="col-values">
+                                                    <p>{numeral((Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100) * sefiPrice).format('$0.00')}</p>
                                                     <h4>
                                                         {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
                                                     </h4>
-                                                    <p>{numeral((Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100)*sefiPrice).format('$0.00')}</p>
                                                 </div>
                                             </div>
 
@@ -403,10 +400,10 @@ export default ({
 
                                                 <div className="col-values">
 
+                                                    <p>{numeral((Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100) * sefiPrice).format('$0.00')}</p>
                                                     <h4>
                                                         {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
                                                     </h4>
-                                                    <p>{numeral((Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100)*sefiPrice).format('$0.00')}</p>
                                                 </div>
                                             </div>
 
