@@ -1,5 +1,4 @@
 import React, { Dispatch, useContext, useEffect, useState } from "react"
-import { Col, Form, Row } from "react-bootstrap"
 import getRounds, { IRound } from "../../pages/SecretLottery/api/getRounds";
 import { ClientContext } from "../../stores/lottery-context/ClientContext";
 import { ConfigsContext } from "../../stores/lottery-context/LotteryConfigsContext";

@@ -20,8 +20,7 @@ import CreateProposal from 'pages/CreateProposal';
 import { DetailProposal } from 'pages/DetailProposal';
 import SefiStaking from 'pages/SefiStaking';
 import { Migration } from 'pages/Migration';
-// import SecretLottery from 'pages/SecretLottery';
-import SecretLottery from 'pages/SecretLotteryOld/';
+import SecretLottery from 'pages/SecretLottery';
 
 export const App: React.FC = () => (
   <Providers>
@@ -36,8 +35,6 @@ export const App: React.FC = () => (
         <Route exact path="/proposal/:id" component={DetailProposal} />
         <Route exact path="/sefistaking" component={SefiStaking} />
         <Route exact path="/migration" component={Migration} />
-        {/* <Route exact path="/secret-lottery" component={SecretLottery} /> */}
-        {/* <Route exact path="/lottery" component={SecretLottery} /> */}
         <Route exact path="/lottery" component={SecretLottery} />
         {/* <Route exact path="/faq" component={FAQPage} /> */}
         {/* <Route exact path="/finance" component={FinancePage} /> */}
