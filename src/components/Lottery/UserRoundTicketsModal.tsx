@@ -1,6 +1,7 @@
 import React, { Dispatch, useContext, useEffect, useState } from "react";
 import { useStores } from 'stores';
-import { Col, Modal, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Popover } from "react-bootstrap";
+import { Modal } from 'semantic-ui-react'
 import { Button } from 'semantic-ui-react';
 import claimRewards from "../../pages/SecretLottery/api/claimRewards";
 import getBalance from "../../pages/SecretLottery/api/getBalance";
@@ -19,8 +20,8 @@ export default ({
     userRoundTicketsModal,
     setUserRoundTicketsModal
 }: {
-    userRoundTicketsModal: { show: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null },
-    setUserRoundTicketsModal: Dispatch<{ show: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null }>
+        userRoundTicketsModal: { open: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null },
+        setUserRoundTicketsModal: Dispatch<{ open: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null }>
 }) => {
 
     let { theme } = useStores();
@@ -269,22 +270,18 @@ export default ({
 
         return (
             <Modal
-                size="lg" centered className={`modal-tickets ${theme.currentTheme}`}
-                show={userRoundTicketsModal.show}
-                onHide={() => setUserRoundTicketsModal(
-                    { show: false, selectedUserRound: null, userTicketsCount: null }
+                closeIcon
+                className={`modal-tickets ${theme.currentTheme}`}
+                open={userRoundTicketsModal.open}
+                onClose={() => setUserRoundTicketsModal(
+                    { open: false, selectedUserRound: null, userTicketsCount: null }
                 )}>
 
-                <Modal.Header
-                    closeButton
-                    className="modal-tickets-header"
-                >
-                    <Modal.Title>
-                        <h6>Your Tickets <strong> Round {round.round_number}</strong></h6>
-                    </Modal.Title>
-                </Modal.Header>
+                <div className="modal-tickets-header">
+                    <h6>Your Tickets <strong> Round {round.round_number}</strong></h6>
+                </div>
 
-                <Modal.Body className="modal-tickets-body">
+                <div className="modal-tickets-body">
                     {
                         round.drafted_ticket
                             ?
@@ -363,7 +360,7 @@ export default ({
                         />
                     }
 
-                </Modal.Body>
+                </div>
             </Modal>
         )
     } else {

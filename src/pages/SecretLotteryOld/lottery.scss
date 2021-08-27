@@ -674,8 +674,6 @@ $shadow-dark: none;
     --secret-swap-neutral-03: #{$secret-swap-neutral-03};
 
     --secret-swap-modal-footer-container: #{$secret-swap-modal-footer-container};
-
-
    
     &.dark{
         --secret-background: #{$secret-background-dark};
@@ -918,182 +916,199 @@ $shadow-dark: none;
         --secret-swap-neutral-03: #{$secret-swap-neutral-03-dark};
     }
 
-    .modal-content{
-        width: 100%;
+    &.modal{
         background-color: var(--secret-background);
         background-clip: none;
+        margin: auto;
+        height: fit-content;
         border-radius: 16px;
         padding: 26px;
         border: none;
         box-shadow: 0px 10px 32px -4px #18274B1A;
         box-shadow: 0px 6px 14px -6px #18274B1F;
+    }
     
-        .modal-tickets-header{
-            border: none;
-            padding: 0;
-    
-            h6{
+
+    .modal-tickets-header{
+        border: none;
+        padding: 0;
+
+        h6{
+            margin: 0;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+            color:var(--secret-swap-neutral-03);
+
+            strong{
+                color: var(--secret-swap-neutral-01);
+            }
+        }
+    }
+
+    .modal-tickets-body{
+        margin-top: 26px;
+        padding: 0;
+
+        .active-round{
+            margin-bottom: 26px;
+            width: 276px;
+
+            p{
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px;
+                letter-spacing: 0em;
+                text-align: left;
                 margin: 0;
-                font-family: Poppins;
+                color:var(--secret-swap-neutral-03);
+            }
+
+            span{
+                font-size: 16px;
                 font-style: normal;
                 font-weight: 600;
-                font-size: 16px;
                 line-height: 24px;
-                color:var(--secret-swap-neutral-03);
+                letter-spacing: 0em;
+                text-align: right;
+                margin: 0;
+                color:var(--secret-swap-neutral-01);                      
+            }
+        }
+
+        .body-content{
+            margin-bottom: 26px;
+            display: grid;
+            grid-template-columns: 50% 50%;
+            
+            .tickets-info{
+                
+                .tickets-info-container{
+                    display: grid;
+                    grid-template-rows: 3 1fr;
+                    grid-row-gap: 16px;
+                    width: 276px;
+                }
+
+                .info-item{
+                    display: flex;
+                    justify-content: space-between;
+
+                    p{
+                        font-size: 16px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 24px;
+                        letter-spacing: 0em;
+                        text-align: left;
+                        margin: 0;
+                        color:var(--secret-swap-neutral-03);
+                    }
+
+                    #winning-text{
+                        color:var(--secret-swap-neutral-01);
+                    }
+
+                    #winning-number{
+                        color:$secret-swap-green-01;
+                    }
+
+                    h6{
+                        font-family: Poppins;
+                        font-size: 16px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 24px;
+                        letter-spacing: 0em;
+                        text-align: right;
+                        margin: 0;
+                        color:var(--secret-swap-neutral-01);
+                    }
+                }
+            }
     
-                strong{
-                    color: var(--secret-swap-neutral-01);
+            .earnings-info{
+                background-color: var(--secret-swap-green-03);
+                border-radius: 16px;
+                height: 142px;
+                padding: 16px;
+                display: grid;
+                grid-template-rows: 50% 50%;
+                grid-row-gap: 10px;
+                align-items: center;
+
+                .row-earnings{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    p{
+                        color:var(--secret-swap-neutral-03);
+                        margin: 0;
+                    }
+
+                    h4{
+                        color:$secret-swap-green-01;
+                        font-family: Poppins;
+                        font-size: 36px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 54px;
+                        letter-spacing: 0em;
+                        margin: 0;
+                    }
+
+                    span{
+                        color:var(--secret-swap-neutral-03);
+                        font-family: Poppins;
+                        font-size: 22px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 29px;
+                        letter-spacing: 0em;
+                    }
+                }
+
+                .row-earning-sefi{
+                    button{
+                        height: 46px;
+                    }
                 }
             }
         }
-    
-        .modal-tickets-body{
-            margin-top: 26px;
-            padding: 0;
-    
-            .active-round{
-                margin-bottom: 26px;
-                width: 276px;
-    
-                p{
-                    font-size: 16px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: 24px;
-                    letter-spacing: 0em;
-                    text-align: left;
-                    margin: 0;
-                    color:var(--secret-swap-neutral-03);
-                }
-    
-                span{
-                    font-size: 16px;
-                    font-style: normal;
-                    font-weight: 600;
-                    line-height: 24px;
-                    letter-spacing: 0em;
-                    text-align: right;
-                    margin: 0;
-                    color:var(--secret-swap-neutral-01);                      
-                }
+
+        .tickets-container{
+            max-height: 490px;
+            overflow-y: auto;
+            overflow-anchor: .5px;
+            overflow-x: hidden;
+
+            .tickets-row{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-evenly;
+                margin-bottom: 10px;
             }
     
-            .body-content{
-                margin-bottom: 26px;
-                display: grid;
-                grid-template-columns: 50% 50%;
-                
-                .tickets-info{
-                   
-                    .tickets-info-container{
-                        display: grid;
-                        grid-template-rows: 3 1fr;
-                        grid-row-gap: 16px;
-                        width: 276px;
-                    }
-    
-                    .info-item{
-                        display: flex;
-                        justify-content: space-between;
-    
-                        p{
-                            font-size: 16px;
-                            font-style: normal;
-                            font-weight: 400;
-                            line-height: 24px;
-                            letter-spacing: 0em;
-                            text-align: left;
-                            margin: 0;
-                            color:var(--secret-swap-neutral-03);
-                        }
-    
-                        #winning-text{
-                            color:var(--secret-swap-neutral-01);
-                        }
-    
-                        #winning-number{
-                            color:$secret-swap-green-01;
-                        }
-    
-                        h6{
-                            font-family: Poppins;
-                            font-size: 16px;
-                            font-style: normal;
-                            font-weight: 600;
-                            line-height: 24px;
-                            letter-spacing: 0em;
-                            text-align: right;
-                            margin: 0;
-                            color:var(--secret-swap-neutral-01);
-                        }
-                    }
-                }
-        
-                .earnings-info{
-                    background-color: var(--secret-swap-green-03);
-                    border-radius: 16px;
-                    height: 142px;
-                    padding: 16px;
-                    display: grid;
-                    grid-template-rows: 50% 50%;
-                    grid-row-gap: 10px;
-                    align-items: center;
-    
-                    .row-earnings{
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-    
-                        p{
-                            color:var(--secret-swap-neutral-03);
-                            margin: 0;
-                        }
-    
-                        h4{
-                            color:$secret-swap-green-01;
-                            font-family: Poppins;
-                            font-size: 36px;
-                            font-style: normal;
-                            font-weight: 600;
-                            line-height: 54px;
-                            letter-spacing: 0em;
-                            margin: 0;
-                        }
-    
-                        span{
-                            color:var(--secret-swap-neutral-03);
-                            font-family: Poppins;
-                            font-size: 22px;
-                            font-style: normal;
-                            font-weight: 600;
-                            line-height: 29px;
-                            letter-spacing: 0em;
-                        }
-                    }
-    
-                    .row-earning-sefi{
-                        button{
-                            height: 46px;
-                        }
-                    }
-                }
-            }
-    
-            .tickets-container{
-                max-height: 400px;
-                overflow-y: scroll;
-                overflow-anchor: .5px;
-                overflow-x: hidden;
-    
-                .tickets-row{
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: space-evenly;
-                    margin-bottom: 10px;
-                }
-        
-                .ticket-button{
-                    background-color: $secret-swap-neutral-07;
+            .ticket-button{
+                background-color: $secret-swap-neutral-07;
+                height: 40px;
+                width: 142px;
+                border-radius: 10px;
+                padding: 8px;
+                color:$secret-swap-neutral-03;
+                text-align: center;
+                border: none;
+                font-size: 16px;
+                padding: 8px 41.8px;
+                font-weight: 600;
+                outline: none;
+
+                &-winner{
+                    background-color:$secret-swap-green-03;
                     height: 40px;
                     width: 142px;
                     border-radius: 10px;
@@ -1105,44 +1120,30 @@ $shadow-dark: none;
                     padding: 8px 41.8px;
                     font-weight: 600;
                     outline: none;
-    
-                    &-winner{
-                        background-color:$secret-swap-green-03;
-                        height: 40px;
-                        width: 142px;
-                        border-radius: 10px;
-                        padding: 8px;
-                        color:$secret-swap-neutral-03;
-                        text-align: center;
-                        border: none;
-                        font-size: 16px;
-                        padding: 8px 41.8px;
-                        font-weight: 600;
-                        outline: none;
-                    }
-    
-                    &-no-winner{
-                        background-color:$secret-swap-red-02;
-                        height: 40px;
-                        width: 142px;
-                        border-radius: 10px;
-                        padding: 8px;
-                        color:$secret-swap-neutral-03;
-                        text-align: center;
-                        border: none;
-                        font-size: 16px;
-                        padding: 8px 41.8px;
-                        font-weight: 600;
-                        outline: none;
-                    }
+                }
+
+                &-no-winner{
+                    background-color:$secret-swap-red-02;
+                    height: 40px;
+                    width: 142px;
+                    border-radius: 10px;
+                    padding: 8px;
+                    color:$secret-swap-neutral-03;
+                    text-align: center;
+                    border: none;
+                    font-size: 16px;
+                    padding: 8px 41.8px;
+                    font-weight: 600;
+                    outline: none;
                 }
             }
-    
-    
         }
-        
+
+
     }
+    
 }
+
 
 
 // POP OVER FOR MODAL

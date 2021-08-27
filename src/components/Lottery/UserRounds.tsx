@@ -25,8 +25,8 @@ export default ({
     const client = useContext(ClientContext);
     const viewkey = useContext(ViewKeyContext);
 
-    const [userRoundTicketsModal, setUserRoundTicketsModal] = useState<{ show: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null }>({
-        show: false,
+    const [userRoundTicketsModal, setUserRoundTicketsModal] = useState<{ open: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null }>({
+        open: false,
         selectedUserRound: null,
         userTicketsCount: null
     })
@@ -68,9 +68,10 @@ export default ({
                                             id="button-outline"
                                             onClick={
                                                 () => setUserRoundTicketsModal({
-                                                    show: true,
+                                                    open: true,
                                                     selectedUserRound: userRound,
-                                                    userTicketsCount: paginatedUserRounds.user_tickets_count[index]
+                                                    userTicketsCount: paginatedUserRounds.user_tickets_count[index],
+
                                                 })}
                                         >{paginatedUserRounds.user_tickets_count[index] + " Tickets"}
                                         </button>
