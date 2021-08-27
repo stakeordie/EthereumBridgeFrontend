@@ -932,6 +932,9 @@ $shadow-dark: none;
     .modal-tickets-header{
         border: none;
         padding: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
         h6{
             margin: 0;
