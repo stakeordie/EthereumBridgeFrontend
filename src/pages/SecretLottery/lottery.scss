@@ -952,6 +952,14 @@ $shadow-dark: none;
         margin-top: 26px;
         padding: 0;
 
+        #text-loading{
+            
+            font-family: Poppins;
+            color: var(--secret-swap-neutral-01);
+            font-size: 16px;
+            
+        }
+
         .active-round{
             margin-bottom: 26px;
             width: 276px;

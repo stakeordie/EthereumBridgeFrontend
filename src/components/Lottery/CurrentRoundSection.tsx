@@ -17,7 +17,7 @@ import Countdown from 'react-countdown';
 import { useStores } from "stores";
 import axios from "axios";
 import numeral from 'numeral';
-import { Accordion, Icon, Button } from "semantic-ui-react";
+import { Accordion, Icon, Button, Loader } from "semantic-ui-react";
 export default ({
     getPaginatedUserTicketsTrigger,
     paginationValues
@@ -150,7 +150,7 @@ export default ({
     return (
         <React.Fragment>
             {
-                (!currentRoundsState || !configs) && <i className="fa fa-spinner fa-spin" style={{ color: "white" }}></i>
+                (!currentRoundsState || !configs) && <Loader inline='centered' size='big'></Loader>
             }
             {
                 currentRoundsState && configs && stakingRewards &&
@@ -219,10 +219,6 @@ export default ({
                             }
                         </Row> */}
                     </div>
-
-
-
-
 
                     {/* Round Pot Distribution */}
                     <div className="box-round-pot">

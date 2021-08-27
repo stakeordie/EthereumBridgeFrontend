@@ -1,7 +1,7 @@
 import React, { Dispatch, useContext, useEffect, useState } from "react";
 import { useStores } from 'stores';
 import { OverlayTrigger, Popover } from "react-bootstrap";
-import { Modal } from 'semantic-ui-react'
+import { Modal, Loader } from 'semantic-ui-react'
 import { Button } from 'semantic-ui-react';
 import claimRewards from "../../pages/SecretLottery/api/claimRewards";
 import getBalance from "../../pages/SecretLottery/api/getBalance";
@@ -304,9 +304,9 @@ export default ({
                                     </div>
                                 </div>
 
-                                <div className="earnings-info">
-                                    {
-                                        userRoundTickets && remainingRewardTickets &&
+                                {
+                                    userRoundTickets && remainingRewardTickets &&
+                                    <div className="earnings-info">
                                         <>
                                             <div className="row-earnings">
                                                 <p>You Earned</p>
@@ -337,10 +337,9 @@ export default ({
                                                 }
                                             </div>
                                         </>
-                                    }
 
-                                    {/* {round.drafted_ticket ? round.drafted_ticket!.split('').join('  ') : "? ? ? ? ? ?"} */}
-                                </div>
+                                    </div>
+                                }
                             </div>
 
                             :
@@ -351,7 +350,7 @@ export default ({
 
 
 
-                    {!userRoundTickets && <i className="fa fa-spinner fa-spin"></i>}
+                    {!userRoundTickets && <Loader inline='centered' size='big'> <p id="text-loading">Loading Tickets</p> </Loader>}
 
                     {userRoundTickets &&
                         <RenderTickets
