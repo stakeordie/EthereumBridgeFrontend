@@ -60,7 +60,8 @@ export default ({
                                 <h6 id="title">Winning Ticket</h6>
                                 <h6 id="title">My Tickets</h6>
                                 {paginatedUserRounds.rounds.map((userRound, index) =>
-                                    <>
+                                //TODO : Add key to avoid react errors
+                                    <div className='ticket-row' key={`ticket-${index}`}>
                                         <h6 key={index}>{userRound.round_number}</h6>
                                         <h6>{userRound.round_expected_end_timestamp ? moment.unix(userRound.round_expected_end_timestamp).format('ddd D MMM, HH:mm') : " - "}</h6>
                                         <h6>{userRound.drafted_ticket ? userRound.drafted_ticket! : " - "}</h6>
@@ -75,7 +76,7 @@ export default ({
                                                 })}
                                         >{paginatedUserRounds.user_tickets_count[index] + " Tickets"}
                                         </button>
-                                    </>
+                                    </div>
                                 )
                             }
                                 </>
