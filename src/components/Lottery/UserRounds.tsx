@@ -32,7 +32,9 @@ export default ({
     })
 
     useEffect(() => {
+      //Move this to Lottery context
         if ( viewkey) {
+          console.log('Query from useEffect (1 query)')
             getPaginatedUserTicketsTrigger(client, viewkey, paginationValues.page, paginationValues.page_size)
         }
     }, [client, viewkey])
@@ -60,7 +62,6 @@ export default ({
                                 <h6 id="title">Winning Ticket</h6>
                                 <h6 id="title">My Tickets</h6>
                                 {paginatedUserRounds.rounds.map((userRound, index) =>
-                                //TODO : Add key to avoid react errors
                                     <div className='ticket-row' key={`ticket-${index}`}>
                                         <h6 key={index}>{userRound.round_number}</h6>
                                         <h6>{userRound.round_expected_end_timestamp ? moment.unix(userRound.round_expected_end_timestamp).format('ddd D MMM, HH:mm') : " - "}</h6>

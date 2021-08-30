@@ -35,7 +35,9 @@ export default ({
   const [loadingClaimReward, setLoadingClaimReward] = useState<boolean>(false)
 
   useEffect(() => {
+    //TODO: Move this to lottery context
     if (client && viewkey && userRoundTicketsModal.selectedUserRound && userRoundTicketsModal.userTicketsCount) {
+      console.log('Query from useEffect userTicketsModal (1 query)')
       setUserRoundTickets(null)
       getUserRoundPaginatedTicketsTrigger(client, viewkey, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
     }

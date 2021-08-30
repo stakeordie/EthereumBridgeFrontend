@@ -33,7 +33,6 @@ export default ({
     const viewkey = useContext(ViewKeyContext);
     const balancesDispatch = useContext(BalancesDispatchContext);
     const configs = useContext(ConfigsContext);
-    const configsDispatch = useContext(ConfigsDispatchContext);
 
     const [currentRoundsState, setCurrentRoundsState] = useState<IRound | null>(null)
     const [sefiPrice, setSefiPrice] = useState<number>(0)
@@ -45,15 +44,8 @@ export default ({
     const [manualTickets, setManualTickets] = useState<string[]>([]);
     const [active,setActive]=useState<boolean>(false);
 
-    useEffect(() => {
-        getConfigsTrigger(client)
-        setInterval(() => {
-            getConfigsTrigger(client)
-        }, 30000); // check 30 seconds
-    }, [client])
-
     useEffect(()=>{
-        //GET sefi price
+        //Move this to Lotery context
         (async()=>{
             try {
                 const { data } = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=sefi&vs_currencies=usd');
@@ -79,6 +71,8 @@ export default ({
     },[ticketsCount])
 
     useEffect(() => {
+      //TODO: Move this to Lottery context
+      console.log('Query from useEffect (3 queries) + config (1 query)')
         if(viewkey && configs){
             getUserTicketsRound(client, viewkey, configs.current_round_number);
         }
@@ -88,11 +82,6 @@ export default ({
             getRoundStakingRewardsTrigger(client, configs)
         }
     }, [configs])
-
-    const getConfigsTrigger = async (client: IClientState) => {
-        const configs = await getConfigs(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS)
-        configsDispatch(configs)
-    }
 
     const getUserTicketsRound = async (client: IClientState, viewkey: string, current_round: number) => {
         try {

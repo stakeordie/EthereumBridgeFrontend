@@ -21,15 +21,17 @@ export default ({
 
     useEffect(() => {
         (async () => {
+          console.log('Query from useEffect (1 query) round viewer')
             const response = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [(configs.current_round_number - 1)]);
             setRoundViewer(response.rounds[0]);
         })()
     }, [client, configs])
 
     useEffect(() => {
-        //GET sefi price
+        //TODO: Move this to lottery context
         (async () => {
             try {
+                console.log('Query from useEffect (1 query to external api)')
                 const { data } = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=sefi&vs_currencies=usd');
                 setSefiPrice(data.sefi.usd)
             } catch (error) {

@@ -49,12 +49,6 @@ const BuyTicketsModal = ({
   const configsDispatch = useContext(ConfigsDispatchContext);
   let { theme } = useStores();
 
-  useEffect(() => {
-    getConfigsTrigger(client)
-    setInterval(() => {
-        getConfigsTrigger(client)
-    }, 30000); // check 30 seconds
-}, [client])
 
   useEffect(()=>{
       const emptyArray=[];
@@ -67,8 +61,12 @@ const BuyTicketsModal = ({
       }
       setManualTickets(emptyArray);
   },[ticketsCount])
-
+  
+  
+  //TODO: Move this to Lottery context
   useEffect(() => {
+    
+    console.log('Query from useEffect (3 queries) + config (1 query)')
     if(viewkey && configs){
         getUserTicketsRound(client, viewkey, configs.current_round_number);
     }
@@ -98,10 +96,6 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
       console.error(error)
   }
 }
-  const getConfigsTrigger = async (client: IClientState) => {
-    const configs = await getConfigs(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS)
-    configsDispatch(configs)
-  }
   const getCurrentRoundTrigger = async(client: IClientState, viewkey: string, current_round: number)=>{
     try {
         const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
