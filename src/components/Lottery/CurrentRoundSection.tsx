@@ -72,24 +72,13 @@ export default observer(() => {
                       <div className="round-footer-tickets">
                           <div className="round-footer-tickets-item">
                               <p>Minimum Ticket Count</p>
-                              <h3>{lottery.configs.min_ticket_count_per_round}</h3>
+                                  <h3>{lottery.currentRoundsState.min_ticket_count}</h3>
                           </div>
                           <div className="round-footer-tickets-item">
                               <p>Current Tickets</p>
                               <h3>{lottery.currentRoundsState.ticket_count}</h3>
                           </div>
-                      </div>
-
-                      {/* Add This To Buy Tickets Modal */}
-
-                      {/* <Row style={{ justifyContent: "center", fontSize: "1.25rem", marginTop: "10px" }}>
-                          {
-                              "Expected to End at: " + new Date(lottery.currentRoundsState.round_expected_end_timestamp*1000).toLocaleString()
-                          }
-                          {
-                              "Min Ticket Count: " + configs.min_ticket_count_per_round
-                          }
-                      </Row> */}
+                          </div>
                   </div>
 
                   {/* Round Pot Distribution */}
@@ -288,7 +277,7 @@ export default observer(() => {
                   </div>
                   
               </React.Fragment>
-              : <h1>Waiting...</h1>
+                  : <h1><Loader size='big'></Loader>Hey</h1>
           }
       </React.Fragment>
   )

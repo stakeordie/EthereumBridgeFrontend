@@ -1,22 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Modal } from 'semantic-ui-react';
 import { useStores } from 'stores';
 import Scrollbars from 'react-custom-scrollbars';
-import getConfigs, { IConfigs } from 'pages/SecretLottery/api/getConfigs';
-import { BalancesDispatchContext } from '../../stores/lottery-context/BalancesContext';
-import { ClientContext, IClientState } from '../../stores/lottery-context/ClientContext';
-import { ConfigsContext, ConfigsDispatchContext } from '../../stores/lottery-context/LotteryConfigsContext';
-import { ViewKeyContext } from '../../stores/lottery-context/ViewKeyContext';
 import formatNumber from '../../utils/secret-lottery/formatNumber';
 import calcBulkDiscountTicketPrice from '../../utils/secret-lottery/calcBulkDiscountTicketPrice';
 import generateRandomTickets from '../../utils/secret-lottery/generateRandomTickets';
-import getRounds, { IRound } from 'pages/SecretLottery/api/getRounds';
-import getUserRoundsTicketCount from 'pages/SecretLottery/api/getUserRoundsTicketCount';
 import buyTickets from 'pages/SecretLottery/api/buyTickets';
 import { errorNotification, successNotification } from 'utils/secret-lottery/notifications';
-import getRoundStakingRewards, { IStakingRewads } from 'pages/SecretLottery/api/getRoundStakingRewards';
-import getBalance from 'pages/SecretLottery/api/getBalance';
 import { isNaN } from 'lodash';
+import { observer } from 'mobx-react';
 
 interface BuyTicketsProps {
   children: JSX.Element;
@@ -27,7 +19,7 @@ const renderThumbVertical = () => {
   return <div className={`thumb`}></div>;
 };
 
-const BuyTicketsModal = ({
+const BuyTicketsModal = observer(({
   children,
 }: BuyTicketsProps) => {
 
@@ -229,6 +221,6 @@ const BuyTicketsModal = ({
       </div>
     </Modal>
   );
-};
+});
 
 export default BuyTicketsModal;
