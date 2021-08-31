@@ -4,19 +4,13 @@ import { useStores } from 'stores';
 import { ClientDispatchContext } from '../../stores/lottery-context/ClientContext';
 
 export const KeplrSetup = observer(() => {
-  const clientDispatchState = useContext(ClientDispatchContext);
-  const { user } = useStores();
+  const { user,lottery } = useStores();
 
   useEffect(() => {
-    clientDispatchState({
-      execute: user.secretjsSend,
-      query: user.secretjs,
-      accountData: {
-        address: user.address,
-        balance: user.balanceSCRT,
-      },
-    });
-  }, [clientDispatchState, user.address, user.balanceSCRT, user.secretjs, user.secretjsSend]);
+
+    lottery.setClient(user.secretjsSend,user.secretjs,user.address,user.balanceSCRT);
+
+  }, [user.address, user.balanceSCRT, user.secretjs, user.secretjsSend]);
   return null;
 });
 

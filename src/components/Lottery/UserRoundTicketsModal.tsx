@@ -1,69 +1,24 @@
-import React, { Dispatch, useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useStores } from 'stores';
 import { OverlayTrigger, Popover } from "react-bootstrap";
 import { Modal, Loader, Icon } from 'semantic-ui-react'
 import { Button } from 'semantic-ui-react';
 import claimRewards from "../../pages/SecretLottery/api/claimRewards";
-import getBalance from "../../pages/SecretLottery/api/getBalance";
 import { IRound } from "../../pages/SecretLottery/api/getRounds";
-import getUserRoundPaginatedTickets, { IUserTicket } from "../../pages/SecretLottery/api/getUserRoundPaginatedTickets";
-import { BalancesDispatchContext } from "../../stores/lottery-context/BalancesContext";
-import { ClientContext, IClientState } from "../../stores/lottery-context/ClientContext";
-import { ViewKeyContext } from "../../stores/lottery-context/ViewKeyContext";
+import  { IUserTicket } from "../../pages/SecretLottery/api/getUserRoundPaginatedTickets";
 import formatNumber from "../../utils/secret-lottery/formatNumber";
 import getPrizedTicketResults, { IPrizedTicketResults } from "../../utils/secret-lottery/getPrizedTicketResults";
 import getTicketsIndexToClaim from "../../utils/secret-lottery/getTicketsIndexToClaim";
 import getWinningTicketsCount from "../../utils/secret-lottery/getWinningTicketsCount";
 import { errorNotification } from "../../utils/secret-lottery/notifications";
+import { observer } from "mobx-react";
 
-export default ({
-  userRoundTicketsModal,
-  setUserRoundTicketsModal
-}: {
-    userRoundTicketsModal: { open: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null },
-    setUserRoundTicketsModal: Dispatch<{ open: boolean, selectedUserRound: IRound | null, userTicketsCount: number | null }>
-}) => {
+export default observer(() => {
 
-  let { theme } = useStores();
-
-  const client = useContext(ClientContext);
-  const viewkey = useContext(ViewKeyContext);
-  const balancesDispatch = useContext(BalancesDispatchContext);
-
-  const ticketPageSize = 500;
-  const [userRoundTickets, setUserRoundTickets] = useState<IUserTicket[] | null>(null)
+  let { theme,lottery } = useStores();
+  const {client,viewingKey,userRoundTicketsModal,userRoundTickets}= lottery
   const [loadingClaimReward, setLoadingClaimReward] = useState<boolean>(false)
 
-  useEffect(() => {
-    //TODO: Move this to lottery context
-    if (client && viewkey && userRoundTicketsModal.selectedUserRound && userRoundTicketsModal.userTicketsCount) {
-      console.log('Query from useEffect userTicketsModal (1 query)')
-      setUserRoundTickets(null)
-      getUserRoundPaginatedTicketsTrigger(client, viewkey, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
-    }
-  }, [userRoundTicketsModal])
-
-
-  const getUserRoundPaginatedTicketsTrigger = async (client: IClientState, viewkey: string, round: IRound, userTicketsCount: number) => {
-    // To get all the tickets depending on the amount of tickets, we will section this by the max size of each request
-    const requestsNumber = Math.ceil(userTicketsCount / ticketPageSize);
-    let allTickets: IUserTicket[] = [];
-    for (var i = 0; i < requestsNumber; i++) {
-      const response = await getUserRoundPaginatedTickets(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, round.round_number, i, ticketPageSize)
-      allTickets = allTickets.concat(response.user_round_paginated_tickets)
-    }
-    setUserRoundTickets(allTickets)
-  }
-
-  const getSEFIBalance = async () => {
-    if (!client) return null
-    const response = await getBalance(client, process.env.SCRT_GOV_TOKEN_ADDRESS);
-    const accountData = await client.execute.getAccount(client.accountData.address);
-    balancesDispatch({
-      native: parseInt(accountData ? accountData.balance[0].amount : "0"),
-      SEFI: response
-    })
-  }
 
   const calcTotalRewards = (draftedTicket: string, tickets: IUserTicket[], round: IRound) => {
     if (!round.reward_distribution) return 0
@@ -154,7 +109,7 @@ export default ({
   }
 
   const claimButtonLogic = async (round: IRound, userRoundTickets: IUserTicket[]) => {
-    if (!client || !viewkey || !userRoundTicketsModal.selectedUserRound || !userRoundTicketsModal.userTicketsCount) return
+    if (!client || !viewingKey || !userRoundTicketsModal.selectedUserRound || !userRoundTicketsModal.userTicketsCount) return
     setLoadingClaimReward(true)
     try {
       let ticketIndexes: number[] = [];
@@ -170,8 +125,8 @@ export default ({
         ticketIndexes
       );
 
-      await getUserRoundPaginatedTicketsTrigger(client, viewkey, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
-      await getSEFIBalance()
+      await lottery.getUserRoundPaginatedTicketsTrigger(client, viewingKey, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
+      await lottery.getSEFIBalance()
 
       setLoadingClaimReward(false)
     }
@@ -199,7 +154,7 @@ export default ({
     }
 
     for (i = 0, j = userRoundTicketsCopy.length; i < j; i += chunk) {
-      let ticketColumns = userRoundTicketsCopy.slice(i, i + chunk).map((userTicket) => {
+      let ticketColumns = userRoundTicketsCopy.slice(i, i + chunk).map((userTicket,index) => {
         let ticketPrizes = null;
         let accumutatedTicketRewards = null;
         let ticketSequence = "";
@@ -218,7 +173,7 @@ export default ({
         }
 
         return (
-          <div className="ticket">
+          <div className="ticket" key={`ticket-${index}`}>
             {
               round.drafted_ticket ?
                 <OverlayTrigger placement="top" rootClose
@@ -247,7 +202,7 @@ export default ({
       })
 
       renderSections.push(
-        <div className="tickets-row">
+        <div className="tickets-row" key={`row-${i}`}>
           {ticketColumns.map((col) => col)}
         </div>
       )
@@ -274,17 +229,13 @@ export default ({
       <Modal
         className={`modal-tickets ${theme.currentTheme}`}
         open={userRoundTicketsModal.open}
-        onClose={() => setUserRoundTicketsModal(
-          { open: false, selectedUserRound: null, userTicketsCount: null }
-        )}>
+        onClose={() => lottery.setUserRoundTicketsModal(false , null, null)}>
 
         <div className="modal-tickets-header">
           <h6>Your Tickets <strong> Round {round.round_number}</strong></h6>
           <Icon
             name='close'
-            onClick={() => setUserRoundTicketsModal(
-              { open: false, selectedUserRound: null, userTicketsCount: null }
-            )}>
+            onClick={() => lottery.setUserRoundTicketsModal(false , null, null)}>
           </Icon>
         </div>
 
@@ -372,4 +323,4 @@ export default ({
   } else {
     return null
   }
-}
+})

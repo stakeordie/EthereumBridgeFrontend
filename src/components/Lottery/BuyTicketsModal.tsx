@@ -19,9 +19,7 @@ import getBalance from 'pages/SecretLottery/api/getBalance';
 import { isNaN } from 'lodash';
 
 interface BuyTicketsProps {
-  children: JSX.Element; 
-  getPaginatedUserTicketsTrigger: Function; 
-  paginationValues: any; 
+  children: JSX.Element;
 }
 
 const renderThumbVertical = () => {
@@ -31,95 +29,15 @@ const renderThumbVertical = () => {
 
 const BuyTicketsModal = ({
   children,
-  getPaginatedUserTicketsTrigger,
-  paginationValues,
 }: BuyTicketsProps) => {
-  const client = useContext(ClientContext);
-  const viewkey = useContext(ViewKeyContext);
-  const configs = useContext(ConfigsContext);
-  const [open, setOpen] = useState<boolean>(false);
-  const [loadingBuyTickets, setLoadingBuyTickets] = useState<boolean>(false)
+
   const [isManualTickets, setIsManualTickets] = useState<boolean>(false);
-  const [currentRoundUserTicketsCount, setCurrentRoundUserTicketsCount] = useState<number | null>(null)
-  const [ticketsCount, setTicketsCount] = useState<string>(configs?.min_ticket_count_per_round.toString());
-  const [manualTickets, setManualTickets] = useState<string[]>([]);
-  const [currentRoundsState, setCurrentRoundsState] = useState<IRound | null>(null)
-  const [stakingRewards, setStakingRewards] = useState<IStakingRewads | null>(null)
-  const balancesDispatch = useContext(BalancesDispatchContext);
-  const configsDispatch = useContext(ConfigsDispatchContext);
-  let { theme } = useStores();
+  const [loadingBuyTickets, setLoadingBuyTickets] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false);
+  let { theme,lottery } = useStores();
 
-
-  useEffect(()=>{
-      const emptyArray=[];
-      for (let i = 0; i < parseFloat(ticketsCount); i++) {
-          if(manualTickets[i] !== ""){
-              emptyArray[i]= manualTickets[i];
-          }else{
-              emptyArray.push("");
-          }
-      }
-      setManualTickets(emptyArray);
-  },[ticketsCount])
+  if(!lottery.configs || !lottery.currentRoundsState)return null;
   
-  
-  //TODO: Move this to Lottery context
-  useEffect(() => {
-    
-    console.log('Query from useEffect (3 queries) + config (1 query)')
-    if(viewkey && configs){
-        getUserTicketsRound(client, viewkey, configs.current_round_number);
-    }
-
-    if (configs) {
-        getCurrentRound(client, configs.current_round_number);
-        getRoundStakingRewardsTrigger(client, configs)
-    }
-}, [configs])
-
-const getUserTicketsRound = async (client: IClientState, viewkey: string, current_round: number) => {
-  try {
-
-      const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
-      setCurrentRoundUserTicketsCount(currentRoundUserTicketsCount.user_rounds_ticket_count[0])
-  } catch (error) {
-      console.error(error)
-  }
-
-}
-const getCurrentRound = async (client: IClientState, current_round: number) => {
-  try {
-      const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
-      setCurrentRoundsState(currentRound.rounds[0])
-      
-  } catch (error) {
-      console.error(error)
-  }
-}
-  const getCurrentRoundTrigger = async(client: IClientState, viewkey: string, current_round: number)=>{
-    try {
-        const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
-        setCurrentRoundUserTicketsCount(currentRoundUserTicketsCount.user_rounds_ticket_count[0])
-        const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
-        setCurrentRoundsState(currentRound.rounds[0])
-    } catch (error) {
-       console.error(error) 
-    }
-  }
-  const getRoundStakingRewardsTrigger = async (client: IClientState, configs: IConfigs) => {
-    const roundStakingRewards = await getRoundStakingRewards(client, configs.staking_contract.address, configs.staking_vk)
-    setStakingRewards(roundStakingRewards);
-  }
-  const getSEFIBalance = async () => {
-    // if (!client) return null
-    const response = await getBalance(client, process.env.SCRT_GOV_TOKEN_ADDRESS)
-    const accountData = await client.execute.getAccount(client.accountData.address);
-    balancesDispatch({
-        native: parseInt(accountData ? accountData.balance[0].amount : "0"),
-        SEFI: response
-    })
-}
-  if(!configs || !currentRoundsState)return null;
   return (
     <Modal
       open={open}
@@ -146,22 +64,25 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
             fluid
             placeholder="000"
             type="number"
-            value={ticketsCount}
+            value={lottery.ticketsCount}
             onChange={e => {
               if (parseInt(e.target.value) >= 500) {
-                setTicketsCount('500');
-              } else {
-                setTicketsCount(e.target.value);
+                lottery.setTicketsCount('500');
+              } else if(parseInt(e.target.value) < 0){
+                lottery.setTicketsCount('0');
+              }else{
+                lottery.setTicketsCount(e.target.value);
               }
             }}
           >
             <Button
               type="submit"
               onClick={() => {
-                if (parseInt(ticketsCount) > configs?.min_ticket_count_per_round) {
-                  setTicketsCount('' + (parseInt(ticketsCount) - 1));
+                if (parseInt(lottery.ticketsCount) > 0) {
+
+                  lottery.setTicketsCount('' + (parseInt(lottery.ticketsCount) - 1));
                 }else {
-                  setTicketsCount(configs?.min_ticket_count_per_round.toString());
+                  lottery.setTicketsCount('0');
                 }
               }}
             >
@@ -171,10 +92,10 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
             <Button
               type="submit"
               onClick={() => {
-                if (parseInt(ticketsCount) >= 500) {
-                  setTicketsCount('500');
+                if (parseInt(lottery.ticketsCount) >= 500) {
+                  lottery.setTicketsCount('500');
                 } else {
-                  setTicketsCount('' + (parseInt(ticketsCount) + 1));
+                  lottery.setTicketsCount('' + (parseInt(lottery.ticketsCount) + 1));
                 }
               }}
             >
@@ -182,9 +103,9 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
             </Button>
           </Input>
         </div>
-        {isManualTickets && parseFloat(ticketsCount) > 0 && (
+        {isManualTickets && parseFloat(lottery.ticketsCount) > 0 && (
           <Scrollbars autoHide renderThumbVertical={renderThumbVertical} className="inputs-container">
-            {manualTickets.map((currentValue: string, index: number) => (
+            {lottery.manualTickets.map((currentValue: string, index: number) => (
               <Input
                 key={`input-${index}`}
                 className="manual-input"
@@ -202,7 +123,8 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
                   if (valueInt < 0) {
                     value = (valueInt * -1).toString();
                   }
-                  setManualTickets(manualTickets.map((v, i) => (i === index ? value : v)));
+                  
+                  lottery.setCustomManualTickets(lottery.manualTickets.map((v, i) => (i === index ? value : v)));
                 }}
               />
             ))}
@@ -215,11 +137,11 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
           size="big"
           disabled={
             loadingBuyTickets ||
-            (isManualTickets && manualTickets.filter(e => e?.length === 6).length !== manualTickets.length) ||
-            parseInt(ticketsCount) <= configs.min_ticket_count_per_round || !ticketsCount
+            (isManualTickets && lottery.manualTickets.filter(e => e?.length === 6).length !== lottery.manualTickets.length) ||
+            parseInt(lottery.ticketsCount) <= 0 || !lottery.ticketsCount
           }
           onClick={async () => {
-            if (!configs) {
+            if (!lottery.configs) {
               return;
             }
             setLoadingBuyTickets(true);
@@ -227,41 +149,42 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
               let tickets = null;
               let ticketPrice = null;
               if (isManualTickets) {
-                tickets = manualTickets;
+                tickets = lottery.manualTickets;
                 ticketPrice =
                   '' +
                   calcBulkDiscountTicketPrice(
-                    configs.per_ticket_bulk_discount,
-                    manualTickets.length,
-                    currentRoundsState.round_ticket_price,
+                    lottery.configs.per_ticket_bulk_discount,
+                    lottery.manualTickets.length,
+                    lottery.currentRoundsState.round_ticket_price,
                   ).finalPrice;
               } else {
-                const autoGeneratedTickets = generateRandomTickets(parseInt(ticketsCount));
+                const autoGeneratedTickets = generateRandomTickets(parseInt(lottery.ticketsCount));
                 tickets = autoGeneratedTickets;
                 ticketPrice =
                   '' +
                   calcBulkDiscountTicketPrice(
-                    configs.per_ticket_bulk_discount,
-                    parseInt(ticketsCount),
-                    currentRoundsState.round_ticket_price,
+                    lottery.configs.per_ticket_bulk_discount,
+                    parseInt(lottery.ticketsCount),
+                    lottery.currentRoundsState.round_ticket_price,
                   ).finalPrice;
               }
               await buyTickets(
-                client,
+                lottery.client,
                 process.env.SCRT_GOV_TOKEN_ADDRESS,
                 process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS,
                 tickets,
                 ticketPrice,
               );
-              await getRoundStakingRewardsTrigger(client, configs);
-              await getCurrentRoundTrigger(client, viewkey, configs.current_round_number);
-              await getPaginatedUserTicketsTrigger(client, viewkey, paginationValues.page, paginationValues.page_size);
-              await getSEFIBalance();
               setOpen(false)
               successNotification('Buy Tickets Success!');
-              setTicketsCount('0');
-              setManualTickets([]);
-              setLoadingBuyTickets(false);
+              setLoadingBuyTickets(false);              
+              await lottery.getRoundStakingRewardsTrigger(lottery.client, lottery.configs);
+              await lottery.getCurrentRoundTrigger(lottery.client, lottery.viewingKey, lottery.configs.current_round_number);
+              await lottery.getPaginatedUserTicketsTrigger(lottery.client, lottery.viewingKey, lottery.paginationValues.page, lottery.paginationValues.page_size);
+              await lottery.getSEFIBalance();
+              lottery.setTicketsCount('0');
+              lottery.setManualTickets();
+              
             } catch (e) {
               setOpen(false)
               setLoadingBuyTickets(false);
@@ -273,9 +196,9 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
           Buy
         </Button>
         <div className="purchased-tickets">
-          {currentRoundUserTicketsCount && currentRoundUserTicketsCount > 0 ? (
+          {lottery.currentRoundUserTicketsCount && lottery.currentRoundUserTicketsCount > 0 ? (
             <h6>
-              You have bought <span>{currentRoundUserTicketsCount} tickets</span> for this round
+              You have bought <span>{lottery.currentRoundUserTicketsCount} tickets</span> for this round
             </h6>
           ) : null}
         </div>
@@ -286,9 +209,9 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
           <h6>
             {`${formatNumber(
               calcBulkDiscountTicketPrice(
-                configs.per_ticket_bulk_discount,
-                parseInt(ticketsCount) | 0,
-                currentRoundsState.round_ticket_price,
+                lottery.configs.per_ticket_bulk_discount,
+                parseInt(lottery.ticketsCount) | 0,
+                lottery.currentRoundsState.round_ticket_price,
               ).finalPrice / 1000000,
             )} SEFI`}
           </h6>
@@ -297,9 +220,9 @@ const getCurrentRound = async (client: IClientState, current_round: number) => {
           <p>Disccount</p>
           <h6>
             {calcBulkDiscountTicketPrice(
-              configs.per_ticket_bulk_discount,
-              parseInt(ticketsCount) | 0,
-              currentRoundsState.round_ticket_price,
+              lottery.configs.per_ticket_bulk_discount,
+              parseInt(lottery.ticketsCount) | 0,
+              lottery.currentRoundsState.round_ticket_price,
             ).discount + '%'}
           </h6>
         </div>

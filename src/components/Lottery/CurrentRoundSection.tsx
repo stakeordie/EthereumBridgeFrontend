@@ -1,414 +1,295 @@
 import React from "react";
-import { useContext, useEffect, useState } from "react";
-import getBalance from "../../pages/SecretLottery/api/getBalance";
-import getConfigs, { IConfigs } from "../../pages/SecretLottery/api/getConfigs";
-import getRounds, { IRound } from "../../pages/SecretLottery/api/getRounds";
-import getRoundStakingRewards, { IStakingRewads } from "../../pages/SecretLottery/api/getRoundStakingRewards";
-import getUserRoundsTicketCount from "../../pages/SecretLottery/api/getUserRoundsTicketCount";
-import { BalancesDispatchContext } from "../../stores/lottery-context/BalancesContext";
-import { ClientContext, IClientState } from "../../stores/lottery-context/ClientContext";
-import { ConfigsContext, ConfigsDispatchContext } from "../../stores/lottery-context/LotteryConfigsContext";
-import { ViewKeyContext } from "../../stores/lottery-context/ViewKeyContext";
+import { useState } from "react";
 import calcTotalPotSize from "../../utils/secret-lottery/calcTotalPotSize";
 import formatNumber from "../../utils/secret-lottery/formatNumber";
 import BuyTicketsModal from "./BuyTicketsModal";
 import moment from 'moment';
 import Countdown from 'react-countdown';
 import { useStores } from "stores";
-import axios from "axios";
 import numeral from 'numeral';
 import { Accordion, Icon, Button, Loader } from "semantic-ui-react";
-export default ({
-    getPaginatedUserTicketsTrigger,
-    paginationValues
-}: {
-    getPaginatedUserTicketsTrigger: Function
-    paginationValues: {
-        page_size: number,
-        page: number
-    }
-}
-) => {
-    const client = useContext(ClientContext);
-    const viewkey = useContext(ViewKeyContext);
-    const balancesDispatch = useContext(BalancesDispatchContext);
-    const configs = useContext(ConfigsContext);
+import { observer } from "mobx-react";
 
-    const [currentRoundsState, setCurrentRoundsState] = useState<IRound | null>(null)
-    const [sefiPrice, setSefiPrice] = useState<number>(0)
-    const [currentRoundUserTicketsCount, setCurrentRoundUserTicketsCount] = useState<number | null>(null)
-    const [stakingRewards, setStakingRewards] = useState<IStakingRewads | null>(null)
-    const {tokens}=useStores();
+export default observer(() => {
+  const { lottery } = useStores()
+  const [active , setActive]=useState<boolean>(false);
 
-    const [ticketsCount, setTicketsCount] = useState<string>("0");
-    const [manualTickets, setManualTickets] = useState<string[]>([]);
-    const [active,setActive]=useState<boolean>(false);
+  const getEstimateSEFI = (n:number):number =>{
+      return Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100
+  }
 
-    useEffect(()=>{
-        //Move this to Lotery context
-        (async()=>{
-            try {
-                const { data } = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=sefi&vs_currencies=usd');
-                setSefiPrice(data.sefi.usd)                
-            } catch (error) {
-                setSefiPrice(0.05)
-                console.error(error);
-            }
-            
-        })()
-    },[])
-    
-    useEffect(()=>{
-        const emptyArray=[];
-        for (let i = 0; i < parseFloat(ticketsCount); i++) {
-            if(manualTickets[i] !== ""){
-                emptyArray[i]= manualTickets[i];
-            }else{
-                emptyArray.push("");
-            }
-        }
-        setManualTickets(emptyArray);
-    },[ticketsCount])
+  const getEstimateUSD = (n:number):number =>{
+      return numeral(Math.round((formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100)* lottery.sefiPrice) / 100).format('$0.00');
+  }
+  
+  return (
+      <React.Fragment>
+          {
+              (!lottery.currentRoundsState || !lottery.configs) && <Loader inline='centered' size='big'></Loader>
+          }
+          {
+              lottery.currentRoundsState  && lottery.configs && lottery.stakingRewards ?
+              <React.Fragment>
+                  {/* Prize Pot */}
+                  <div className="box-round">      
+                      <div className="data-header hero-lottery">
+                          <h4>Pot Size</h4>
+                      </div>
 
-    useEffect(() => {
-      //TODO: Move this to Lottery context
-      console.log('Query from useEffect (3 queries) + config (1 query)')
-        if(viewkey && configs){
-            getUserTicketsRound(client, viewkey, configs.current_round_number);
-        }
+                      <div className="data">
+                          <div className="data-footer">
+                              <h4>{lottery.currentRoundsState  && numeral((formatNumber(calcTotalPotSize(lottery.currentRoundsState , lottery.stakingRewards) / 1000000) * lottery.sefiPrice)).format('$0,0.00')}</h4>
+                          </div>
+                          <div className="data-body">
+                              <h1>
+                                  {lottery.currentRoundsState && formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) / 1000000)}
+                                  <span> SEFI</span>
+                              </h1>
+                          </div>
+                      </div>
 
-        if (configs) {
-            getCurrentRound(client, configs.current_round_number);
-            getRoundStakingRewardsTrigger(client, configs)
-        }
-    }, [configs])
+                      <div className="round-bottom">
+                          <div className="round-bottom-content">
+                          <BuyTicketsModal>
+                              <button disabled={!lottery.viewingKey || !lottery.client.execute} className="button-primary-lg">
+                                  Buy Tickets
+                              </button>
+                          </BuyTicketsModal>
+                         
+                              <div className="round-bottom-footer">
+                                  <p>You have bought <span>{lottery.currentRoundUserTicketsCount} tickets</span> for this round</p>
+                              </div>
+                          </div>
+                      </div>
 
-    const getUserTicketsRound = async (client: IClientState, viewkey: string, current_round: number) => {
-        try {
-    
-            const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
-            setCurrentRoundUserTicketsCount(currentRoundUserTicketsCount.user_rounds_ticket_count[0])
-        } catch (error) {
-            console.error(error)
-        }
+                      {/* Round Ends Countdown */}
+                      <div className="counter-row">
+                          <h4>
+                              Round {lottery.currentRoundsState.round_number} ends in <Countdown date={(moment.unix(lottery.currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} />
+                          </h4>
+                      </div>
 
-    }
-    const getCurrentRound = async (client: IClientState, current_round: number) => {
-        try {
-            const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
-            setCurrentRoundsState(currentRound.rounds[0])
-            
-        } catch (error) {
-            console.error(error)
-        }
-    }
+                      <div className="round-footer-tickets">
+                          <div className="round-footer-tickets-item">
+                              <p>Minimum Ticket Count</p>
+                              <h3>{lottery.configs.min_ticket_count_per_round}</h3>
+                          </div>
+                          <div className="round-footer-tickets-item">
+                              <p>Current Tickets</p>
+                              <h3>{lottery.currentRoundsState.ticket_count}</h3>
+                          </div>
+                      </div>
 
-    const getCurrentRoundTrigger = async(client: IClientState, viewkey: string, current_round: number)=>{
-        try {
-            const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
-            setCurrentRoundUserTicketsCount(currentRoundUserTicketsCount.user_rounds_ticket_count[0])
-            const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
-            setCurrentRoundsState(currentRound.rounds[0])
-        } catch (error) {
-           console.error(error) 
-        }
-    }
+                      {/* Add This To Buy Tickets Modal */}
 
-    const getRoundStakingRewardsTrigger = async (client: IClientState, configs: IConfigs) => {
-        const roundStakingRewards = await getRoundStakingRewards(client, configs.staking_contract.address, configs.staking_vk)
-        setStakingRewards(roundStakingRewards);
-    }
+                      {/* <Row style={{ justifyContent: "center", fontSize: "1.25rem", marginTop: "10px" }}>
+                          {
+                              "Expected to End at: " + new Date(lottery.currentRoundsState.round_expected_end_timestamp*1000).toLocaleString()
+                          }
+                          {
+                              "Min Ticket Count: " + configs.min_ticket_count_per_round
+                          }
+                      </Row> */}
+                  </div>
 
-    const getSEFIBalance = async () => {
-        // if (!client) return null
-        const response = await getBalance(client, process.env.SCRT_GOV_TOKEN_ADDRESS)
-        const accountData = await client.execute.getAccount(client.accountData.address);
-        balancesDispatch({
-            native: parseInt(accountData ? accountData.balance[0].amount : "0"),
-            SEFI: response
-        })
-    }
-    const getEstimateSEFI = (n:number):number =>{
-        return Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100
-    }
+                  {/* Round Pot Distribution */}
+                  <div className="box-round-pot">
+                      <Accordion >
+                              <div className="round-pot-title">
+                                  <h2>Round Pot Distribution </h2>
 
-    const getEstimateUSD = (n:number):number =>{
-        return numeral(Math.round((formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100)* sefiPrice) / 100).format('$0.00');
-    }
+                              </div>
+                          <Accordion.Title active={active} onClick={() => setActive(!active)}>
+                              <div className="show-detail">
+                                  <Button color="black" fluid >
+                                      Round Pot Distribution Detail
+                                      <Icon name='dropdown' style={{ marginRight: '10px' }} />
+                                  </Button>
+                              </div>
+                          </Accordion.Title>
 
-    return (
-        <React.Fragment>
-            {
-                (!currentRoundsState || !configs) && <Loader inline='centered' size='big'></Loader>
-            }
-            {
-                currentRoundsState && configs && stakingRewards &&
-                <React.Fragment>
-                    {/* Prize Pot */}
-                    <div className="box-round">      
-                        <div className="data-header hero-lottery">
-                            <h4>Pot Size</h4>
-                        </div>
-
-                        <div className="data">
-                            <div className="data-footer">
-                                <h4>{currentRoundsState && numeral((formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000) * sefiPrice)).format('$0,0.00')}</h4>
-                            </div>
-                            <div className="data-body">
-                                <h1>
-                                    {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}
-                                    <span> SEFI</span>
-                                </h1>
-                            </div>
-                        </div>
-
-                        <div className="round-bottom">
-                            <div className="round-bottom-content">
-                            <BuyTicketsModal 
-                                getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
-                                paginationValues={paginationValues}
-                            >
-                                <button disabled={!viewkey || !client.execute} className="button-primary-lg">
-                                    Buy Tickets
-                                </button>
-                            </BuyTicketsModal>
-                           
-                                <div className="round-bottom-footer">
-                                    <p>You have bought <span>{currentRoundUserTicketsCount} tickets</span> for this round</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Round Ends Countdown */}
-                        <div className="counter-row">
-                            <h4>
-                                Round {currentRoundsState.round_number} ends in <Countdown date={(moment.unix(currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} />
-                            </h4>
-                        </div>
-
-                        <div className="round-footer-tickets">
-                            <div className="round-footer-tickets-item">
-                                <p>Minimum Ticket Count</p>
-                                <h3>{configs.min_ticket_count_per_round}</h3>
-                            </div>
-                            <div className="round-footer-tickets-item">
-                                <p>Current Tickets</p>
-                                <h3>{currentRoundsState.ticket_count}</h3>
-                            </div>
-                        </div>
-
-                        {/* Add This To Buy Tickets Modal */}
-
-                        {/* <Row style={{ justifyContent: "center", fontSize: "1.25rem", marginTop: "10px" }}>
-                            {
-                                "Expected to End at: " + new Date(currentRoundsState.round_expected_end_timestamp*1000).toLocaleString()
-                            }
-                            {
-                                "Min Ticket Count: " + configs.min_ticket_count_per_round
-                            }
-                        </Row> */}
-                    </div>
-
-                    {/* Round Pot Distribution */}
-                    <div className="box-round-pot">
-                        <Accordion >
-                                <div className="round-pot-title">
-                                    <h2>Round Pot Distribution </h2>
-
-                                </div>
-                            <Accordion.Title active={active} onClick={() => setActive(!active)}>
-                                <div className="show-detail">
-                                    <Button color="black" fluid >
-                                        Round Pot Distribution Detail
-                                        <Icon name='dropdown' style={{ marginRight: '10px' }} />
-                                    </Button>
-                                </div>
-                            </Accordion.Title>
-
-                            <Accordion.Content active={active}>
-                                {
-                                    configs &&
-                                    <>
-                                        <div className="round-info-container">
-                                            <div className="row-match">
-                                                <div className="col-title">
-                                                    <h4>Match all 6</h4>
-                                                </div>
-                                                <div className="col-results">
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                </div>
-                                                <div className="col-values">
-                                                    <p> {getEstimateUSD(6)}</p>
-                                                    <h4>{getEstimateSEFI(6)} <span>SEFI</span> </h4>
-                                                </div>
-                                            </div>
+                          <Accordion.Content active={active}>
+                              {
+                                  lottery.configs &&
+                                  <>
+                                      <div className="round-info-container">
+                                          <div className="row-match">
+                                              <div className="col-title">
+                                                  <h4>Match all 6</h4>
+                                              </div>
+                                              <div className="col-results">
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                              </div>
+                                              <div className="col-values">
+                                                  <p> {getEstimateUSD(6)}</p>
+                                                  <h4>{getEstimateSEFI(6)} <span>SEFI</span> </h4>
+                                              </div>
+                                          </div>
 
 
-                                            <div className="row-match">
-                                                <div className="col-title">
-                                                    <h4>Match first 5</h4>
-                                                </div>
-                                                <div className="col-results">
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                                </div>
-                                                <div className="col-values">
-                                                    <p> {getEstimateUSD(5)}</p>
-                                                    <h4>{getEstimateSEFI(5)} <span>SEFI</span> </h4>
-                                                </div>
-                                            </div>
+                                          <div className="row-match">
+                                              <div className="col-title">
+                                                  <h4>Match first 5</h4>
+                                              </div>
+                                              <div className="col-results">
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                              </div>
+                                              <div className="col-values">
+                                                  <p> {getEstimateUSD(5)}</p>
+                                                  <h4>{getEstimateSEFI(5)} <span>SEFI</span> </h4>
+                                              </div>
+                                          </div>
 
-                                            <div className="row-match">
-                                                <div className="col-title">
-                                                    <h4>Match first 4</h4>
-                                                </div>
-                                                <div className="col-results">
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                </div>
-                                                <div className="col-values">
-                                                    <p> {getEstimateUSD(4)}</p>
-                                                    <h4>{getEstimateSEFI(4)} <span>SEFI</span> </h4>
-                                                </div>
-                                            </div>
+                                          <div className="row-match">
+                                              <div className="col-title">
+                                                  <h4>Match first 4</h4>
+                                              </div>
+                                              <div className="col-results">
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                              </div>
+                                              <div className="col-values">
+                                                  <p> {getEstimateUSD(4)}</p>
+                                                  <h4>{getEstimateSEFI(4)} <span>SEFI</span> </h4>
+                                              </div>
+                                          </div>
 
-                                            <div className="row-match">
-                                                <div className="col-title">
-                                                    <h4>Match first 3</h4>
-                                                </div>
-                                                <div className="col-results">
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                </div>
-                                                <div className="col-values">
-                                                    <p> {getEstimateUSD(3)}</p>
-                                                    <h4>{getEstimateSEFI(3)} <span>SEFI</span> </h4>
-                                                </div>
-                                            </div>
+                                          <div className="row-match">
+                                              <div className="col-title">
+                                                  <h4>Match first 3</h4>
+                                              </div>
+                                              <div className="col-results">
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                              </div>
+                                              <div className="col-values">
+                                                  <p> {getEstimateUSD(3)}</p>
+                                                  <h4>{getEstimateSEFI(3)} <span>SEFI</span> </h4>
+                                              </div>
+                                          </div>
 
-                                            <div className="row-match">
-                                                <div className="col-title">
-                                                    <h4>Match first 2</h4>
-                                                </div>
-                                                <div className="col-results">
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                </div>
-                                                <div className="col-values">
-                                                    <p> {getEstimateUSD(2)}</p>
-                                                    <h4>{getEstimateSEFI(2)} <span>SEFI</span> </h4>
-                                                </div>
-                                            </div>
+                                          <div className="row-match">
+                                              <div className="col-title">
+                                                  <h4>Match first 2</h4>
+                                              </div>
+                                              <div className="col-results">
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                              </div>
+                                              <div className="col-values">
+                                                  <p> {getEstimateUSD(2)}</p>
+                                                  <h4>{getEstimateSEFI(2)} <span>SEFI</span> </h4>
+                                              </div>
+                                          </div>
 
 
-                                            <div className="row-match">
-                                                <div className="col-title">
-                                                    <h4>Match first 1</h4>
-                                                </div>
-                                                <div className="col-results">
-                                                    <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
-                                                    <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                    <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
-                                                </div>
-                                                <div className="col-values">
-                                                    <p> {getEstimateUSD(1)}</p>
-                                                    <h4>{getEstimateSEFI(1)} <span>SEFI</span> </h4>
-                                                </div>
-                                            </div>
+                                          <div className="row-match">
+                                              <div className="col-title">
+                                                  <h4>Match first 1</h4>
+                                              </div>
+                                              <div className="col-results">
+                                                  <i className="far fa-check-circle fa-lg" style={{ color: "#5cb85c" }}></i>
+                                                  <i className="far fa-times-circle fa-lg" style={{ color: "#d9534f" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                                  <i className="far fa-circle fa-lg" style={{ color: "#5F5F6B" }}></i>
+                                              </div>
+                                              <div className="col-values">
+                                                  <p> {getEstimateUSD(1)}</p>
+                                                  <h4>{getEstimateSEFI(1)} <span>SEFI</span> </h4>
+                                              </div>
+                                          </div>
 
-                                            <div className="row-match">
-                                                <div className="col-title">
-                                                    <h4 id="burn">Burn</h4>
-                                                </div>
-                                                <div className="col-results">
+                                          <div className="row-match">
+                                              <div className="col-title">
+                                                  <h4 id="burn">Burn</h4>
+                                              </div>
+                                              <div className="col-results">
 
-                                                </div>
-                                                <div className="col-values">
-                                                    <p>{numeral((Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100) * sefiPrice).format('$0.00')}</p>
-                                                    <h4>
-                                                        {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
-                                                    </h4>
-                                                </div>
-                                            </div>
+                                              </div>
+                                              <div className="col-values">
+                                                  <p>{numeral((Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100) * lottery.sefiPrice).format('$0.00')}</p>
+                                                  <h4>
+                                                      {Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
+                                                  </h4>
+                                              </div>
+                                          </div>
 
-                                            <div className="row-match">
-                                                <div className="col-title">
-                                                    <h4>Trigger Fee</h4>
-                                                </div>
+                                          <div className="row-match">
+                                              <div className="col-title">
+                                                  <h4>Trigger Fee</h4>
+                                              </div>
 
-                                                <div className="col-results">
+                                              <div className="col-results">
 
-                                                </div>
+                                              </div>
 
-                                                <div className="col-values">
+                                              <div className="col-values">
 
-                                                    <p>{numeral((Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100) * sefiPrice).format('$0.00')}</p>
-                                                    <h4>
-                                                        {Math.round(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) * (currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
-                                                    </h4>
-                                                </div>
-                                            </div>
+                                                  <p>{numeral((Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100) * lottery.sefiPrice).format('$0.00')}</p>
+                                                  <h4>
+                                                      {Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
+                                                  </h4>
+                                              </div>
+                                          </div>
 
-                                        </div> {/* round-info-container */}
+                                      </div> {/* round-info-container */}
 
-                                    </>
-                                }
-                            </Accordion.Content>
+                                  </>
+                              }
+                          </Accordion.Content>
 
-                            {
-                                configs &&
-                                <>
-                                    <div className="box-pot-size">
-                                        <div className="box-pot-size-container">
-                                            <div className="col-pot-results">
-                                                <h4>Pot Size</h4>
-                                                <h6>{currentRoundsState && numeral(formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)).format('$0,0.00')}</h6>
-                                                <h5> {currentRoundsState && formatNumber(calcTotalPotSize(currentRoundsState, stakingRewards) / 1000000)}  <span> SEFI</span></h5>
-                                            </div>
-                                            <div className="col-pot-button">
-                                                <BuyTicketsModal
-                                                    getPaginatedUserTicketsTrigger={getPaginatedUserTicketsTrigger}
-                                                    paginationValues={paginationValues}
-                                                >
-                                                    <button disabled={!viewkey || !client.execute} className="button-primary-lg">
-                                                        Buy Tickets
-                                                    </button>
-                                                </BuyTicketsModal>
-                                            </div>
-                                        </div>
-                                    </div> {/*Box Pot Size */}
-                                </>
-                            }
+                          {
+                              lottery.configs &&
+                              <>
+                                  <div className="box-pot-size">
+                                      <div className="box-pot-size-container">
+                                          <div className="col-pot-results">
+                                              <h4>Pot Size</h4>
+                                              <h6>{lottery.currentRoundsState && numeral(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) / 1000000)).format('$0,0.00')}</h6>
+                                              <h5> {lottery.currentRoundsState && formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) / 1000000)}  <span> SEFI</span></h5>
+                                          </div>
+                                          <div className="col-pot-button">
+                                              <BuyTicketsModal>
+                                                  <button disabled={!lottery.viewingKey || !lottery.client.execute} className="button-primary-lg">
+                                                      Buy Tickets
+                                                  </button>
+                                              </BuyTicketsModal>
+                                          </div>
+                                      </div>
+                                  </div> {/*Box Pot Size */}
+                              </>
+                          }
 
-                        </Accordion>
-                    </div>
-                    
-                </React.Fragment>
-            }
-        </React.Fragment>
-    )
-}
+                      </Accordion>
+                  </div>
+                  
+              </React.Fragment>
+              : <h1>Waiting...</h1>
+          }
+      </React.Fragment>
+  )
+});

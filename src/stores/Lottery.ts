@@ -5,13 +5,16 @@ import { IClientState } from './lottery-context/ClientContext';
 import getRounds, { IRound } from 'pages/SecretLottery/api/getRounds';
 import getPaginatedUserRounds, { IPaginatedUserRounds } from 'pages/SecretLottery/api/getPaginatedUserRounds';
 import { IBalances } from './lottery-context/BalancesContext';
-import { IConfigs } from 'pages/SecretLottery/api/getConfigs';
+import getConfigs, { IConfigs } from 'pages/SecretLottery/api/getConfigs';
 import getRoundStakingRewards, { IStakingRewads } from 'pages/SecretLottery/api/getRoundStakingRewards';
 import axios from 'axios';
 import getUserRoundsTicketCount from 'pages/SecretLottery/api/getUserRoundsTicketCount';
 import formatNumber from 'utils/secret-lottery/formatNumber';
 import calcTotalPotSize from 'utils/secret-lottery/calcTotalPotSize';
 import numeral from 'numeral';
+import getBalance from 'pages/SecretLottery/api/getBalance';
+import { CosmWasmClient, SigningCosmWasmClient } from 'secretjs';
+import getUserRoundPaginatedTickets, { IUserTicket } from 'pages/SecretLottery/api/getUserRoundPaginatedTickets';
 
 
 export class Lottery extends StoreConstructor {
@@ -48,12 +51,27 @@ export class Lottery extends StoreConstructor {
     selectedUserRound: null,
     userTicketsCount: null
   };
+  @observable public userRoundTickets: IUserTicket[] | null = null;
 
   //Round viewer
   @observable public roundViewer: IRound | null = null;
 
   constructor(stores) {
     super(stores);
+  }
+  @action public setUserRoundTickets (v:IUserTicket[]|null){
+    this.userRoundTickets = v;
+  }
+  @action public getUserRoundPaginatedTicketsTrigger = async (client: IClientState, viewkey: string, round: IRound, userTicketsCount: number) => {
+    // To get all the tickets depending on the amount of tickets, we will section this by the max size of each request
+    const ticketPageSize = 500;
+    const requestsNumber = Math.ceil(userTicketsCount / ticketPageSize);
+    let allTickets: IUserTicket[] = [];
+    for (var i = 0; i < requestsNumber; i++) {
+      const response = await getUserRoundPaginatedTickets(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, round.round_number, i, ticketPageSize)
+      allTickets = allTickets.concat(response.user_round_paginated_tickets)
+    }
+    this.userRoundTickets = allTickets;
   }
 
   // Queries Index
@@ -83,6 +101,16 @@ export class Lottery extends StoreConstructor {
   };
 
   // QUERIES CURRENT ROUND SECTION
+  @action public getCurrentRoundTrigger = async (client: IClientState, viewkey: string, current_round: number) => {
+    try {
+      const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
+      this.currentRoundUserTicketsCount = (currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+      const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
+      this.currentRoundsState = (currentRound.rounds[0])
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   @action public async getSefiPrice() {
 
@@ -107,6 +135,13 @@ export class Lottery extends StoreConstructor {
     }
     this.manualTickets = emptyArray;
   }
+  @action setTicketsCount (tickets:string){
+    this.ticketsCount = tickets;
+  }
+  @action setCustomManualTickets (manualTickets:Array<string>){
+    this.manualTickets = manualTickets;
+  }
+
 
 
   @action public getUserTicketsRound = async (client: IClientState, viewkey: string, current_round: number) => {
@@ -129,42 +164,62 @@ export class Lottery extends StoreConstructor {
     }
   }
 
-  // getCurrenRoundTrigger = Not Used in Current Round Section Component
 
   @action public getRoundStakingRewardsTrigger = async (client: IClientState, configs: IConfigs) => {
     const roundStakingRewards = await getRoundStakingRewards(client, configs.staking_contract.address, configs.staking_vk)
     this.stakingRewards = (roundStakingRewards);
   }
 
-  // getSEFIBalance = Not Used in Current Round Section Component
+  @action public getSEFIBalance = async () => {
+    if (!this.client) return null
 
-  @action public getEstimateSEFI = (n: number): number => {
-    return Math.round(formatNumber(calcTotalPotSize(this.currentRoundsState, this.stakingRewards) * (this.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(this.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100
-  }
-
-  @action public getEstimateUSD = (n: number): number => {
-    return numeral(Math.round((formatNumber(calcTotalPotSize(this.currentRoundsState, this.stakingRewards) * (this.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(this.currentRoundsState.round_ticket_price) / 1000000) * 100) * this.sefiPrice) / 100).format('$0.00');
+    const response = await getBalance(this.client, process.env.SCRT_GOV_TOKEN_ADDRESS)
+    const accountData = await this.client.execute.getAccount(this.client.accountData.address);
+    this.balances = ({
+      native: parseInt(accountData ? accountData.balance[0].amount : "0"),
+      SEFI: response
+    })
   }
 
   // QUERIES USER ROUNDS
 
-  // @action public setUserRoundTicketsModal = () => {
-  //       this.userRoundTicketsModal =({
-  //       open : true,
-  //       selectedUserRound: userRound,
-  //       userTicketsCount: this.paginatedUserRounds.user_tickets_count[index],
-  //     })    
-  // }
+  @action public setUserRoundTicketsModal (
+    open: boolean, 
+    selectedUserRound: IRound | null, 
+    userTicketsCount: number | null
+   ) {
+        this.userRoundTicketsModal = {
+        open:open,
+        selectedUserRound,
+        userTicketsCount,
+      }    
+  }
 
   // QUERIES ROUND VIEWER
 
-  @action public getRoundViewer = async () => {
+  @action public getRoundViewer = async (index:number) => {
     try {
-      const response = await getRounds(this.client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [(this.configs.current_round_number - 1)]);
+      const response = await getRounds(this.client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [index]);
       this.roundViewer = (response.rounds[0]);
     } catch (error) {
       console.error(error)
     }
   }
 
+  @action public setClient(execute:SigningCosmWasmClient,query:CosmWasmClient,address:string,balance:string){
+    this.client = {
+      execute,
+      query,
+      accountData:{
+        address,
+        balance
+      }
+    }
+  }
+  @action public async getConfigsTrigger(client:any){
+    this.configs = await getConfigs(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS);
+  }
+  @action public setViewingKey(vk:string | null){
+    this.viewingKey = vk;
+  } 
 }
