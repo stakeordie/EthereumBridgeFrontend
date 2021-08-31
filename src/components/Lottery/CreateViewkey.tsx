@@ -2,12 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Button } from 'semantic-ui-react'
 import {errorNotification, successNotification} from "../../utils/secret-lottery/notifications";
 import { useStores } from "stores";
+import { observer } from "mobx-react";
 
-export default ({
-    menu
-}: {
-    menu: string
-}) => {
+export default observer(({ menu }:{ menu:string }) => {
     const [createViewKeyLoading, setCreateViewKeyLoading] = useState<Boolean>(false)
     const { lottery }= useStores();
     const { client ,viewingKey}= lottery;
@@ -56,4 +53,4 @@ export default ({
                 null
         )
     
-}
+})
