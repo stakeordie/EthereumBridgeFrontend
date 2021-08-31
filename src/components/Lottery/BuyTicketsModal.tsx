@@ -109,7 +109,7 @@ const BuyTicketsModal = observer(({
                   let value: any = e.target.value;
                   let valueInt = parseInt(value);
 
-                  if (isNaN(valueInt) || value.length > 6) {
+                  if (value.length > 6) {
                     return;
                   }
                   if (valueInt < 0) {
