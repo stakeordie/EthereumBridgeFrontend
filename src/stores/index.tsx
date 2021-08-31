@@ -11,6 +11,7 @@ import { SecretSwapPairs } from './SecretSwapPairs';
 import { SignerHealthStore } from './SignerHealthStore';
 import { SecretSwapPools } from './SecretSwapPools';
 import Theme  from 'themes';
+import { Lottery } from './Lottery';
 
 export interface IStores {
   routing?: RouterStore;
@@ -24,6 +25,7 @@ export interface IStores {
   secretSwapPairs?: SecretSwapPairs;
   secretSwapPools?: SecretSwapPools;
   signerHealth?: SignerHealthStore;
+  lottery?: Lottery;
   theme?: Theme;
 }
 
@@ -40,6 +42,7 @@ stores.rewards = new Rewards(stores);
 stores.secretSwapPairs = new SecretSwapPairs(stores);
 stores.secretSwapPools = new SecretSwapPools(stores);
 stores.signerHealth = new SignerHealthStore(stores);
+stores.lottery = new Lottery(stores);
 stores.theme = new Theme();
 
 
