@@ -29,7 +29,8 @@ export default observer(() => {
           }
           {
               lottery.currentRoundsState  && lottery.configs && lottery.stakingRewards ?
-              <React.Fragment>
+                  <React.Fragment>
+
                   {/* Prize Pot */}
                   <div className="box-round">      
                       <div className="data-header hero-lottery">
@@ -70,7 +71,7 @@ export default observer(() => {
                       </div>
 
                       <div className="round-footer-tickets">
-                          <div className="round-footer-tickets-item">
+                              <div className="round-footer-tickets-item">
                               <p>Minimum Ticket Count</p>
                                   <h3>{lottery.currentRoundsState.min_ticket_count}</h3>
                           </div>
@@ -277,7 +278,10 @@ export default observer(() => {
                   </div>
                   
               </React.Fragment>
-                  : <h1><Loader size='big'></Loader>Hey</h1>
+                  :
+                  <div className="ui active dimmer">
+                      <div className="ui loader"> </div>
+                  </div>
           }
       </React.Fragment>
   )

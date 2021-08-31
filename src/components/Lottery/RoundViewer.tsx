@@ -26,13 +26,13 @@ export default observer(() => {
                                 <button
 
                                     disabled={
-                                        lottery.roundViewer.round_number === 1
+                                        lottery.roundViewer.round_number === 0
                                     }
                                     onClick={async () => await lottery.getRoundViewer(lottery.configs.current_round_number - 1)}
                                 ><img src={'/static/arrow-left-lottery.svg'} alt="arrowleft" />
                                 </button>
 
-                                <h4>Round {lottery.roundViewer.round_number} </h4>
+                                <h4>Round {lottery.roundViewer.round_number + 1} </h4>
                                 <button
                                     className="logo-img"
                                     disabled={
