@@ -62,7 +62,11 @@ const Lottery = observer(() => {
 
     useEffect(() => {
       (async () => {
-        await lottery.getRoundViewer(lottery.configs.current_round_number - 1);
+        if(!lottery.roundViewer){
+          await lottery.getRoundViewer(lottery.configs.current_round_number - 1);
+        }else{
+          await lottery.getRoundViewer(lottery.roundViewer.round_number);
+        }
       })()
   }, [client, configs])
 

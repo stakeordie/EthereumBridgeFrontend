@@ -1,5 +1,5 @@
 import { StoreConstructor } from './core/StoreConstructor';
-import { action, computed, observable } from 'mobx';
+import { action, observable } from 'mobx';
 import createViewKey from 'pages/SecretLottery/api/createViewKey';
 import { IClientState } from './lottery-context/ClientContext';
 import getRounds, { IRound } from 'pages/SecretLottery/api/getRounds';
@@ -9,9 +9,6 @@ import getConfigs, { IConfigs } from 'pages/SecretLottery/api/getConfigs';
 import getRoundStakingRewards, { IStakingRewads } from 'pages/SecretLottery/api/getRoundStakingRewards';
 import axios from 'axios';
 import getUserRoundsTicketCount from 'pages/SecretLottery/api/getUserRoundsTicketCount';
-import formatNumber from 'utils/secret-lottery/formatNumber';
-import calcTotalPotSize from 'utils/secret-lottery/calcTotalPotSize';
-import numeral from 'numeral';
 import getBalance from 'pages/SecretLottery/api/getBalance';
 import { CosmWasmClient, SigningCosmWasmClient } from 'secretjs';
 import getUserRoundPaginatedTickets, { IUserTicket } from 'pages/SecretLottery/api/getUserRoundPaginatedTickets';
@@ -55,6 +52,7 @@ export class Lottery extends StoreConstructor {
 
   //Round viewer
   @observable public roundViewer: IRound | null = null;
+  @observable public loadingRound: boolean = false;
 
   constructor(stores) {
     super(stores);
@@ -199,9 +197,12 @@ export class Lottery extends StoreConstructor {
 
   @action public getRoundViewer = async (index:number) => {
     try {
+      this.loadingRound = true;
       const response = await getRounds(this.client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [index]);
       this.roundViewer = (response.rounds[0]);
+      this.loadingRound = false;
     } catch (error) {
+      this.loadingRound = false;
       console.error(error)
     }
   }
