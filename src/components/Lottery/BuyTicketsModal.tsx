@@ -58,10 +58,10 @@ const BuyTicketsModal = observer(({
             type="number"
             value={lottery.ticketsCount}
             onChange={e => {
-              if (parseInt(e.target.value) >= 500) {
+               if (parseInt(e.target.value) >= 500) {
                 lottery.setTicketsCount('500');
               } else if(parseInt(e.target.value) < 0){
-                lottery.setTicketsCount('0');
+                lottery.setTicketsCount('');
               }else{
                 lottery.setTicketsCount(e.target.value);
               }
@@ -70,11 +70,10 @@ const BuyTicketsModal = observer(({
             <Button
               type="submit"
               onClick={() => {
-                if (parseInt(lottery.ticketsCount) > 0) {
-
+                if (parseInt(lottery.ticketsCount) > 1) {
                   lottery.setTicketsCount('' + (parseInt(lottery.ticketsCount) - 1));
                 }else {
-                  lottery.setTicketsCount('0');
+                  lottery.setTicketsCount('');
                 }
               }}
             >
@@ -86,7 +85,9 @@ const BuyTicketsModal = observer(({
               onClick={() => {
                 if (parseInt(lottery.ticketsCount) >= 500) {
                   lottery.setTicketsCount('500');
-                } else {
+                }else if(isNaN(parseInt(lottery.ticketsCount))) {
+                  lottery.setTicketsCount('1');
+                }else{
                   lottery.setTicketsCount('' + (parseInt(lottery.ticketsCount) + 1));
                 }
               }}

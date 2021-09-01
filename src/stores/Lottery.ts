@@ -38,7 +38,7 @@ export class Lottery extends StoreConstructor {
   @observable public sefiPrice: number = 0;
   @observable public currentRoundUserTicketsCount: number | null = null;
   @observable public stakingRewards: IStakingRewads | null = null;
-  @observable public ticketsCount: string = '0';
+  @observable public ticketsCount: string = '';
   @observable public manualTickets: string[] = [];
 
   //User rounds
