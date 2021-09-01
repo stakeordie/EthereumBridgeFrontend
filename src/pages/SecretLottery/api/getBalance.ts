@@ -13,6 +13,6 @@ export default async (client: IClientState, contractAddress: string) => {
         
         return balanceResponse.balance.amount
     } catch (e) {
-        return null
+        return 'unlock'
     }
 }
