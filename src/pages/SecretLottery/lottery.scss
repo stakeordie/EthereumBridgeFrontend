@@ -331,6 +331,9 @@ $shadow-dark: none;
 
         h4{
             color: var(--secret-swap-neutral-03);
+            &.calculating{
+              color:var(--secret-swap-green-01);
+            }
         }
 
         span{

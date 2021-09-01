@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import calcTotalPotSize from "../../utils/secret-lottery/calcTotalPotSize";
 import formatNumber from "../../utils/secret-lottery/formatNumber";
@@ -13,6 +13,7 @@ import { observer } from "mobx-react";
 export default observer(() => {
   const { lottery } = useStores()
   const [active , setActive]=useState<boolean>(false);
+  const [calculating , setCalculating]=useState<boolean>(false);
 
   const getEstimateSEFI = (n:number):number =>{
       return Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100
@@ -21,7 +22,14 @@ export default observer(() => {
   const getEstimateUSD = (n:number):number =>{
       return numeral(Math.round((formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100)* lottery.sefiPrice) / 100).format('$0.00');
   }
-  
+  const updateCounter = ()=>{
+    setCalculating(true);
+  } 
+  useEffect(()=>{
+    const result = moment.unix(lottery.currentRoundsState?.round_expected_end_timestamp).isBefore(); 
+    setCalculating(result);  
+  },[lottery.currentRoundsState])
+
   return (
       <React.Fragment>
           {
@@ -65,9 +73,16 @@ export default observer(() => {
 
                       {/* Round Ends Countdown */}
                       <div className="counter-row">
-                          <h4>
-                              Round {lottery.currentRoundsState.round_number} ends in <Countdown date={(moment.unix(lottery.currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} />
-                          </h4>
+                              {
+                                (calculating)
+                                  ? <> 
+                                      <h4 className='calculating'>Calculating next round ...</h4>
+                                      <p>This may take a few minutes</p>
+                                    </>
+                                  : <h4>
+                                      Round {lottery.currentRoundsState.round_number} ends in  <Countdown overtime={true} onComplete={updateCounter} key='countdown' date={(moment.unix(lottery.currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} />
+                                    </h4>
+                              }
                       </div>
 
                       <div className="round-footer-tickets">
