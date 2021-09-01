@@ -25,8 +25,7 @@ export class Lottery extends StoreConstructor {
     page_size:number,
     page:number,
   } = {
-      page_size: 100,
-      // page_size: this.paginatedUserRounds.rounds.length,
+      page_size: 1000,
       page: 1
     };
   //Buy tickets modal and Current Round section
@@ -95,6 +94,7 @@ export class Lottery extends StoreConstructor {
       page_size,
     );
     
+    this.paginationValues.page_size = this.paginatedUserRounds.rounds.length
   };
 
   // QUERIES CURRENT ROUND SECTION
