@@ -31,8 +31,7 @@ const BuyTicketsModal = observer(({
   let { theme,lottery,user } = useStores();
 
   if(!lottery.configs || !lottery.currentRoundsState)return null;
-  console.log(lottery.balances.SEFI)
-  
+
   return (
     <Modal
       open={open}
