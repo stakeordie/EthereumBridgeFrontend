@@ -115,6 +115,8 @@ export class Lottery extends StoreConstructor {
       const { data } = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=secret-finance&vs_currencies=usd');
       if(data['secret-finance']){
         this.sefiPrice = data['secret-finance'].usd
+      }else{
+        this.sefiPrice = 0.05;  
       }
     } catch (error) {
       this.sefiPrice = 0.05;
