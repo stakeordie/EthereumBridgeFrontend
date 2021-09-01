@@ -13,7 +13,6 @@ import getBalance from 'pages/SecretLottery/api/getBalance';
 import { CosmWasmClient, SigningCosmWasmClient } from 'secretjs';
 import getUserRoundPaginatedTickets, { IUserTicket } from 'pages/SecretLottery/api/getUserRoundPaginatedTickets';
 
-
 export class Lottery extends StoreConstructor {
 
   //General porposes
@@ -21,15 +20,15 @@ export class Lottery extends StoreConstructor {
   @observable public viewingKey: string | null = null;
   @observable public balances: IBalances | null = null;
   @observable public configs: IConfigs | null = null;
+  @observable public paginatedUserRounds: IPaginatedUserRounds | null = null;
   @observable public paginationValues: {
     page_size:number,
     page:number,
   } = {
-    page_size:5,
-    page:1
-  };
-  @observable public paginatedUserRounds: IPaginatedUserRounds | null = null;
-
+      page_size: 100,
+      // page_size: this.paginatedUserRounds.rounds.length,
+      page: 1
+    };
   //Buy tickets modal and Current Round section
   @observable public currentRoundsState: IRound | null = null;
   @observable public sefiPrice: number = 0;
