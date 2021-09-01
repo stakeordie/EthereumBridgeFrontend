@@ -106,10 +106,17 @@ export default observer(() => {
                               </div>
                           <Accordion.Title active={active} onClick={() => setActive(!active)}>
                               <div className="show-detail">
-                                  <Button color="black" fluid >
-                                      Round Pot Distribution Detail
-                                      <Icon name='dropdown' style={{ marginRight: '10px' }} />
-                                  </Button>
+                                    <div className="show-detail">
+                                        <button className="button-collapse-detail">
+                                            <div className="button-content">
+                                                <h6>Round Detail</h6>
+                                                <img
+                                                    src={active ? "/static/chevron-down.svg" : "/static/chevron-right.svg"}
+                                                    alt="chevron down icon"
+                                                />
+                                            </div>
+                                        </button>
+                                    </div>
                               </div>
                           </Accordion.Title>
 

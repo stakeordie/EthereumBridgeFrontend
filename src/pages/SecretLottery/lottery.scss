@@ -353,7 +353,40 @@ $shadow-dark: none;
         box-shadow: var(--secret-swap-shadow);
 
         .show-detail{
+
             margin-top: 26px;
+
+            .button-collapse-detail {
+                color: #FF726E;
+                background-color: transparent;
+                width: 100%;
+                border: none;
+                cursor: pointer;
+                outline: none;
+
+                h6{
+                    font-family: Poppins;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 24px;
+                    letter-spacing: 0em;
+                    text-align: center;
+                    color: #FF726E;
+                }
+
+                .button-content{
+                    display: flex;
+                    justify-content: center;
+
+
+                    img{
+                        margin-left: 15px;
+                        filter: none;
+                    }
+
+                }
+            }
         }
     
         .round-info-container{
@@ -563,6 +596,39 @@ $shadow-dark: none;
     
                     #sefi-price{
                         color:var(--secret-swap-green-01);
+                    }
+                }
+            }
+
+            .show-detail{
+
+                .button-collapse-detail {
+                    color: #FF726E;
+                    background-color: transparent;
+                    width: 100%;
+                    border: none;
+                    cursor: pointer;
+                    outline: none;
+
+                    h6{
+                        font-family: Poppins;
+                        font-size: 16px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 24px;
+                        letter-spacing: 0em;
+                        text-align: center;
+                        color: #FF726E;
+                    }
+
+                    .button-content{
+                        display: flex;
+                        justify-content: center;
+
+                        img{
+                            margin-left: 15px;
+                            filter: none;
+                        }
                     }
                 }
             }
