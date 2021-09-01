@@ -268,14 +268,18 @@ export default observer(() => {
                     <>
                       <div className="row-earnings">
                         <p>You Earned</p>
-                        <h4>{formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)}<span> SEFI</span></h4>
+                        {
+                          calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) > 0 ?
+                            <h4>{formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000)} <span> SEFI</span></h4>
+                          :
+                            <h4>{formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)}<span> SEFI</span></h4>
+                        }
                       </div>
                       <div className="row-earning-sefi">
                         {
                           remainingRewardTickets.remainingPrizeToClaim > 0 ?
                             <Button
                               fluid
-                              color="black"
                               disabled={loadingClaimReward}
                               onClick={async () => {
                                 claimButtonLogic(round, userRoundTickets);
@@ -289,9 +293,9 @@ export default observer(() => {
                             :
                             calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) > 0
                               ?
-                              "Claimed " + formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000) + " SEFI"
+                              <p>Claimed: <span> {formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000)} SEFI</span></p>
                               :
-                              "No Winner Tickets"
+                                <p>No Winning Tickets</p>
                         }
                       </div>
                     </>
