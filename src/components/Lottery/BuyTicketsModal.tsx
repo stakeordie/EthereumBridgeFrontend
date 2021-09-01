@@ -9,6 +9,8 @@ import buyTickets from 'pages/SecretLottery/api/buyTickets';
 import { errorNotification, successNotification } from 'utils/secret-lottery/notifications';
 import { isNaN } from 'lodash';
 import { observer } from 'mobx-react';
+import { unlockJsx } from 'pages/Swap/utils';
+import { divDecimals } from 'utils';
 
 interface BuyTicketsProps {
   children: JSX.Element;
@@ -26,9 +28,10 @@ const BuyTicketsModal = observer(({
   const [isManualTickets, setIsManualTickets] = useState<boolean>(false);
   const [loadingBuyTickets, setLoadingBuyTickets] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false);
-  let { theme,lottery } = useStores();
+  let { theme,lottery,user } = useStores();
 
   if(!lottery.configs || !lottery.currentRoundsState)return null;
+  console.log(lottery.balances.SEFI)
   
   return (
     <Modal
@@ -51,6 +54,19 @@ const BuyTicketsModal = observer(({
         </button>
       </div>
       <div className="modal-body-buy">
+        <div className='sefi-balance'>
+          <h6>Balance</h6>
+          <h6>
+            { (lottery.balances.SEFI.toString() === 'unlock')
+                ? unlockJsx({onClick:async()=>{ 
+                   await user.keplrWallet.suggestToken(user.chainId, process.env.SCRT_GOV_TOKEN_ADDRESS); 
+                   await lottery.getSEFIBalance();
+                  }
+                })
+                : divDecimals(lottery.balances.SEFI,6).toString()
+            }
+          </h6>
+        </div>
         <div className="modal-input">
           <Input
             fluid

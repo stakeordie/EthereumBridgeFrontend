@@ -281,7 +281,7 @@ export default observer(() => {
                                       <div className="box-pot-size-container">
                                           <div className="col-pot-results">
                                               <h4>Pot Size</h4>
-                                              <h6>{lottery.currentRoundsState && numeral(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) / 1000000)).format('$0,0.00')}</h6>
+                                              <h6>{lottery.currentRoundsState && numeral(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) / 1000000) * lottery.sefiPrice).format('$0,0.00')}</h6>
                                               <h5> {lottery.currentRoundsState && formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) / 1000000)}  <span> SEFI</span></h5>
                                           </div>
                                           <div className="col-pot-button">
