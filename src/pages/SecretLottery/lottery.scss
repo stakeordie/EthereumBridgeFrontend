@@ -588,8 +588,11 @@ $shadow-dark: none;
     
                 .header-item{
                     display: grid;
-                    grid-template-rows: 2 1fr;
                     grid-row-gap: 4px;
+
+                    h6{
+                        color:var(--secret-swap-neutral-03);
+                    }
     
                     h3{
                         color:var(--secret-swap-neutral-03);
