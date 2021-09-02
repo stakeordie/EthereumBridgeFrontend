@@ -99,7 +99,7 @@ export default observer(() => {
                           <div className="button-content">
                               {active ? <h6>Hide previous rounds</h6> : <h6>View previous rounds</h6>}
                               <img           
-                                  src={active ? "/static/chevron-down.svg" : "/static/chevron-right.svg"}
+                                  src={active ? "/static/chevron-up.svg" : "/static/chevron-right.svg"}
                                   alt="chevron down icon"
                               />
                           </div>
