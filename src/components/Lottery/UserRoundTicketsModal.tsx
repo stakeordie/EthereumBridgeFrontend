@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useStores } from 'stores';
 import { OverlayTrigger, Popover } from "react-bootstrap";
-import { Modal, Loader, Icon } from 'semantic-ui-react'
+import { Modal, Loader, Icon, Popup } from 'semantic-ui-react'
 import { Button } from 'semantic-ui-react';
 import claimRewards from "../../pages/SecretLottery/api/claimRewards";
 import { IRound } from "../../pages/SecretLottery/api/getRounds";
@@ -176,22 +176,21 @@ export default observer(() => {
           <div className="ticket" key={`ticket-${index}`}>
             {
               round.drafted_ticket ?
-                <OverlayTrigger placement="top" rootClose
-                  overlay={
-                    <Popover id="popover-basic">
-                      <Popover.Content>
-                        <div className="popover-content">
-                          <p><strong>Ticket {userTicket.ticket}</strong></p>
-                          <p>{ticketSequence}</p>
-                          <p>Ticket Rewards: {(accumutatedTicketRewards ? formatNumber(accumutatedTicketRewards! / 1000000) : 0)} </p>
-                        </div>
-                      </Popover.Content>
-                    </Popover>
-                  }>
-                  <button className={`ticket-button-${!ticketPrizes ? "normal" : ticketPrizes.sequence_1.length > 0 ? "winner" : "no-winner"}`}>
-                    {userTicket.ticket}
-                  </button>
-                </OverlayTrigger>
+                <Popup
+                  inverted={theme.currentTheme === 'dark'}
+                  trigger={
+                    <button className={`ticket-button-${!ticketPrizes ? "normal" : ticketPrizes.sequence_1.length > 0 ? "winner" : "no-winner"}`}>
+                      {userTicket.ticket}
+                    </button>
+                  }
+                  content={
+                    <div className="popover-content">
+                      <h5><strong>Ticket {userTicket.ticket}</strong></h5>
+                      <p>{ticketSequence}</p>
+                      <p>Ticket Rewards: {(accumutatedTicketRewards ? formatNumber(accumutatedTicketRewards! / 1000000) : 0)} </p>
+                    </div>
+                  }
+                />
                 :
                 <button className='ticket-button'>
                   {userTicket.ticket}
@@ -286,7 +285,7 @@ export default observer(() => {
                               }}>
                               {
                                 loadingClaimReward ?
-                                  <i className="fa fa-spinner fa-spin"></i> :
+                                  <Loader inverted={theme.currentTheme === 'dark'} inline active size='small'/> :
                                   `Claim ${formatNumber(remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).remainingPrizeToClaim / 1000000)} SEFI`
                               }
                             </Button>
