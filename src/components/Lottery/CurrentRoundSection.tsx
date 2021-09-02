@@ -75,7 +75,7 @@ export default observer(() => {
                                       <p>This may take a few minutes</p>
                                     </>
                                   : <h4>
-                                      Round {lottery.currentRoundsState.round_number} ends in  <Countdown overtime={true} onComplete={updateCounter} key='countdown' date={(moment.unix(lottery.currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} />
+                                      Round {lottery.currentRoundsState.round_number + 1} ends in  <Countdown overtime={true} onComplete={updateCounter} key='countdown' date={(moment.unix(lottery.currentRoundsState.round_expected_end_timestamp).toDate())} daysInHours={true} />
                                     </h4>
                               }
                       </div>

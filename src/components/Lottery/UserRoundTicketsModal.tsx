@@ -10,7 +10,7 @@ import formatNumber from "../../utils/secret-lottery/formatNumber";
 import getPrizedTicketResults, { IPrizedTicketResults } from "../../utils/secret-lottery/getPrizedTicketResults";
 import getTicketsIndexToClaim from "../../utils/secret-lottery/getTicketsIndexToClaim";
 import getWinningTicketsCount from "../../utils/secret-lottery/getWinningTicketsCount";
-import { errorNotification } from "../../utils/secret-lottery/notifications";
+import { errorNotification, successNotification } from '../../utils/secret-lottery/notifications';
 import { observer } from "mobx-react";
 
 export default observer(() => {
@@ -127,11 +127,11 @@ export default observer(() => {
 
       await lottery.getUserRoundPaginatedTicketsTrigger(client, viewingKey, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
       await lottery.getSEFIBalance()
-
+      successNotification('Claimed Successfully', true);
       setLoadingClaimReward(false)
     }
     catch (e) {
-      errorNotification(e)
+      errorNotification(e, true)
       setLoadingClaimReward(false)
     }
 
