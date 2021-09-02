@@ -881,6 +881,7 @@ $shadow-dark: none;
         display: grid;
         grid-template-rows: (3, 1fr);
         grid-row-gap: 16px;
+
         .sefi-balance{
           display: flex;
           justify-content: space-between;
@@ -894,6 +895,15 @@ $shadow-dark: none;
             font-style: normal;
             font-weight: 400;
             line-height: 24px;
+          }
+
+          span{
+            color: var(--secret-swap-neutral-01);
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: 0em;
           }
         }
         button{
