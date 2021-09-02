@@ -499,6 +499,42 @@ $shadow-dark: none;
         width: 742px;
         margin: 32px auto 0px auto;
         height: auto;
+        .show-detail{
+
+          margin-top: 26px;
+
+          .button-collapse-detail {
+              color: #FF726E;
+              background-color: transparent;
+              width: 100%;
+              border: none;
+              cursor: pointer;
+              outline: none;
+
+              h6{
+                  font-family: Poppins;
+                  font-size: 16px;
+                  font-style: normal;
+                  font-weight: 600;
+                  line-height: 24px;
+                  letter-spacing: 0em;
+                  text-align: center;
+                  color: #FF726E;
+              }
+
+              .button-content{
+                  display: flex;
+                  justify-content: center;
+
+
+                  img{
+                      margin-left: 15px;
+                      filter: none;
+                  }
+
+              }
+          }
+      }
     
         h2{
             text-align: center;
@@ -512,6 +548,9 @@ $shadow-dark: none;
             grid-row-gap: 16px;
             align-items: center;
             justify-items: center;
+            &.collapse{
+              margin-top: 5px;
+            }
     
             #title{
                 color: var(--secret-swap-neutral-03);

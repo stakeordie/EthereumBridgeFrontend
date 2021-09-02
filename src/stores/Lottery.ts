@@ -166,7 +166,6 @@ export class Lottery extends StoreConstructor {
       const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
       this.currentRoundsState = (currentRound.rounds[0])
       this.calculating = moment.unix(this.currentRoundsState?.round_expected_end_timestamp).isBefore()
-      console.log(this.currentRoundsState?.round_expected_end_timestamp)
       if(this.currentRoundsState.min_ticket_count > this.currentRoundsState.ticket_count ){
         // Not reach minimum ticket count
         this.calculatingMsg ='Extending this round ...'
