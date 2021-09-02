@@ -177,7 +177,7 @@ export default observer(() => {
             {
               round.drafted_ticket ?
                 <Popup
-                  inverted={theme.currentTheme === 'dark'}
+                  inverted
                   trigger={
                     <button className={`ticket-button-${!ticketPrizes ? "normal" : ticketPrizes.sequence_1.length > 0 ? "winner" : "no-winner"}`}>
                       {userTicket.ticket}
