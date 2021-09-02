@@ -198,9 +198,8 @@ $shadow-dark: none;
 
         &:disabled{
             cursor: default;
-            color: $secret-swap-neutral-03;
+            opacity: 0.3;
         }
-
     }
 
     .button-primary-sm {
