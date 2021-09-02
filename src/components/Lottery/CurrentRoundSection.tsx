@@ -13,7 +13,6 @@ import { observer } from "mobx-react";
 export default observer(() => {
   const { lottery } = useStores()
   const [active , setActive]=useState<boolean>(false);
-  const [calculating , setCalculating]=useState<boolean>(false);
 
   const getEstimateSEFI = (n:number):number =>{
       return Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100
@@ -23,12 +22,8 @@ export default observer(() => {
       return numeral(Math.round((formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100)* lottery.sefiPrice) / 100).format('$0.00');
   }
   const updateCounter = ()=>{
-    setCalculating(true);
+    lottery.setCalculating(true);
   } 
-  useEffect(()=>{
-    const result = moment.unix(lottery.currentRoundsState?.round_expected_end_timestamp).isBefore(); 
-    setCalculating(result);  
-  },[lottery.currentRoundsState])
 
   return (
       <React.Fragment>
@@ -60,7 +55,7 @@ export default observer(() => {
                       <div className="round-bottom">
                           <div className="round-bottom-content">
                           <BuyTicketsModal>
-                              <button disabled={!lottery.viewingKey || !lottery.client.execute} className="button-primary-lg">
+                              <button disabled={!lottery.viewingKey || !lottery.client.execute || lottery.calculating} className="button-primary-lg">
                                   Buy Tickets
                               </button>
                           </BuyTicketsModal>
@@ -74,9 +69,9 @@ export default observer(() => {
                       {/* Round Ends Countdown */}
                       <div className="counter-row">
                               {
-                                (calculating)
+                                (lottery.calculating)
                                   ? <> 
-                                      <h4 className='calculating'>Calculating next round ...</h4>
+                                      <h4 className='calculating'>{lottery.calculatingMsg}</h4>
                                       <p>This may take a few minutes</p>
                                     </>
                                   : <h4>
@@ -286,7 +281,7 @@ export default observer(() => {
                                           </div>
                                           <div className="col-pot-button">
                                               <BuyTicketsModal>
-                                                  <button disabled={!lottery.viewingKey || !lottery.client.execute} className="button-primary-lg">
+                                                  <button disabled={!lottery.viewingKey || !lottery.client.execute || lottery.calculating} className="button-primary-lg">
                                                       Buy Tickets
                                                   </button>
                                               </BuyTicketsModal>

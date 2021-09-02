@@ -49,7 +49,7 @@ export default observer(() => {
                                     <img src='/static/empty-ticket.png' alt="empty ticket" width='100px' />
                                     <p> You haven't bought any tickets yet</p>
                                     <BuyTicketsModal>
-                                        <button disabled={!lottery.viewingKey || !lottery.client.execute} className="button-primary-lg">
+                                        <button disabled={!lottery.viewingKey || !lottery.client.execute || lottery.calculating} className="button-primary-lg">
                                             Buy Tickets
                                         </button>
                                     </BuyTicketsModal>

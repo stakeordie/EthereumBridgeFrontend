@@ -195,6 +195,8 @@ $shadow-dark: none;
         outline: none;
         color: $secret-swap-neutral-07;
         border: none;
+        font-weight: 600;
+        font-family: 'Poppins';
 
         &:disabled{
             cursor: default;
@@ -209,6 +211,8 @@ $shadow-dark: none;
         outline: none;
         color: $secret-swap-neutral-07;
         border: none;
+        font-weight: 600;
+        font-family: 'Poppins';
 
         &:disabled{
             cursor: default;
@@ -227,6 +231,7 @@ $shadow-dark: none;
         border: 1px solid var(--secret-swap-neutral-01);
         font-weight: 600px;
         font-size: 16px;
+        font-family: 'Poppins';
     }
 
     // POT SIZE
@@ -332,6 +337,7 @@ $shadow-dark: none;
             color: var(--secret-swap-neutral-03);
             &.calculating{
               color:var(--secret-swap-green-01);
+              padding: 0 2rem;
             }
         }
 

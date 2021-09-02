@@ -12,6 +12,7 @@ import getUserRoundsTicketCount from 'pages/SecretLottery/api/getUserRoundsTicke
 import getBalance from 'pages/SecretLottery/api/getBalance';
 import { CosmWasmClient, SigningCosmWasmClient } from 'secretjs';
 import getUserRoundPaginatedTickets, { IUserTicket } from 'pages/SecretLottery/api/getUserRoundPaginatedTickets';
+import moment from 'moment';
 
 export class Lottery extends StoreConstructor {
 
@@ -30,6 +31,8 @@ export class Lottery extends StoreConstructor {
     };
   //Buy tickets modal and Current Round section
   @observable public currentRoundsState: IRound | null = null;
+  @observable public calculating: boolean = false;
+  @observable public calculatingMsg: 'Calculating next round ...' | 'Extending this round ...' | '' = '';
   @observable public sefiPrice: number = 0;
   @observable public currentRoundUserTicketsCount: number | null = null;
   @observable public stakingRewards: IStakingRewads | null = null;
@@ -142,7 +145,9 @@ export class Lottery extends StoreConstructor {
   @action setCustomManualTickets (manualTickets:Array<string>){
     this.manualTickets = manualTickets;
   }
-
+  @action setCalculating (b:boolean){
+    this.calculating = b;
+  }
 
 
   @action public getUserTicketsRound = async (client: IClientState, viewkey: string, current_round: number) => {
@@ -160,6 +165,14 @@ export class Lottery extends StoreConstructor {
     try {
       const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
       this.currentRoundsState = (currentRound.rounds[0])
+      this.calculating = moment.unix(this.currentRoundsState?.round_expected_end_timestamp).isBefore()
+      console.log(this.currentRoundsState?.round_expected_end_timestamp)
+      if(this.currentRoundsState.min_ticket_count > this.currentRoundsState.ticket_count ){
+        // Not reach minimum ticket count
+        this.calculatingMsg ='Extending this round ...'
+      }else {
+        this.calculatingMsg = 'Calculating next round ...'
+      }
     } catch (error) {
       console.error(error)
     }
