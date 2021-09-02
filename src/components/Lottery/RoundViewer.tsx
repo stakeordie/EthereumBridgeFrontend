@@ -385,6 +385,37 @@ export default observer(() => {
                       </h4>
                     </div>
                   </div>
+                  
+                <div className="row-body">
+                    <div className="col-sequence-trigger">
+                      <h4>Trigger</h4>
+                    </div>
+                    <div className="col-dist-rewards">
+                      <p>
+                        {numeral(
+                          formatNumber(
+                            parseInt(
+                              lottery.roundViewer.reward_distribution
+                                ? lottery.roundViewer.reward_distribution.triggerer_pot_size
+                                : '0',
+                            ) / 1000000,
+                          ) * lottery.sefiPrice,
+                        ).format('$0.00')}
+                      </p>
+                      <h4>
+                        {formatNumber(
+                          parseInt(
+                            lottery.roundViewer.reward_distribution
+                              ? lottery.roundViewer.reward_distribution.triggerer_pot_size
+                              : '0',
+                          ) / 1000000,
+                        )}
+                      </h4>
+                    </div>
+                    <div className="col-winners">
+                      
+                    </div>
+                  </div>
                 </div>
               </Accordion.Content>
             </div>
