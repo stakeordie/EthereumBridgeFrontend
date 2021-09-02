@@ -6,9 +6,13 @@ export default async (
     contractAddress: string,
     round_numbers: number[]
 ) => {
+  try {
     let queryMsg = { get_rounds: { round_numbers } };
     const response = await client.query.queryContractSmart(contractAddress, queryMsg);
     return JSON.parse(atob(response)).get_rounds
+  } catch (error) {
+    return null; 
+  }
 }
 
 export interface IRound {

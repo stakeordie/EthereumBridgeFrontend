@@ -17,6 +17,7 @@ export default async (
         const response = await client.query.queryContractSmart(contractAddress, queryMsg);
        return response.rewards
     } catch (e){
+       return null
         console.log(e)
     }
 }

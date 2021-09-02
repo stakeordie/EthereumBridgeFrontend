@@ -5,9 +5,13 @@ export default async (
     client: IClientState,
     contractAddress: string,
 ) => {
+  try {
     let queryMsg = { get_configs: { } };
     const response = await client.query.queryContractSmart(contractAddress, queryMsg);
-    return JSON.parse(atob(response)).get_configs
+    return JSON.parse(atob(response)).get_configs 
+  } catch (error) {
+    return null;
+  }
 }
 
 export interface IConfigs {

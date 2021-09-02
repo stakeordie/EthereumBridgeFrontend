@@ -89,14 +89,16 @@ export class Lottery extends StoreConstructor {
     page_size: number,
   ) {
 
-    this.paginatedUserRounds = await getPaginatedUserRounds(
+    const result = await getPaginatedUserRounds(
       client,
       process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS,
       viewkey,
       page - 1,
       page_size,
     );
-    
+    if(result){
+      this.paginatedUserRounds = result;
+    }
     this.paginationValues.page_size = this.paginatedUserRounds.rounds.length
   };
 
@@ -104,9 +106,13 @@ export class Lottery extends StoreConstructor {
   @action public getCurrentRoundTrigger = async (client: IClientState, viewkey: string, current_round: number) => {
     try {
       const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
-      this.currentRoundUserTicketsCount = (currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+      if(currentRoundUserTicketsCount){
+        this.currentRoundUserTicketsCount = (currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+      }
       const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
-      this.currentRoundsState = (currentRound.rounds[0])
+      if(currentRound){
+        this.currentRoundsState = (currentRound.rounds[0])
+      }
     } catch (error) {
       console.error(error)
     }
@@ -154,7 +160,9 @@ export class Lottery extends StoreConstructor {
     try {
 
       const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
-      this.currentRoundUserTicketsCount = (currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+      if(currentRoundUserTicketsCount){
+        this.currentRoundUserTicketsCount = (currentRoundUserTicketsCount.user_rounds_ticket_count[0])
+      }
     } catch (error) {
       console.error(error)
     }
@@ -164,7 +172,10 @@ export class Lottery extends StoreConstructor {
   @action public getCurrentRound = async (client: IClientState, current_round: number) => {
     try {
       const currentRound = await getRounds(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round])
-      this.currentRoundsState = (currentRound.rounds[0])
+      if(currentRound){
+        this.currentRoundsState = (currentRound.rounds[0])
+      }
+
       this.calculating = moment.unix(this.currentRoundsState?.round_expected_end_timestamp).isBefore()
       if(this.currentRoundsState.min_ticket_count > this.currentRoundsState.ticket_count ){
         // Not reach minimum ticket count
@@ -180,7 +191,9 @@ export class Lottery extends StoreConstructor {
 
   @action public getRoundStakingRewardsTrigger = async (client: IClientState, configs: IConfigs) => {
     const roundStakingRewards = await getRoundStakingRewards(client, configs.staking_contract.address, configs.staking_vk)
-    this.stakingRewards = (roundStakingRewards);
+    if(roundStakingRewards){
+      this.stakingRewards = (roundStakingRewards);
+    }
   }
 
   @action public getSEFIBalance = async () => {
@@ -214,7 +227,10 @@ export class Lottery extends StoreConstructor {
     try {
       this.loadingRound = true;
       const response = await getRounds(this.client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [index]);
-      this.roundViewer = (response.rounds[0]);
+      if(response){
+        this.roundViewer = (response.rounds[0]);
+      }
+
       this.loadingRound = false;
     } catch (error) {
       this.loadingRound = false;
@@ -233,7 +249,15 @@ export class Lottery extends StoreConstructor {
     }
   }
   @action public async getConfigsTrigger(client:any){
-    this.configs = await getConfigs(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS);
+    try {
+      const result = await getConfigs(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS);
+      if(result){
+        this.configs = result;
+      }
+      
+    } catch (error) {
+      console.error(error)
+    }
   }
   @action public setViewingKey(vk:string | null){
     this.viewingKey = vk;

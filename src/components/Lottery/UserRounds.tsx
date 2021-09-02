@@ -54,8 +54,8 @@ export default observer(() => {
                                             <h6>{userRound.drafted_ticket ? userRound.drafted_ticket! : " - "}</h6>
                                             <button
                                                 id="button-outline"
-                                                onClick={() => lottery.setUserRoundTicketsModal(true,userRound,lottery.paginatedUserRounds.user_tickets_count[index])}
-                                            >{lottery.paginatedUserRounds.user_tickets_count[index] + " Tickets"}
+                                                onClick={() => lottery.setUserRoundTicketsModal(true,userRound,lottery.paginatedUserRounds?.user_tickets_count[index])}
+                                            >{lottery.paginatedUserRounds?.user_tickets_count[index] + " Tickets"}
                                             </button>
                                         </div>
                                       )
@@ -84,8 +84,8 @@ export default observer(() => {
                           <h6>{userRound.drafted_ticket ? userRound.drafted_ticket! : " - "}</h6>
                           <button
                               id="button-outline"
-                              onClick={() => lottery.setUserRoundTicketsModal(true,userRound,lottery.paginatedUserRounds.user_tickets_count[index])}
-                          >{lottery.paginatedUserRounds.user_tickets_count[index] + " Tickets"}
+                              onClick={() => lottery.setUserRoundTicketsModal(true,userRound,lottery.paginatedUserRounds?.user_tickets_count[index])}
+                          >{lottery.paginatedUserRounds?.user_tickets_count[index] + " Tickets"}
                           </button>
                       </div>
                     )

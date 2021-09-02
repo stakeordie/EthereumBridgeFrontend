@@ -58,7 +58,7 @@ const Lottery = observer(() => {
            await lottery.getPaginatedUserTicketsTrigger(client, viewingKey, paginationValues.page, paginationValues.page_size)
         }
       })()
-    }, [client, viewingKey])
+    }, [client, viewingKey,configs])
 
     useEffect(() => {
       (async () => {
