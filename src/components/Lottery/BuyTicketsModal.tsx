@@ -63,7 +63,7 @@ const BuyTicketsModal = observer(({
                   }
                 })
                 : divDecimals(lottery.balances.SEFI,6).toString()
-            }
+            }<span> SEFI</span>
           </h6>
         </div>
         <div className="modal-input">
