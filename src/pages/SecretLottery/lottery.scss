@@ -967,10 +967,12 @@ $shadow-dark: none;
 
             &:hover{
                 background-color: transparent;
+                color: var(--secret-swap-neutral-01);
             }
 
             &:focus{
                 background-color:unset;
+                color: var(--secret-swap-neutral-01);
             }
         }
 
@@ -984,6 +986,7 @@ $shadow-dark: none;
                 text-align: center;
                 color: #D6D6D6;
                 background: transparent;
+                border-color: $secret-swap-neutral-03-dark;
 
                 &::-webkit-inner-spin-button {
                     -webkit-appearance: none;
@@ -991,7 +994,7 @@ $shadow-dark: none;
                 }
 
                  &:focus{
-                    border-color: #D6D6D6;
+                    border-color: $secret-swap-neutral-03-dark;
                 }
             }
         }
