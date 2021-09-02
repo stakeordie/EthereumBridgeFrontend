@@ -42,7 +42,7 @@ const BuyTicketsModal = observer(({
     >
       <div className="modal-header-buy">
         <h6>Buy Tickets</h6>
-        <h3 onClick={() => setOpen(false)}>x</h3>
+        <h3 onClick={() => { setOpen(false); lottery.setTicketsCount('')}}>x</h3>
       </div>
       <div className="modal-nav">
         <button onClick={() => setIsManualTickets(false)} className={isManualTickets ? 'inactive' : 'active'}>
@@ -184,18 +184,18 @@ const BuyTicketsModal = observer(({
                 ticketPrice,
               );
               setOpen(false)
-              successNotification('Buy Tickets Success!');
               setLoadingBuyTickets(false);              
+              successNotification('Buy Tickets Success!');
+              lottery.setTicketsCount('');
               await lottery.getRoundStakingRewardsTrigger(lottery.client, lottery.configs);
               await lottery.getCurrentRoundTrigger(lottery.client, lottery.viewingKey, lottery.configs.current_round_number);
               await lottery.getPaginatedUserTicketsTrigger(lottery.client, lottery.viewingKey, lottery.paginationValues.page, lottery.paginationValues.page_size);
               await lottery.getSEFIBalance();
-              lottery.setTicketsCount('0');
               lottery.setManualTickets();
-              
             } catch (e) {
               setOpen(false)
               setLoadingBuyTickets(false);
+              lottery.setTicketsCount('');
               errorNotification(e);
             }
           }}
@@ -225,7 +225,7 @@ const BuyTicketsModal = observer(({
           </h6>
         </div>
         <div className="row-footer">
-          <p>Disccount</p>
+          <p>Discount</p>
           <h6>
             {calcBulkDiscountTicketPrice(
               lottery.configs.per_ticket_bulk_discount,
