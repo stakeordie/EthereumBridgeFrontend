@@ -82,10 +82,16 @@ export const DepositRewards = async (params: {
   amount: string;
   fee?: StdFee;
 }): Promise<string> => {
-  const tx = await Snip20Send({
+  let tx: any;
+  tx = await Snip20Send({
     msg: 'eyJkZXBvc2l0Ijp7fX0K', // '{"deposit":{}}' -> base64
     ...params,
   });
+
+  if(tx?.code){
+    throw new Error(tx?.raw_log)
+  }
+  
   console.log(tx)
   return 'yooyoo';
 };
