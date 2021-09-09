@@ -16,28 +16,38 @@ export default async (
 }
 
 export interface IRound {
-    round_number: number,
-    round_ticket_price: string,
-    pending_staking_rewards: string,
-    staking_pot_size: string,
-    ticket_count: number,
-    min_ticket_count: number,
-    round_reward_pot_allocations: {
-        triggerer: number,
-        burn: number,
-        sequence_1: number,
-        sequence_2: number,
-        sequence_3: number,
-        sequence_4: number,
-        sequence_5: number,
-        sequence_6: number,
-    },
-    round_start_timestamp: number,
-    round_expected_end_timestamp: number,
-    round_end_timestamp: number | null,
-    drafted_ticket: string | null,
-    final_pot_size: string | null,
-    reward_distribution: IRoundRewardDistribution | null
+  round_number: number,
+  round_ticket_price: string,
+  pending_staking_rewards: string,
+  initial_pot_size: string,
+  initial_sequence_pools: {
+      sequence_1: string,
+      sequence_2: string,
+      sequence_3: string,
+      sequence_4: string,
+      sequence_5: string,
+      sequence_6: string,
+  },
+  staking_pot_size: string,
+  ticket_count: number,
+  min_ticket_count: number,
+  round_reward_pot_allocations: {
+      triggerer: number,
+      reserve: number,
+      burn: number,
+      sequence_1: number,
+      sequence_2: number,
+      sequence_3: number,
+      sequence_4: number,
+      sequence_5: number,
+      sequence_6: number,
+  },
+  round_start_timestamp: number,
+  round_expected_end_timestamp: number,
+  round_end_timestamp: number | null,
+  drafted_ticket: string | null,
+  final_pot_size: string | null,
+  reward_distribution: IRoundRewardDistribution | null
 }
 
 export interface IRoundRewardDistribution {

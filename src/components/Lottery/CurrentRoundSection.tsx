@@ -9,17 +9,18 @@ import { useStores } from "stores";
 import numeral from 'numeral';
 import { Accordion, Icon, Button, Loader } from "semantic-ui-react";
 import { observer } from "mobx-react";
+import calcPotSize from "utils/secret-lottery/calcPotSize";
 
 export default observer(() => {
   const { lottery } = useStores()
   const [active , setActive]=useState<boolean>(false);
 
   const getEstimateSEFI = (n:number):number =>{
-      return Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100
+      return Math.round((formatNumber(calcPotSize(lottery.currentRoundsState, lottery.stakingRewards)[`sequence${n}`]) / 1000000 ) * 100 ) / 100
   }
 
   const getEstimateUSD = (n:number):number =>{
-      return numeral(Math.round((formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations[`sequence_${n}`] * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100)* lottery.sefiPrice) / 100).format('$0.00');
+      return numeral(Math.round(((formatNumber(calcPotSize(lottery.currentRoundsState, lottery.stakingRewards)[`sequence${n}`]) / 1000000 ) * 100) * lottery.sefiPrice ) / 100).format('$0.00')
   }
   const updateCounter = ()=>{
     lottery.setCalculating(true);
@@ -238,9 +239,10 @@ export default observer(() => {
 
                                               </div>
                                               <div className="col-values">
-                                                  <p>{numeral((Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100) * lottery.sefiPrice).format('$0.00')}</p>
+                                                <p>{numeral((Math.round((formatNumber(calcPotSize(lottery.currentRoundsState, lottery.stakingRewards).burn) / 1000000 ) * 100 ) / 100) * lottery.sefiPrice).format('$0.00')}</p>
+                                                  {/* <p>{numeral((Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100) * lottery.sefiPrice).format('$0.00')}</p> */}
                                                   <h4>
-                                                      {Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations.burn * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
+                                                      {Math.round((formatNumber(calcPotSize(lottery.currentRoundsState, lottery.stakingRewards).burn) / 1000000 ) * 100 ) / 100} <span>SEFI</span>
                                                   </h4>
                                               </div>
                                           </div>
@@ -256,12 +258,30 @@ export default observer(() => {
 
                                               <div className="col-values">
 
-                                                  <p>{numeral((Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100) * lottery.sefiPrice).format('$0.00')}</p>
+                                                  <p>{numeral((Math.round((formatNumber(calcPotSize(lottery.currentRoundsState, lottery.stakingRewards).triggerer) / 1000000 ) * 100 ) / 100) * lottery.sefiPrice).format('$0.00')}</p>
                                                   <h4>
-                                                      {Math.round(formatNumber(calcTotalPotSize(lottery.currentRoundsState, lottery.stakingRewards) * (lottery.currentRoundsState.round_reward_pot_allocations.triggerer * 0.01) / 1000000) / (parseInt(lottery.currentRoundsState.round_ticket_price) / 1000000) * 100) / 100} <span>SEFI</span>
+                                                      {Math.round((formatNumber(calcPotSize(lottery.currentRoundsState, lottery.stakingRewards).triggerer) / 1000000 ) * 100 ) / 100} <span>SEFI</span>
                                                   </h4>
                                               </div>
                                           </div>
+                                          <div className="row-match">
+                                              <div className="col-title">
+                                                  <h4>Reverse</h4>
+                                              </div>
+
+                                              <div className="col-results">
+
+                                              </div>
+
+                                              <div className="col-values">
+
+                                                  <p>{numeral((Math.round((formatNumber(calcPotSize(lottery.currentRoundsState, lottery.stakingRewards).reserve) / 1000000 ) * 100 ) / 100) * lottery.sefiPrice).format('$0.00')}</p>
+                                                  <h4>
+                                                      {Math.round((formatNumber(calcPotSize(lottery.currentRoundsState, lottery.stakingRewards).reserve) / 1000000 ) * 100 ) / 100} <span>SEFI</span>
+                                                  </h4>
+                                              </div>
+                                          </div>
+
 
                                       </div> {/* round-info-container */}
 
