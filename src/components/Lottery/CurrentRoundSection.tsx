@@ -266,7 +266,7 @@ export default observer(() => {
                                           </div>
                                           <div className="row-match">
                                               <div className="col-title">
-                                                  <h4>Reverse</h4>
+                                                  <h4>Reserve</h4>
                                               </div>
 
                                               <div className="col-results">

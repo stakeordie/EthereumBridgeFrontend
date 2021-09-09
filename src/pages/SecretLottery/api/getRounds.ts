@@ -53,6 +53,7 @@ export interface IRound {
 export interface IRoundRewardDistribution {
     triggerer_pot_size: string,
     burn_pot_size: string,
+    reserve_pot_size: string,
     sequence_1_pot_size: string,
     sequence_1_ticket_win_count: number,
     sequence_1_reward_per_ticket: string,

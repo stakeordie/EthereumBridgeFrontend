@@ -423,6 +423,35 @@ export default observer(() => {
 
                                         </div>
                                     </div>
+
+                                    <div className="row-body">
+                                        <div className="col-sequence-trigger">
+                                            <h4>Reserve</h4>
+                                        </div>
+                                        <div className="col-dist-rewards">
+                                            <p>
+                                                {numeral(
+                                                    formatNumber(
+                                                        parseInt(
+                                                            lottery.roundViewer.reward_distribution
+                                                                ? lottery.roundViewer.reward_distribution.triggerer_pot_size
+                                                                : '0',
+                                                        ) / 1000000,
+                                                    ) * lottery.sefiPrice,
+                                                ).format('$0.00')}
+                                            </p>
+                                            <h4>
+                                                {formatNumber(
+                                                    parseInt(
+                                                        lottery.roundViewer.reward_distribution
+                                                            ? lottery.roundViewer.reward_distribution.reserve_pot_size
+                                                            : '0',
+                                                    ) / 1000000,
+                                                )}
+                                            </h4>
+                                        </div>
+                                        <div className="col-winners"/>
+                                    </div>
                                 </div>
                             </Accordion.Content>
                         </div>
