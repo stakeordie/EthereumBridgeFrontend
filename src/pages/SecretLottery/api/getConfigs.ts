@@ -27,5 +27,6 @@ export interface IConfigs {
     staking_vk: string,
     current_round_number: number,
     per_ticket_bulk_discount: number,
-    min_ticket_count_per_round: number
+    min_ticket_count_per_round: number,
+    current_reserve_pot:string
 }

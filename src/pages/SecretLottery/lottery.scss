@@ -1400,3 +1400,23 @@ $shadow-dark: none;
   
   }
 }
+
+//RESERVE POT
+.reserve_pot{
+  position: fixed;
+  right: 65px;
+  bottom: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  span{
+    color: var(--secret-swap-neutral-01);
+  }
+  h4{
+    color:var(--secret-swap-green-01);
+  }
+  img{
+    filter: none;
+  }
+}

@@ -10,6 +10,7 @@ import './lottery.scss';
 import { BaseContainer, PageContainer } from 'components';
 import { Box } from 'grommet';
 import { observer } from 'mobx-react';
+import ReservePot from 'components/Lottery/ReservePot';
 
 const Lottery = observer(() => {
   let { theme,lottery } = useStores();
@@ -93,6 +94,7 @@ const Lottery = observer(() => {
               <CurrentRoundSection />
               <UserRounds />
               <RoundViewer />
+              <ReservePot value={parseInt(configs?.current_reserve_pot) / 1000000}/>
             </div>
           </Box>
         </PageContainer>
