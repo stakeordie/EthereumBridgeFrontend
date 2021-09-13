@@ -8,7 +8,7 @@ export default async (client: IClientState, contractAddress: string) => {
     
     const { transactionHash } = await client.execute.execute(contractAddress, handleMsg,undefined,undefined,{
         amount: [{ amount: "500000", denom: "uscrt" }],
-        gas: "200000",
+        gas: "250000",
     });
 
     const tx:TxsResponse = await new Promise((accept, reject) => {
