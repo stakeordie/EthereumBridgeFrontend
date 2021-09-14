@@ -31,8 +31,6 @@ export const BaseContainer: React.FC<IStyledChildrenProps<BoxProps>> = withTheme
         >
           <Header forceUpdate={forceUpdate} />
 
-          <MessageDismiss />
-
           <div
             className={`${styles[Theme.currentTheme]}`}
             {...props}

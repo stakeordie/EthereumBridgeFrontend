@@ -24,7 +24,6 @@ import { Migration } from 'pages/Migration';
 
 const hideEverything = function() {
   const bodyEl = document.querySelector('body');
-  const alertbarEl = document.querySelector('.messsage-body');
   const menuHeaderEl = document.querySelector('.nav_menu__items');
   const menuRightEl = document.querySelector('.menu-right');
   const footerEl1 = document.querySelector('._3e3M01KJ95etCclEH4wYSU');
@@ -32,7 +31,6 @@ const hideEverything = function() {
   bodyEl.setAttribute("style", "opacity: 0;");
   footerEl1.setAttribute("style", "opacity: 0;");
   footerEl2.setAttribute("style", "opacity: 0;");
-  alertbarEl.setAttribute("style", "opacity: 0;");
   menuHeaderEl.setAttribute("style", "opacity: .3; pointer-events: none;");
   menuRightEl.setAttribute("style", "opacity: .3; pointer-events: none;");
   bodyEl.setAttribute("style", "opacity: 1;");
