@@ -9,6 +9,7 @@ import Header from '../Header/Header';
 import { useStores } from 'stores';
 import * as styles from './styles.styl';
 import MessageDismiss from 'ui/message/Message';
+import MaintenanceWrapper from './MaintenanceWrapper';
 
 export const BaseContainer: React.FC<IStyledChildrenProps<BoxProps>> = withTheme(
   ({ theme, children, ...props }: IStyledChildrenProps<BoxProps>) => {
@@ -46,6 +47,7 @@ export const BaseContainer: React.FC<IStyledChildrenProps<BoxProps>> = withTheme
           </div>
           {/* <MainFooter /> */}
         </div>
+        <MaintenanceWrapper/>
       </>
     );
   },

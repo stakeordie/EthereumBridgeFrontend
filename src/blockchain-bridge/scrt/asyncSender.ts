@@ -2,7 +2,7 @@ import { SigningCosmWasmClient } from 'secretjs';
 import { Coin, StdFee } from 'secretjs/types/types';
 import retry from 'async-await-retry';
 import { sleep } from '../utils';
-
+import stores from 'stores';
 class CustomError extends Error {
   public txHash: string;
 }
@@ -16,6 +16,10 @@ export class AsyncSender extends SigningCosmWasmClient {
     fee?: StdFee,
   ) => {
     let tx;
+    if(process.env.IS_MAINTENANCE === 'true'){
+      stores.user.setModalOpen(true);
+      throw new CustomError("We are working on add functionality back, please,try later.");
+    }
     try {
       tx = await this.execute(contractAddress, handleMsg, memo, transferAmount, fee);
     } catch (e) {

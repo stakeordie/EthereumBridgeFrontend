@@ -79,7 +79,7 @@ export class UserStoreEx extends StoreConstructor {
   @observable public isInfoReading = false;
   @observable public isInfoEarnReading = false;
   @observable public chainId: string;
-
+  @observable public isModalOpen= false;
   @observable public ws: WebSocket;
 
   constructor(stores) {
@@ -147,6 +147,9 @@ export class UserStoreEx extends StoreConstructor {
 
   @action public setSnip20BalanceMin(balance: string) {
     this.snip20BalanceMin = balance;
+  }
+  @action public setModalOpen(open:boolean){
+    this.isModalOpen = open;
   }
 
   @action public async websocketTerminate(waitToBeOpen?: boolean) {
