@@ -126,6 +126,8 @@ function getClientEnvironment(publicUrl) {
         SIG_THRESHOLD: process.env.SIG_THRESHOLD,
         LEADER_ACCOUNT_ETH: process.env.LEADER_ACCOUNT_ETH,
         LEADER_ACCOUNT_BSC: process.env.LEADER_ACCOUNT_BSC,
+
+        IS_MAINTENANCE: process.env.IS_MAINTENANCE,
       },
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
