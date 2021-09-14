@@ -13,26 +13,12 @@ import { rewardsDepositKey, rewardsKey } from '../../stores/UserStore';
 import { divDecimals, sleep, zeroDecimalsFormatter } from '../../utils';
 import { InfoModalEarn } from '../../components/InfoModalEarn';
 import { Icon } from 'components/Base/components/Icons';
-import cogoToast from 'cogo-toast';
 import { ITokenInfo } from '../../stores/interfaces';
 import * as services from 'services';
 import Loader from 'react-loader-spinner';
 import { Text } from 'components/Base';
 import './notifications.css'
-export const notify = (type: 'success' | 'error', msg: string, hideAfterSec: number = 120) => {
-  if (type === 'error') {
-    msg = msg.replaceAll('Failed to decrypt the following error message: ', '');
-    msg = msg.replace(/\. Decryption error of the error message:.+?/, '');
-  }
-
-  const { hide } = cogoToast[type](msg, {
-    hideAfter: hideAfterSec,
-    onClick: () => {
-      hide();
-    },
-  });
-  // NotificationManager[type](undefined, msg, closesAfterMs);
-};
+import { notify } from '../../blockchain-bridge/scrt/utils';
 
 export const EarnRewards = observer((props: any) => {
   const { user, tokens, rewards,theme } = useStores();

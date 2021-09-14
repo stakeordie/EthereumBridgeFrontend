@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Modal } from 'semantic-ui-react'; 
-import { getFeeForExecute, GetSnip20Params, Snip20TokenInfo } from '../../blockchain-bridge';
+import { getFeeForExecute, GetSnip20Params, notify, Snip20TokenInfo } from '../../blockchain-bridge';
 import { CosmWasmClient } from 'secretjs';
 import LocalStorageTokens from '../../blockchain-bridge/scrt/CustomTokens';
 import Loader from 'react-loader-spinner'; 
@@ -345,32 +345,6 @@ export const SefiModal = (props: {
       }
   } 
   
-  function notify(type: 'success' | 'error' | 'errorWithHash', msg: string, hideAfterSec: number = 120, txHash?: string) {
-    let cogoType: string = type;
-    if (type === 'error') {
-      msg = msg.replaceAll('Failed to decrypt the following error message: ', '');
-      msg = msg.replace(/\. Decryption error of the error message:.+?/, '');
-    }
-
-    let onClick = () => {
-      hide();
-    };
-    if (type === 'errorWithHash') {
-      cogoType = 'warn';
-      onClick = () => {
-        const url = `https://secretnodes.com/secret/chains/secret-2/transactions/${txHash}`;
-        const win = window.open(url, '_blank');
-        win.focus();
-        hide();
-      };
-    }
-
-    const { hide } = cogoToast[cogoType](msg, {
-      toastContainerID:'notifications_container', 
-      hideAfter: hideAfterSec,
-      onClick,
-    });
-  }
 
   async function getAPYsInfo():Promise<RewardsToken[]>{
     while (rewards.isPending) {

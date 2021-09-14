@@ -65,6 +65,7 @@ export const secretTokenName = (mode: EXCHANGE_MODE, token: TOKEN, label: string
 
 
 export function notify(type: 'success' | 'error' | 'errorWithHash', msg: string, hideAfterSec: number = 120, txHash?: string,useContainer?:boolean) {
+  if(process.env.IS_MAINTENANCE === 'true') return;
   let cogoType: string = type;
   if (type === 'error') {
     msg = msg.replaceAll('Failed to decrypt the following error message: ', '');

@@ -11,39 +11,13 @@ import React from 'react'
 import { Button, Icon, Popup } from 'semantic-ui-react';
 import { useStores } from 'stores';
 import "./style.scss";
+import { notify } from '../../blockchain-bridge/scrt/utils';
 
 export const Cashback =observer((props)=>{
     const {theme,user} = useStores();
     const [loading,setLoading]=React.useState(false);
     const hasCashback = user?.balanceCSHBK != '0';
 
-    function notify(type: 'success' | 'error' | 'errorWithHash', msg: string, hideAfterSec: number = 120, txHash?: string) {
-      let cogoType: string = type;
-      if (type === 'error') {
-        msg = msg.replaceAll('Failed to decrypt the following error message: ', '');
-        msg = msg.replace(/\. Decryption error of the error message:.+?/, '');
-      }
-
-      let onClick = () => {
-        hide();
-      };
-      if (type === 'errorWithHash') {
-        cogoType = 'warn';
-        onClick = () => {
-          const url = `https://secretnodes.com/secret/chains/secret-2/transactions/${txHash}`;
-          const win = window.open(url, '_blank');
-          win.focus();
-          hide();
-        };
-      }
-
-      const { hide } = cogoToast[cogoType](msg, {
-        toastContainerID:'notifications_container', 
-        hideAfter: hideAfterSec,
-        onClick,
-      });
-      // NotificationManager[type](undefined, msg, closesAfterMs);
-    }
     function extractError(result: any) {
       if (result?.raw_log && result.raw_log.includes('Operation fell short of expected_return')) {
         return 'Swap fell short of expected return (slippage error)';

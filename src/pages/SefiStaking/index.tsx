@@ -24,7 +24,6 @@ import EarnInfoBox from '../../components/Earn/EarnInfoBox';
 import { IRewardPool, ITokenInfo } from '../../stores/interfaces';
 import Loader from 'react-loader-spinner';
 import { Text } from 'components/Base';
-import { notify } from '../Earn';
 import * as thisStyles from './styles.styl';
 import cn from 'classnames';
 import { ethMethodsSefi, web3 } from '../../blockchain-bridge/eth';
@@ -34,6 +33,7 @@ import { unlockJsx, wrongViewingKey } from 'pages/Swap/utils';
 import BigNumber from 'bignumber.js';
 import { SwapToken, SwapTokenMap, TokenMapfromITokenInfo } from 'pages/TokenModal/types/SwapToken';
 import ProposalLayout from 'components/ProposalLayout';
+import { notify } from '../../blockchain-bridge/scrt/utils';
 const Web3 = require("web3");
 
 const sefiAddr = "0x773258b03c730f84af10dfcb1bfaa7487558b8ac";
