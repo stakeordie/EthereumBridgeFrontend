@@ -1,0 +1,94 @@
+.ui{
+  &.modal{
+    &.maintenance {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 26px;
+      border-radius: 16px;
+      width: 468px;
+      h2{
+        margin: 10px 0 ;
+      }
+      span{
+        font-size: 16px;
+      }
+      img{
+        filter: none;
+      }
+      
+      button{
+        width: 100%;
+        outline: none;
+        font-size: 16px;
+        border: none;
+        font-weight: 600;
+        padding: 1rem;
+        margin-top: 26px;
+        cursor: pointer;
+      }
+      svg{
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+      }
+      *{
+        font-family: 'Poppins';
+      }
+    }    
+  }
+}
+
+
+.ui{
+  &.modal{
+    &.maintenance {
+      &.dark{
+        $background:#0E0E10;
+        $button_color:white;
+        $button_background:#333;
+        $title_color:white;
+        $subtitle_color:#ccc;
+
+        background: $background;
+        h2{
+          color: $title_color;
+        }
+        span{
+          color: $subtitle_color;
+        }
+        button{
+          color: $button_color;
+          background-color: $button_background;
+        }
+        svg{
+          fill: $button_background;
+        }
+      }
+      &.light{
+        $background:white;
+        $button_color:white;
+        $button_background:black;
+        $title_color:#0E0E10;
+        $subtitle_color: #5F5F6B;
+
+        background: $background;
+        h2{
+          color: $title_color;
+        }
+        span{
+          color: $subtitle_color;
+        }
+        button{
+          color: $button_color;
+          background-color: $button_background;
+        }
+        svg{
+          fill: $button_background;
+        }
+      }
+    }
+  }
+}
