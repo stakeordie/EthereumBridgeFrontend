@@ -22,7 +22,7 @@ const MaintenanceModal = ({ open, setOpen, children, title, subtitle }: Maintena
       </div>
       <h2>{title}</h2>
       <span>{subtitle}</span>
-      <button onClick={() => setOpen(false)}>Ok</button>
+      <button onClick={() => setOpen(false)}>OK</button>
     </Modal>
   );
 };
