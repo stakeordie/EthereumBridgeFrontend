@@ -46,23 +46,7 @@ export const App: React.FC = () => (
   <Providers>
     <Suspense fallback={<div />}>
       <Switch>
-        <Route exact path="/swap" component={SwapPageWrapper} />
-        <Route exact path="/pool" component={SwapPagePool} />
-        <Route exact path="/earn" component={SeFiPage} />
-        <Route exact path="/cashback" component={Cashback} />
-        <Route exact path="/governance" component={Governance} />
-        <Route exact path="/proposal" component={CreateProposal} />
-        <Route exact path="/proposal/:id" component={DetailProposal} />
-        <Route exact path="/sefistaking" component={SefiStaking} />
-        <Route exact path="/migration" component={Migration} />
         <Route exact path="/Maintenance" component={Maintenance} />
-        {/* <Route exact path="/faq" component={FAQPage} /> */}
-        {/* <Route exact path="/finance" component={FinancePage} /> */}
-        {/* <Route exact path="/info" component={InfoPage} /> */}
-        {/* <Route exact path="/explorer" component={Explorer} /> */}
-        {/* <Route exact path="/earn" component={EarnRewards} /> */}
-        {/* <Route exact path="/:token" component={EthBridge} /> */}
-        <Route exact path="/:token/operations/:operationId" component={EthBridge} />
         <Redirect to="/maintenance" />
       </Switch>
     </Suspense>

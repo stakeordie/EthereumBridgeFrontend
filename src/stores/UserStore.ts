@@ -105,7 +105,7 @@ export class UserStoreEx extends StoreConstructor {
       this.isInfoReading = sessionObj.isInfoReading;
       this.isInfoEarnReading = sessionObj.isInfoEarnReading;
       this.keplrCheckPromise.then(async () => {
-        await this.signIn();
+        //await this.signIn();
 
         this.getRates();
         this.getBalances();
