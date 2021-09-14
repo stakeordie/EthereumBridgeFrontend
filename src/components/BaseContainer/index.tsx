@@ -10,6 +10,7 @@ import { useStores } from 'stores';
 import * as styles from './styles.styl';
 import MessageDismiss from 'ui/message/Message';
 import MaintenanceWrapper from './MaintenanceWrapper';
+import MaintenancePopup from './MaintenancePopup';
 
 export const BaseContainer: React.FC<IStyledChildrenProps<BoxProps>> = withTheme(
   ({ theme, children, ...props }: IStyledChildrenProps<BoxProps>) => {
@@ -17,6 +18,8 @@ export const BaseContainer: React.FC<IStyledChildrenProps<BoxProps>> = withTheme
     // const { minWidth, maxWidth } = container;
     const [ignored, forceUpdate] = React.useReducer(x => x + 1, 0);
     const { theme: Theme } = useStores();
+
+
 
     return (
       <>
@@ -47,7 +50,8 @@ export const BaseContainer: React.FC<IStyledChildrenProps<BoxProps>> = withTheme
           </div>
           {/* <MainFooter /> */}
         </div>
-        <MaintenanceWrapper/>
+        <MaintenancePopup />
+        <MaintenanceWrapper />
       </>
     );
   },
