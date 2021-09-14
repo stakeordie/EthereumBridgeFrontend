@@ -93,36 +93,41 @@ const ClaimButton = (props: {
     >
       {displayAvailable()}<span style={{marginLeft:'10px'}}>{props.rewardsToken}</span>
     </div>
-    <Button
-      loading={loading}
-      className={`${styles.button} ${styles[theme.currentTheme]}`}
-      disabled={typeof props.available === 'undefined' || props.available === '0'}
-      onClick={async () => {
-        setLoading(true);
-        try {
-          await Redeem({
-            secretjs: props.secretjs,
-            address: props.contract,
-            amount: '0',
-            fee,
-          });
-
-          props.notify('success', `Claimed ${props.available} ${props.rewardsToken}`);
-        } catch (reason) {
-          props.notify('error', `Failed to claim: ${reason}`);
-          console.error(`Failed to claim: ${reason}`);
-        }
-        await Promise.all([
-          await user.updateBalanceForSymbol(props.symbol),
-          await user.updateBalanceForSymbol(props.rewardsToken || 'sSCRT'),
-          await user.refreshRewardsBalances(props.symbol),
-          await user.updateScrtBalance()
-        ]);
-        setLoading(false);
-      }}
-    >
-      Claim
-    </Button>
+    {
+      process.env.IS_MAINTENANCE === 'true'
+        ? <> </>
+        :<Button
+        loading={loading}
+        className={`${styles.button} ${styles[theme.currentTheme]}`}
+        disabled={typeof props.available === 'undefined' || props.available === '0'}
+        onClick={async () => {
+          setLoading(true);
+          try {
+            await Redeem({
+              secretjs: props.secretjs,
+              address: props.contract,
+              amount: '0',
+              fee,
+            });
+  
+            props.notify('success', `Claimed ${props.available} ${props.rewardsToken}`);
+          } catch (reason) {
+            props.notify('error', `Failed to claim: ${reason}`);
+            console.error(`Failed to claim: ${reason}`);
+          }
+          await Promise.all([
+            await user.updateBalanceForSymbol(props.symbol),
+            await user.updateBalanceForSymbol(props.rewardsToken || 'sSCRT'),
+            await user.refreshRewardsBalances(props.symbol),
+            await user.updateScrtBalance()
+          ]);
+          setLoading(false);
+        }}
+      >
+        Claim
+      </Button>
+    }
+    
     </>
   );
 };
