@@ -96,23 +96,31 @@ const DepositContainer = props => {
           </div>
           <div className={cn(styles.subtitle)}>{props.balanceText}</div>
         </div>
-        <div>
-          <Input
-            placeholder="0.0"
-            className={`${styles.form} ${styles[props.theme.currentTheme]}`}
-            value={props.value}
-            onChange={props.onChange}
-          >
-            <input style={{ borderRadius: '4px', height: '40px' }} />
-          </Input>
-        </div>
-        <div className={styles.amountRow}>
-          <AmountButton balance={props.balance} onChange={props.onChange} multiplier={'0.25'} />
-          <AmountButton balance={props.balance} onChange={props.onChange} multiplier={'0.5'} />
-          <AmountButton balance={props.balance} onChange={props.onChange} multiplier={'0.75'} />
-          <AmountButton balance={props.balance} onChange={props.onChange} multiplier={'1'} />
-        </div>
-        <div>{props.action}</div>
+        {
+          process.env.IS_MAINTENANCE === 'true'
+          ? (props.title !== 'Earn') ? <div>{props.action}</div> : <></>
+          : <>
+              <div>
+                <Input
+                  placeholder="0.0"
+                  className={`${styles.form} ${styles[props.theme.currentTheme]}`}
+                  value={props.value}
+                  onChange={props.onChange}
+                >
+                  <input style={{ borderRadius: '4px', height: '40px' }} />
+                </Input>
+              </div>
+              <div className={styles.amountRow}>
+                <AmountButton balance={props.balance} onChange={props.onChange} multiplier={'0.25'} />
+                <AmountButton balance={props.balance} onChange={props.onChange} multiplier={'0.5'} />
+                <AmountButton balance={props.balance} onChange={props.onChange} multiplier={'0.75'} />
+                <AmountButton balance={props.balance} onChange={props.onChange} multiplier={'1'} />
+              </div>
+              <div>{props.action}</div> 
+            </>
+        }
+
+        
       </div>
     </div>
   );

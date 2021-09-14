@@ -378,6 +378,14 @@ class EarnRow extends Component<
               }}
             />
           </div> */}
+          {
+            (process.env.IS_MAINTENANCE === 'true')
+              ? <div className='maintenance-warning'>
+                  <h3><Icon name='warning circle'/>We are working to add functionality back to Secret Swap as soon as possible. Please try again a little later.</h3>
+                </div>
+              : <></>
+          }
+          
           <div>
             <Segment basic>
               <Grid className={cn(styles.content2)} columns={2} relaxed="very" stackable>
