@@ -707,6 +707,10 @@ export class SwapTab extends React.Component<
               primary={buttonMessage === BUTTON_MSG_SWAP}
               fluid
               onClick={async () => {
+                if(process.env.IS_MAINTENANCE === 'true'){
+                  stores.user.setModalOpen(true)
+                  return;
+                }
                 const { fromInput, fromToken, toToken, bestRoute, priceImpact, slippageTolerance } = this.state;
                 const pair = this.props.selectedPair;
                 const optMessage = (this.state.expectedCSHBK)?`And you earned ${this.state.expectedCSHBK} cashback`:''
@@ -718,6 +722,7 @@ export class SwapTab extends React.Component<
                     `Price impact for this swap is very high. Please type the word "${confirmString}" to continue.`,
                   );
                   if (confirm !== confirmString) {
+                    this.setState({ loadingSwap: false });
                     return;
                   }
                 }
