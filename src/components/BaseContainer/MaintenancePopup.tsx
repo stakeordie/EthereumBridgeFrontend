@@ -10,8 +10,8 @@ export default observer(() => {
 
       <>  
         <MaintenanceModal
-            title="We made adjustments to Secret Swap and some functionality is not available at the moment."
-            subtitle="Sorry for the inconvenience, we are working to bring it back as soon as possible."
+            title="This functionality is currently disabled."
+            subtitle="Please try again later or after an announcement is made regarding this feature."
             open={user.isMaintenanceOpen}
             setOpen={() => user.setMaintenanceModal(false)}
         />
