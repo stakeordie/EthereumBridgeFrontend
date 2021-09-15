@@ -381,7 +381,7 @@ class EarnRow extends Component<
           {
             (process.env.IS_MAINTENANCE === 'true')
               ? <div className='maintenance-warning'>
-                  <h3><Icon name='warning circle'/>We are working to add functionality back to Secret Swap as soon as possible. Please try again a little later.</h3>
+                  <h3><Icon name='warning circle'/>A new version of this earn pool is coming soon and will allow you to migrate. For now you can only withdraw LP tokens.</h3>
                 </div>
               : <></>
           }
