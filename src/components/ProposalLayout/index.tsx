@@ -7,7 +7,8 @@ import './style.scss';
 
 const ProposalLayout = (props: {
     children: ReactChild,
-    width?: string
+    width?: string,
+    maxWidth?:string,
 }) => {
     const { theme } = useStores();
     return (
@@ -18,7 +19,7 @@ const ProposalLayout = (props: {
                     pad={{ horizontal: '136px', top: 'small' }}
                     style={{ alignItems: 'center' }}
                 >
-                    <div style={{ width: props.width || '80%' }}>
+                    <div style={{ width: props.width || '90%',maxWidth: props.maxWidth || '90%' }}>
                         <div className='go-back'>
                             <Link className='go-back' to='/governance' >
                                 <img src="/static/arrow-left.svg" alt="go-back" />

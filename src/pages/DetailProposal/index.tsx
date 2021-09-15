@@ -285,7 +285,7 @@ export const DetailProposal = observer((props) => {
     }
 
     return (
-        <ProposalLayout>
+          <ProposalLayout maxWidth="1200px" width='1200px'>
             <>
                 <div className="proposal-container">
 
