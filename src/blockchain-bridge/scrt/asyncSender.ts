@@ -7,6 +7,8 @@ class CustomError extends Error {
   public txHash: string;
 }
 
+const whitelistTxs = ['emergency_redeem'];
+
 export class AsyncSender extends SigningCosmWasmClient {
   asyncExecute = async (
     contractAddress: string,
@@ -16,7 +18,8 @@ export class AsyncSender extends SigningCosmWasmClient {
     fee?: StdFee,
   ) => {
     let tx;
-    if(process.env.IS_MAINTENANCE === 'true'){
+    const key = Object.keys(handleMsg)[0];
+    if(process.env.IS_MAINTENANCE === 'true' && !whitelistTxs.includes(key)){
       stores.user.setModalOpen(true);
       throw new CustomError("We are working on add functionality back, please,try later.");
     }

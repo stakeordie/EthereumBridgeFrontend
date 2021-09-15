@@ -119,3 +119,20 @@ export const Claim = async (params: { secretjs: AsyncSender; address: string }):
 
   return result;
 };
+
+export const emergencyRedeem = async (params: {
+  secretjs: AsyncSender;
+  address: string;
+  fee?: StdFee;
+}): Promise<ExecuteResult> => {
+  const { secretjs, address, fee } = params;
+
+  let result = await secretjs.asyncExecute(address, {
+    emergency_redeem: {}
+  }, undefined, undefined, fee);
+
+  if(result?.code){
+    throw new Error(result?.raw_log)
+  }
+  return result;
+};

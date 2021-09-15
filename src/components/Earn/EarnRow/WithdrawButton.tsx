@@ -1,4 +1,4 @@
-import { Redeem } from '../../../blockchain-bridge/scrt';
+import { emergencyRedeem } from '../../../blockchain-bridge/scrt';
 import React, { useEffect, useState } from 'react';
 import { valueToDecimals } from '../../../utils';
 import cn from 'classnames';
@@ -43,13 +43,11 @@ const WithdrawButton = ({ props, value, changeValue }) => {
     <Button
       loading={loading}
       className={`${styles.button} ${styles[theme.currentTheme]}`}
-      disabled={Number(value) === 0 || isNaN(value)}
       onClick={async () => {
         setLoading(true);
-        await Redeem({
+        await emergencyRedeem({
           secretjs: props.userStore.secretjsSend,
           address: props.token.rewardsContract,
-          amount: valueToDecimals(amount, props.token.decimals),
           fee,
         })
           .then(_ => {
