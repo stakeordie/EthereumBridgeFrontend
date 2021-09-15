@@ -7,8 +7,8 @@ export default observer(()=>{
   const {user} = useStores();
   return (
     <MaintenanceModal
-      title="We are working to add functionality back to Secret Swap as soon as possible."
-      subtitle="Please try again a little later."
+      title="This functionality is currently disabled."
+      subtitle="Please try again later or after an announcement is made regarding this feature"
       open={user.isModalOpen}
       setOpen={(open: boolean) => user.setModalOpen(open)}
     />
