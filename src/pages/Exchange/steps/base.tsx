@@ -54,15 +54,6 @@ export type BalanceInterface = {
   scrt: BalanceAmountInterface;
 };
 
-export const notify = (type: 'success' | 'error', msg: string, hideAfterSec: number = 10) => {
-  const { hide } = cogoToast[type](msg, {
-    position: 'top-right',
-    hideAfter: hideAfterSec,
-    onClick: () => {
-      hide();
-    },
-  });
-};
 
 const validateTokenInput = (token: any) => {
   if (!token || !token.symbol) return 'This field is required.';

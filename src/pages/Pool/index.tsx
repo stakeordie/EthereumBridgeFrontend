@@ -9,7 +9,7 @@ import { UserStoreEx } from 'stores/UserStore';
 import { observer } from 'mobx-react';
 import { BigNumber } from 'bignumber.js';
 import { getNativeBalance, unlockJsx, wrongViewingKey } from './utils';
-import { GetSnip20Params } from '../../blockchain-bridge';
+import { GetSnip20Params, notify } from '../../blockchain-bridge';
 import { loadTokensFromList } from '../TokenModal/LocalTokens/LoadTokensFromList';
 import { ISecretSwapPair, ITokenInfo } from '../../stores/interfaces';
 import { Tokens } from '../../stores/Tokens';
@@ -355,7 +355,7 @@ export class SwapRouter extends React.Component<
           });
         }
       } catch (error) {
-        this.notify('error', `Error getting pools' balances for ${pair.identifier()}: ${error.message}`);
+        notify('error', `Error getting pools' balances for ${pair.identifier()}: ${error.message}`);
       }
     }
 
@@ -619,33 +619,6 @@ export class SwapRouter extends React.Component<
     this.setState({ routingGraph: graph });
   };
 
-  notify(type: 'success' | 'error' | 'errorWithHash', msg: string, hideAfterSec: number = 120, txHash?: string) {
-    let cogoType: string = type;
-    if (type === 'error') {
-      msg = msg.replaceAll('Failed to decrypt the following error message: ', '');
-      msg = msg.replace(/\. Decryption error of the error message:.+?/, '');
-    }
-
-    let onClick = () => {
-      hide();
-    };
-    if (type === 'errorWithHash') {
-      cogoType = 'warn';
-      onClick = () => {
-        const url = `https://secretnodes.com/secret/chains/secret-2/transactions/${txHash}`;
-        const win = window.open(url, '_blank');
-        win.focus();
-        hide();
-      };
-    }
-
-    const { hide } = cogoToast[cogoType](msg, {
-      toastContainerID: 'notifications_container',
-      hideAfter: hideAfterSec,
-      onClick,
-    });
-    // NotificationManager[type](undefined, msg, closesAfterMs);
-  }
 
   render() {
     const isProvide = window.location.hash === '#Provide';
@@ -688,7 +661,7 @@ export class SwapRouter extends React.Component<
                   selectedPair={this.state.selectedPair}
                   selectedToken0={this.state.selectedToken0}
                   selectedToken1={this.state.selectedToken1}
-                  notify={this.notify}
+                  notify={notify}
                   onSetTokens={async (token0, token1) => await this.onSetTokens(token0, token1)}
                   theme={this.props.theme}
                 />
@@ -701,7 +674,7 @@ export class SwapRouter extends React.Component<
                   tokens={this.state.allTokens}
                   balances={this.state.balances}
                   pairs={this.state.pairs}
-                  notify={this.notify}
+                  notify={notify}
                   updateToken={async (pair: SwapPair) => {
                     //this.registerPairQueries(pair);
                     await this.refreshBalances({
@@ -722,7 +695,7 @@ export class SwapRouter extends React.Component<
                   tokens={this.state.allTokens}
                   balances={this.state.balances}
                   pairs={this.state.pairs}
-                  notify={this.notify}
+                  notify={notify}
                   updateToken={async (pair: SwapPair) => {
                     this.registerPairQueries(pair);
                     await this.refreshBalances({
