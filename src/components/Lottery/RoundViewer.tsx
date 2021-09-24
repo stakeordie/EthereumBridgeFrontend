@@ -434,7 +434,7 @@ export default observer(() => {
                                                     formatNumber(
                                                         parseInt(
                                                             lottery.roundViewer.reward_distribution
-                                                                ? lottery.roundViewer.reward_distribution.triggerer_pot_size
+                                                                ? lottery.roundViewer.reward_distribution.reserve_pot_size
                                                                 : '0',
                                                         ) / 1000000,
                                                     ) * lottery.sefiPrice,
