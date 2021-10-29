@@ -38,8 +38,11 @@ export class Lottery extends StoreConstructor {
   @observable public stakingRewards: IStakingRewads | null = null;
   @observable public ticketsCount: string = '';
   @observable public manualTickets: string[] = [];
+  
+  //Modal Pagination values
   @observable public pages: Array<number> = [];
-  @observable public currentPage:number = 1;
+  @observable public currentPage:number = 0;
+  @observable public pageSize:number = 100;
 
   //User rounds
   @observable public userRoundTicketsModal: {
@@ -64,24 +67,23 @@ export class Lottery extends StoreConstructor {
     this.userRoundTickets = v;
   }
   @action public getUserRoundPaginatedTicketsTrigger = async (client: IClientState, viewkey: string, round: IRound, userTicketsCount: number) => {
-    // To get all the tickets depending on the amount of tickets, we will section this by the max size of each request
-    const ticketPageSize = 100;
-    this.updatePagination(userTicketsCount,ticketPageSize);
+    //Paginating tickets by the current page and page size
+    this.updatePagination(userTicketsCount,this.pageSize);
     let allTickets: IUserTicket[] = [];
-    const response = await getUserRoundPaginatedTickets(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, round.round_number, this.currentPage, ticketPageSize)
+    const response = await getUserRoundPaginatedTickets(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, round.round_number, this.currentPage, this.pageSize)
     allTickets = allTickets.concat(response.user_round_paginated_tickets)
     this.userRoundTickets = allTickets;
   }
 
   @action public setPaginationIndex = (i:number) => {
-    if(this.currentPage === i || !i || isNaN(i)) return;
+    if(this.currentPage === i || isNaN(i)) return;
     this.currentPage = i;
   }
 
   @action public updatePagination(userTicketsCount: number,pageSize:number){
     const totalPages = Math.ceil(userTicketsCount / pageSize);
     const pages = []
-    for (let i = 1; i <= totalPages; i++) {
+    for (let i = 0; i < totalPages; i++) {
       pages.push(i);
     }
     this.pages = pages;

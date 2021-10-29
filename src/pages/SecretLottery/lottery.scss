@@ -22,7 +22,9 @@ $secret-swap-neutral-01-dark: #FFFFFF;
 $secret-swap-neutral-03-dark: #DEDEDE;
 
 $secret-swap-modal-footer-container-dark: #0E0E10;
-
+.modal-loading{
+  min-height: 700px;
+}
 .pagination-section-modal{
   display: flex;
   width: 100%;
@@ -41,6 +43,9 @@ $secret-swap-modal-footer-container-dark: #0E0E10;
       &.selected {
         color: $secret-swap-red-01;
         background: $secret-swap-red-02;
+        &:hover{
+          cursor: default;
+        }
       }
     }
   }

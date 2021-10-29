@@ -1,13 +1,13 @@
 import { IUserTicket } from "../../pages/SecretLottery/api/getUserRoundPaginatedTickets";
 
 
-export default (userTickets: IUserTicket[], ticketsToClaim: IUserTicket[]) => {
+export default (userTickets: IUserTicket[], ticketsToClaim: IUserTicket[],currentPage:number,pageSize:number) => {
     let userTicketsModified:IUserTicket[] = JSON.parse(JSON.stringify([...userTickets]));
     let results: number[] = [];
     for (let ticketToClaim of ticketsToClaim) {
         const indexFound = userTicketsModified.findIndex((userTicket) => userTicket.ticket === ticketToClaim.ticket && userTicket.created_timestamp === ticketToClaim.created_timestamp && !userTicket.claimed_reward)
         if (indexFound === -1) continue
-        results.push(indexFound)
+        results.push(indexFound + (currentPage * pageSize))
         userTicketsModified[indexFound].claimed_reward = true;
     }
 

@@ -16,7 +16,7 @@ import { observer } from "mobx-react";
 export default observer(() => {
 
   let { theme,lottery } = useStores();
-  const {client,viewingKey,userRoundTicketsModal,userRoundTickets,pages,currentPage,setPaginationIndex}= lottery
+  const {client,viewingKey,userRoundTicketsModal,userRoundTickets,pages,setPaginationIndex,currentPage,pageSize}= lottery
   const [loadingClaimReward, setLoadingClaimReward] = useState<boolean>(false)
 
 
@@ -115,7 +115,9 @@ export default observer(() => {
       let ticketIndexes: number[] = [];
 
       ticketIndexes = getTicketsIndexToClaim(
-        userRoundTickets, remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).tickets
+        userRoundTickets, remainingToClaimTickets(round.drafted_ticket!, userRoundTickets, round).tickets,
+        currentPage,
+        pageSize
       )
 
       await claimRewards(
@@ -211,6 +213,11 @@ export default observer(() => {
       {renderSections.map((section) => section)}
     </div>
   }
+  
+  const onModalClose = ()=>{
+    lottery.setUserRoundTicketsModal(false , null, null);
+    setPaginationIndex(0);
+  }
 
   // S T A R T - R E N D E R I N G - I N F O 
   if (userRoundTicketsModal.selectedUserRound && userRoundTicketsModal.userTicketsCount) {
@@ -228,13 +235,13 @@ export default observer(() => {
       <Modal
         className={`modal-tickets ${theme.currentTheme}`}
         open={userRoundTicketsModal.open}
-        onClose={() => lottery.setUserRoundTicketsModal(false , null, null)}>
+        onClose={onModalClose}>
 
         <div className="modal-tickets-header">
           <h6>Your Tickets <strong> Round {round.round_number}</strong></h6>
           <Icon
             name='close'
-            onClick={() => lottery.setUserRoundTicketsModal(false , null, null)}>
+            onClick={onModalClose}>
           </Icon>
         </div>
 
@@ -311,7 +318,7 @@ export default observer(() => {
 
 
 
-          {!userRoundTickets && <Loader inline='centered' size='big'> <p id="text-loading">Loading Tickets</p> </Loader>}
+          {!userRoundTickets && <Loader className='modal-loading' inline='centered' size='big'> <p id="text-loading">Loading Tickets</p> </Loader>}
 
           {userRoundTickets &&
             <RenderTickets
@@ -322,15 +329,24 @@ export default observer(() => {
           <div className='pagination-section-modal'>
             <div className='pages'>
               {
+                (currentPage > 1)
+                ? <div onClick={()=>setPaginationIndex(0)} className="page">{'<<'}</div>
+                : <></>
+              }
+              {
                 pages.map((page)=>
                   (page == currentPage - 1 || page == currentPage + 1 || page == currentPage)
-                   ? 
+                   && 
                     <div onClick={()=>setPaginationIndex(page)} key={`page-${page}`} className={(page === currentPage)?'page selected':'page'}>
-                      {page}
+                      {page + 1}
                     </div>
-                   : <></>
 
                 )
+              }
+              {
+                (currentPage < pages.length - 2)
+                ? <div onClick={()=>setPaginationIndex(pages.length-1)} className="page">{'>>'}</div>
+                : <></>
               }
             </div>
           </div>
