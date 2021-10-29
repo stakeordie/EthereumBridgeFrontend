@@ -16,7 +16,7 @@ import { observer } from "mobx-react";
 export default observer(() => {
 
   let { theme,lottery } = useStores();
-  const {client,viewingKey,userRoundTicketsModal,userRoundTickets}= lottery
+  const {client,viewingKey,userRoundTicketsModal,userRoundTickets,pages,currentPage,setPaginationIndex}= lottery
   const [loadingClaimReward, setLoadingClaimReward] = useState<boolean>(false)
 
 
@@ -319,6 +319,21 @@ export default observer(() => {
               round={userRoundTicketsModal.selectedUserRound}
             />
           }
+          <div className='pagination-section-modal'>
+            <div className='pages'>
+              {
+                pages.map((page)=>
+                  (page == currentPage - 1 || page == currentPage + 1 || page == currentPage)
+                   ? 
+                    <div onClick={()=>setPaginationIndex(page)} key={`page-${page}`} className={(page === currentPage)?'page selected':'page'}>
+                      {page}
+                    </div>
+                   : <></>
+
+                )
+              }
+            </div>
+          </div>
 
         </div>
       </Modal>

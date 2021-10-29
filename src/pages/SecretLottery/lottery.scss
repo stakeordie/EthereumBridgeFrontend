@@ -23,6 +23,28 @@ $secret-swap-neutral-03-dark: #DEDEDE;
 
 $secret-swap-modal-footer-container-dark: #0E0E10;
 
+.pagination-section-modal{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+  .pages {
+    display: flex;
+    .page{
+      padding: .5rem;
+      margin-left:.25rem;
+      &:hover{
+        background: $secret-swap-neutral-03-dark;
+        cursor: pointer;
+      }
+      &.selected {
+        color: $secret-swap-red-01;
+        background: $secret-swap-red-02;
+      }
+    }
+  }
+}
 //Fonts
 $font-family: Poppins;
 

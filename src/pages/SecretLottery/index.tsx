@@ -14,7 +14,7 @@ import ReservePot from 'components/Lottery/ReservePot';
 
 const Lottery = observer(() => {
   let { theme,lottery } = useStores();
-  const { configs,viewingKey,client,ticketsCount,paginationValues,userRoundTicketsModal} = lottery
+  const { configs,viewingKey,client,ticketsCount,paginationValues,userRoundTicketsModal,currentPage} = lottery
 
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const Lottery = observer(() => {
       lottery.setUserRoundTickets(null)
       lottery.getUserRoundPaginatedTicketsTrigger(client, viewingKey, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
     }
-  }, [userRoundTicketsModal])
+  }, [userRoundTicketsModal,currentPage])
 
   return (
     <div className="App">
