@@ -238,7 +238,7 @@ export default observer(() => {
         onClose={onModalClose}>
 
         <div className="modal-tickets-header">
-          <h6>Your Tickets <strong> Round {round.round_number}</strong></h6>
+          <h6>Your Tickets <strong> Round {round.round_number}</strong> of page {currentPage+1} / {pages.length}</h6>
           <Icon
             name='close'
             onClick={onModalClose}>
@@ -254,11 +254,11 @@ export default observer(() => {
                 <div className="tickets-info">
                   <div className="tickets-info-container">
                     <div className="info-item">
-                      <p>Your Total Tickets: </p>
+                      <p>Your Round Total Tickets: </p>
                       <h6>{userRoundTicketsModal.userTicketsCount}</h6>
                     </div>
                     <div className="info-item">
-                      <p>Your Winning Tickets:</p>
+                      <p>Your Winning Tickets Page {currentPage+1}:</p>
                       <h6>{winTicketsCount ? winTicketsCount : " - "}</h6>
                     </div>
                     <div className="info-item">
@@ -273,7 +273,7 @@ export default observer(() => {
                   <div className="earnings-info">
                     <>
                       <div className="row-earnings">
-                        <p>You Earned</p>
+                        <p>You Earned in <strong>page {currentPage+1}</strong></p>
                         {
                           calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) > 0 ?
                             <h4>{formatNumber(calcTotalRewards(round.drafted_ticket!, userRoundTickets, round) / 1000000)} <span> SEFI</span></h4>

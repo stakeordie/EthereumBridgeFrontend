@@ -23,7 +23,7 @@ $secret-swap-neutral-03-dark: #DEDEDE;
 
 $secret-swap-modal-footer-container-dark: #0E0E10;
 .modal-loading{
-  min-height: 700px;
+  min-height: 400px;
 }
 .pagination-section-modal{
   display: flex;
@@ -34,10 +34,16 @@ $secret-swap-modal-footer-container-dark: #0E0E10;
   .pages {
     display: flex;
     .page{
+      width: 30px;
+      text-align: center;
+      border-radius: 2px;
       padding: .5rem;
       margin-left:.25rem;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--secret-swap-neutral-01);
       &:hover{
-        background: $secret-swap-neutral-03-dark;
+        background: var(--secret-swap-green-03);
         cursor: pointer;
       }
       &.selected {
