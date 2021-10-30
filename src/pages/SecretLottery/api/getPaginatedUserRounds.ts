@@ -2,24 +2,30 @@ import { IClientState } from "../../../stores/lottery-context/ClientContext";
 import { IRound } from "./getRounds";
 
 export default async (
-    client: IClientState,
-    contractAddress: string,
-    key: string,
-    page: number,
-    page_size: number
+  client: IClientState,
+  contractAddress: string,
+  page: number,
+  page_size: number
 ) => {
-    try {
-        let queryMsg = { get_paginated_user_rounds: { address: client.accountData.address, key: key, page, page_size } };
-        const response = await client.query.queryContractSmart(contractAddress, queryMsg);
-        const responseJSON = JSON.parse(atob(response)).get_paginated_user_rounds
-        return responseJSON
-    } catch (e){
-        if(e.message.includes("User+VK not valid!")){
-            localStorage.clear();
-            window.location.reload();
-        }
-        return null
+  try {
+    let query = { get_paginated_user_rounds: { address: client.accountData.address, page, page_size } };
+    const permit = JSON.parse(localStorage.getItem(
+      `lottery_permit_${client.accountData.address}`
+    ));
+    const queryWithPermit = { with_permit: { query, permit } }
+    const response = await client.query.queryContractSmart(
+      contractAddress, queryWithPermit
+    );
+    return response.get_paginated_user_rounds
+  } catch (e){
+    if (e.message.includes(
+      "signature verification failed; verify correct account sequence and chain-id")
+    ) {
+      localStorage.clear();
+      window.location.reload();
     }
+    return null
+  }
 }
 
 export interface IPaginatedUserRounds {

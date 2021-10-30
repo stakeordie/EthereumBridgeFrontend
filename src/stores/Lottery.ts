@@ -19,6 +19,7 @@ export class Lottery extends StoreConstructor {
   //General porposes
   @observable public client: IClientState = null;
   @observable public viewingKey: string | null = null;
+  @observable public hasPermit: boolean | null = false;
   @observable public balances: IBalances | null = null;
   @observable public configs: IConfigs | null = null;
   @observable public paginatedUserRounds: IPaginatedUserRounds | null = null;
@@ -98,9 +99,61 @@ export class Lottery extends StoreConstructor {
     localStorage.setItem(`${menu}_` + client.accountData.address, response.create_viewing_key.key);
   }
 
+  @action public async enablePermit(client: IClientState) {
+
+    const permitName = "secret_lottery_permits";
+    const allowedTokens = [process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS];
+    const permissions = ["owner"];
+
+    const { signature } = await window.keplr.signAmino(
+      process.env.CHAIN_ID,
+      client.accountData.address,
+      {
+        chain_id: process.env.CHAIN_ID,
+        account_number: "0", // Must be 0
+        sequence: "0", // Must be 0
+        fee: {
+          amount: [{ denom: "uscrt", amount: "0" }],  // Must be 0 uscrt
+          gas: "1",  // Must be 1
+        },
+        msgs: [
+          {
+            type: "query_permit",  // Must be "query_permit"
+            value: {
+              permit_name: permitName,
+              allowed_tokens: allowedTokens,
+              permissions: permissions,
+            },
+          },
+        ],
+        memo: "",  // Must be empty
+      },
+      {
+        preferNoSetFee: true, // Fee must be 0, so hide it from the user
+        preferNoSetMemo: true, // Memo must be empty, so hide it from the user
+      }
+    );
+
+    const permit = {
+      params: {
+        permit_name: permitName,
+        allowed_tokens: allowedTokens,
+        chain_id: process.env.CHAIN_ID,
+        permissions: permissions,
+      },
+      signature: signature,
+    }
+
+    localStorage.setItem(
+      `lottery_permit_${client.accountData.address}`,
+      JSON.stringify(permit)
+    );
+
+    this.hasPermit = true;
+  }
+
   @action public async  getPaginatedUserTicketsTrigger (
     client: IClientState,
-    viewkey: string,
     page: number,
     page_size: number,
   ) {
@@ -108,7 +161,6 @@ export class Lottery extends StoreConstructor {
     const result = await getPaginatedUserRounds(
       client,
       process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS,
-      viewkey,
       page - 1,
       page_size,
     );
@@ -119,9 +171,9 @@ export class Lottery extends StoreConstructor {
   };
 
   // QUERIES CURRENT ROUND SECTION
-  @action public getCurrentRoundTrigger = async (client: IClientState, viewkey: string, current_round: number) => {
+  @action public getCurrentRoundTrigger = async (client: IClientState, current_round: number) => {
     try {
-      const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
+      const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round]);
       if(currentRoundUserTicketsCount){
         this.currentRoundUserTicketsCount = (currentRoundUserTicketsCount.user_rounds_ticket_count[0])
       }
@@ -172,10 +224,10 @@ export class Lottery extends StoreConstructor {
   }
 
 
-  @action public getUserTicketsRound = async (client: IClientState, viewkey: string, current_round: number) => {
+  @action public getUserTicketsRound = async (client: IClientState, current_round: number) => {
     try {
 
-      const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, [current_round]);
+      const currentRoundUserTicketsCount = await getUserRoundsTicketCount(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, [current_round]);
       if(currentRoundUserTicketsCount){
         this.currentRoundUserTicketsCount = (currentRoundUserTicketsCount.user_rounds_ticket_count[0])
       }

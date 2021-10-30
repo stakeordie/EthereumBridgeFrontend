@@ -5,10 +5,12 @@ import { useStores } from "stores";
 import { observer } from "mobx-react";
 
 export default observer(({ menu }:{ menu:string }) => {
-    const [createViewKeyLoading, setCreateViewKeyLoading] = useState<Boolean>(false)
-    const { lottery }= useStores();
-    const { client ,viewingKey}= lottery;
+  const [createViewKeyLoading, setCreateViewKeyLoading] = useState<Boolean>(false)
+  const [enablePermitLoading, setenablePermitLoading] = useState<Boolean>(false);
 
+  const { lottery }= useStores();
+  const { client, viewingKey, hasPermit } = lottery;
+  
     useEffect(() => {
         if (client) {
             lottery.setViewingKey(null);
@@ -23,7 +25,7 @@ export default observer(({ menu }:{ menu:string }) => {
     }, [client, menu])
         return (
 
-            (client?.execute && !viewingKey) ?
+            (client?.execute && !hasPermit) ?
                 <div style={{ width: "100%", justifyContent: 'center', padding: '1rem 0', display: 'flex' }}>
                     <Button
                         style={{ width: "210px" }}
@@ -31,22 +33,22 @@ export default observer(({ menu }:{ menu:string }) => {
                         color="black"
                         fluid
                         onClick={async () => {
-                            setCreateViewKeyLoading(true)
+                            setenablePermitLoading(true)
                             try {
-                                await lottery.createViewing(menu,client);
-                                successNotification("View Key Created!")
+                                await lottery.enablePermit(client);
+                                successNotification("Permit Enabled!")
                                 
                             } catch (e) {
                                 errorNotification(e);
                             }
-                            setCreateViewKeyLoading(false)
+                            setenablePermitLoading(false)
                         }}
                     > {
-                            createViewKeyLoading ?
-                                <i className="fa fa-spinner fa-spin"></i>
-                                :
-                                "Create Viewing Key"
-                        }
+                        enablePermitLoading ?
+                            <i className="fa fa-spinner fa-spin"></i>
+                            :
+                            "Enable Permit"
+                      }
                     </Button>
                 </div>
                 :

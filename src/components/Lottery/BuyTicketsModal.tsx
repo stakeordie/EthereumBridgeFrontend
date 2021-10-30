@@ -188,8 +188,8 @@ const BuyTicketsModal = observer(({
               successNotification('Buy Tickets Success!');
               lottery.setTicketsCount('');
               await lottery.getRoundStakingRewardsTrigger(lottery.client, lottery.configs);
-              await lottery.getCurrentRoundTrigger(lottery.client, lottery.viewingKey, lottery.configs.current_round_number);
-              await lottery.getPaginatedUserTicketsTrigger(lottery.client, lottery.viewingKey, lottery.paginationValues.page, lottery.paginationValues.page_size);
+              await lottery.getCurrentRoundTrigger(lottery.client, lottery.configs.current_round_number);
+              await lottery.getPaginatedUserTicketsTrigger(lottery.client, lottery.paginationValues.page, lottery.paginationValues.page_size);
               await lottery.getSEFIBalance();
               lottery.setManualTickets();
             } catch (e) {

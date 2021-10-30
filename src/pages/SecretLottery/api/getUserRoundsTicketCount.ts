@@ -3,21 +3,29 @@ import { IClientState } from "../../../stores/lottery-context/ClientContext";
 export default async (
     client: IClientState,
     contractAddress: string,
-    key: string,
     round_numbers: number[]
 ) => {
-    try {
-        let queryMsg = { get_user_rounds_ticket_count: { address: client.accountData.address, key, round_numbers } };
-        const response = await client.query.queryContractSmart(contractAddress, queryMsg);
-        const responseJSON =  JSON.parse(atob(response)).get_user_rounds_ticket_count
-        return responseJSON
-    } catch (e){
-        if(e.message.includes("User+VK not valid!")){
-            localStorage.clear();
-            window.location.reload();
-        }
-        return {
-            user_rounds_ticket_count: []
-        }
+  try {
+    if (!client) return;
+    let query = { get_user_rounds_ticket_count: { address: client.accountData.address, round_numbers } };
+    const permit = JSON.parse(localStorage.getItem(
+      `lottery_permit_${client.accountData.address}`
+    ));
+    const queryWithPermit = { with_permit: { query, permit } }
+    const response = await client.query.queryContractSmart(
+      contractAddress, queryWithPermit
+    );
+    return response.get_user_rounds_ticket_count;
+  } catch (e) {
+    if (e.message.includes(
+      "signature verification failed; verify correct account sequence and chain-id")
+    ) {
+      localStorage.clear();
+      window.location.reload();
     }
+    console.error('Message:', e.message);
+    return {
+      user_rounds_ticket_count: []
+    }
+  }
 }

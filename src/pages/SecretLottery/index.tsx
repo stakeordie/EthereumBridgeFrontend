@@ -43,7 +43,7 @@ const Lottery = observer(() => {
   useEffect(() => {
     (async()=>{
       if(viewingKey && configs){
-          await lottery.getUserTicketsRound(client, viewingKey, configs.current_round_number);
+          await lottery.getUserTicketsRound(client, configs.current_round_number);
       }
 
       if (configs) {
@@ -56,7 +56,7 @@ const Lottery = observer(() => {
     useEffect(() => {
       (async()=>{
         if (viewingKey) {
-           await lottery.getPaginatedUserTicketsTrigger(client, viewingKey, paginationValues.page, paginationValues.page_size)
+           await lottery.getPaginatedUserTicketsTrigger(client, paginationValues.page, paginationValues.page_size)
         }
       })()
     }, [client, viewingKey,configs])
