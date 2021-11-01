@@ -11,11 +11,11 @@ import { BaseContainer, PageContainer } from 'components';
 import { Box } from 'grommet';
 import { observer } from 'mobx-react';
 import ReservePot from 'components/Lottery/ReservePot';
+import CreatePermit from 'components/Lottery/CreatePermit';
 
 const Lottery = observer(() => {
   let { theme,lottery } = useStores();
-  const { configs,viewingKey,client,ticketsCount,paginationValues,userRoundTicketsModal,currentPage} = lottery
-
+  const { configs,client,ticketsCount,paginationValues,userRoundTicketsModal,currentPage, hasPermit } = lottery
 
   useEffect(() => {
     (async()=>{
@@ -42,7 +42,7 @@ const Lottery = observer(() => {
 
   useEffect(() => {
     (async()=>{
-      if(viewingKey && configs){
+      if(hasPermit && configs){
           await lottery.getUserTicketsRound(client, configs.current_round_number);
       }
 
@@ -55,11 +55,11 @@ const Lottery = observer(() => {
 
     useEffect(() => {
       (async()=>{
-        if (viewingKey) {
+        if (hasPermit) {
            await lottery.getPaginatedUserTicketsTrigger(client, paginationValues.page, paginationValues.page_size)
         }
       })()
-    }, [client, viewingKey,configs])
+    }, [client, hasPermit,configs])
 
     useEffect(() => {
       (async () => {
@@ -72,11 +72,24 @@ const Lottery = observer(() => {
   }, [client, configs])
 
   useEffect(() => {
-    if (client && viewingKey && userRoundTicketsModal.selectedUserRound && userRoundTicketsModal.userTicketsCount) {
+    if (client && hasPermit && userRoundTicketsModal.selectedUserRound && userRoundTicketsModal.userTicketsCount) {
       lottery.setUserRoundTickets(null)
-      lottery.getUserRoundPaginatedTicketsTrigger(client, viewingKey, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
+      lottery.getUserRoundPaginatedTicketsTrigger(client, hasPermit, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
     }
-  }, [userRoundTicketsModal,currentPage])
+  }, [userRoundTicketsModal, currentPage])
+  
+  useEffect(() => {
+    if (!client || !lottery.setPermit || !lottery) {return;}
+
+    lottery.setPermit(false);
+    
+    lottery.getSEFIBalance();
+
+    if (localStorage.getItem('lottery_permit_' + client.accountData.address)) {
+      lottery.setPermit(true);
+    }
+  }, [client, lottery.setPermit, hasPermit]);
+
 
   return (
     <div className="App">
@@ -89,7 +102,7 @@ const Lottery = observer(() => {
           >
             <ReactNotification />
             <KeplrSetup />
-            <CreateViewkey menu={'SEFI'} />
+            <CreatePermit/>
             <div className={`lottery-container ${theme.currentTheme}`}>
               <CurrentRoundSection />
               <UserRounds />

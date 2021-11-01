@@ -56,7 +56,7 @@ export default observer(() => {
                       <div className="round-bottom">
                           <div className="round-bottom-content">
                           <BuyTicketsModal>
-                              <button disabled={!lottery.viewingKey || !lottery.client.execute || lottery.calculating} className="button-primary-lg">
+                              <button disabled={!lottery.hasPermit || !lottery.client.execute || lottery.calculating} className="button-primary-lg">
                                   Buy Tickets
                               </button>
                           </BuyTicketsModal>
@@ -301,7 +301,7 @@ export default observer(() => {
                                           </div>
                                           <div className="col-pot-button">
                                               <BuyTicketsModal>
-                                                  <button disabled={!lottery.viewingKey || !lottery.client.execute || lottery.calculating} className="button-primary-lg">
+                                                  <button disabled={!lottery.hasPermit ||!lottery.client.execute || lottery.calculating} className="button-primary-lg">
                                                       Buy Tickets
                                                   </button>
                                               </BuyTicketsModal>

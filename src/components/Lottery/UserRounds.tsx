@@ -7,6 +7,7 @@ import { observer } from "mobx-react";
 import UserRoundTicketsModal from "./UserRoundTicketsModal";
 import { Accordion } from "semantic-ui-react";
 import { IRound } from "pages/SecretLottery/api/getRounds";
+import CreatePermit from "./CreatePermit";
 
 export default observer(() => {
   const { lottery } = useStores();
@@ -32,10 +33,10 @@ export default observer(() => {
                     <div className="box-tickets-title">
                         <h2>Your Tickets</h2>
                     </div>
-                    {(!lottery.viewingKey)
+                    {(!lottery.hasPermit)
                         ? <div className='connect-wallet-container'> 
                             <span>Connect your wallet to view your tickets</span> 
-                            <CreateViewkey menu='SEFI' />
+                            <CreatePermit />
                           </div>
                         : <div className="tickets-result">
 
@@ -65,7 +66,7 @@ export default observer(() => {
                                         <img src='/static/empty-ticket.png' alt="empty ticket" width='100px' />
                                         <p> You haven't bought any tickets yet</p>
                                         <BuyTicketsModal>
-                                            <button disabled={!lottery.viewingKey || !lottery.client.execute || lottery.calculating} className="button-primary-lg">
+                                            <button disabled={!lottery.hasPermit || !lottery.client.execute || lottery.calculating} className="button-primary-lg">
                                                 Buy Tickets
                                             </button>
                                         </BuyTicketsModal>
@@ -93,7 +94,7 @@ export default observer(() => {
                 </div>
                 </Accordion.Content>
                 {
-                  (lottery.paginatedUserRounds && lottery.paginatedUserRounds.rounds.length > 0 && lottery.viewingKey !== 'unlock')
+                  (lottery.paginatedUserRounds && lottery.paginatedUserRounds.rounds.length > 0)
                   && <div className="show-detail" onClick={() => setActive(!active)}>
                       <button className="button-collapse-detail">
                           <div className="button-content">

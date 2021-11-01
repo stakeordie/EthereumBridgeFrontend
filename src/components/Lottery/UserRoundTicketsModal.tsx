@@ -16,7 +16,7 @@ import { observer } from "mobx-react";
 export default observer(() => {
 
   let { theme,lottery } = useStores();
-  const {client,viewingKey,userRoundTicketsModal,userRoundTickets,pages,setPaginationIndex,currentPage,pageSize}= lottery
+  const {client,hasPermit,userRoundTicketsModal,userRoundTickets,pages,setPaginationIndex,currentPage,pageSize}= lottery
   const [loadingClaimReward, setLoadingClaimReward] = useState<boolean>(false)
 
 
@@ -109,7 +109,7 @@ export default observer(() => {
   }
 
   const claimButtonLogic = async (round: IRound, userRoundTickets: IUserTicket[]) => {
-    if (!client || !viewingKey || !userRoundTicketsModal.selectedUserRound || !userRoundTicketsModal.userTicketsCount) return
+    if (!client || !hasPermit || !userRoundTicketsModal.selectedUserRound || !userRoundTicketsModal.userTicketsCount) return
     setLoadingClaimReward(true)
     try {
       let ticketIndexes: number[] = [];
@@ -127,7 +127,7 @@ export default observer(() => {
         ticketIndexes
       );
 
-      await lottery.getUserRoundPaginatedTicketsTrigger(client, viewingKey, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
+      await lottery.getUserRoundPaginatedTicketsTrigger(client, hasPermit, userRoundTicketsModal.selectedUserRound, userRoundTicketsModal.userTicketsCount)
       await lottery.getSEFIBalance()
       successNotification('Claimed Successfully', true);
       setLoadingClaimReward(false)

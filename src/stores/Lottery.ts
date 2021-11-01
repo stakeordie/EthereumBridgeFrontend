@@ -19,7 +19,7 @@ export class Lottery extends StoreConstructor {
   //General porposes
   @observable public client: IClientState = null;
   @observable public viewingKey: string | null = null;
-  @observable public hasPermit: boolean | null = false;
+  @observable public hasPermit: boolean = false;
   @observable public balances: IBalances | null = null;
   @observable public configs: IConfigs | null = null;
   @observable public paginatedUserRounds: IPaginatedUserRounds | null = null;
@@ -67,11 +67,11 @@ export class Lottery extends StoreConstructor {
   @action public setUserRoundTickets (v:IUserTicket[]|null){
     this.userRoundTickets = v;
   }
-  @action public getUserRoundPaginatedTicketsTrigger = async (client: IClientState, viewkey: string, round: IRound, userTicketsCount: number) => {
+  @action public getUserRoundPaginatedTicketsTrigger = async (client: IClientState, hasPermit: boolean, round: IRound, userTicketsCount: number) => {
     //Paginating tickets by the current page and page size
     this.updatePagination(userTicketsCount,this.pageSize);
     let allTickets: IUserTicket[] = [];
-    const response = await getUserRoundPaginatedTickets(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, viewkey, round.round_number, this.currentPage, this.pageSize)
+    const response = await getUserRoundPaginatedTickets(client, process.env.REACT_APP_SECRET_LOTTERY_CONTRACT_ADDRESS, hasPermit, round.round_number, this.currentPage, this.pageSize)
     allTickets = allTickets.concat(response.user_round_paginated_tickets)
     this.userRoundTickets = allTickets;
   }
@@ -322,12 +322,14 @@ export class Lottery extends StoreConstructor {
       if(result){
         this.configs = result;
       }
-      
     } catch (error) {
       console.error(error)
     }
   }
   @action public setViewingKey(vk:string | null){
     this.viewingKey = vk;
-  } 
+  }
+  @action public setPermit(permitValue: boolean) {
+    this.hasPermit = permitValue;
+  }
 }
