@@ -43,7 +43,7 @@ export class Lottery extends StoreConstructor {
   //Modal Pagination values
   @observable public pages: Array<number> = [];
   @observable public currentPage:number = 0;
-  @observable public pageSize:number = 100;
+  @observable public pageSize:number = 1000;
 
   //User rounds
   @observable public userRoundTicketsModal: {
