@@ -56,7 +56,7 @@ const BuyTicketsModal = observer(({
         <div className='sefi-balance'>
           <h6>Balance</h6>
           <h6>
-            { (lottery.balances.SEFI)
+            { (lottery.balances)
               ? (lottery.balances?.SEFI?.toString() === 'unlock')
                   ? unlockJsx({onClick:async()=>{ 
                     await user.keplrWallet.suggestToken(user.chainId, process.env.SCRT_GOV_TOKEN_ADDRESS); 
