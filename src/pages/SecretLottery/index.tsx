@@ -18,12 +18,13 @@ const Lottery = observer(() => {
 
 
   useEffect(() => {
+    if(!client) return;
     (async()=>{
       await lottery.getConfigsTrigger(client);
     })();
     setInterval(async() => {
         await lottery.getConfigsTrigger(client)
-    }, 30000); // check 30 seconds
+    }, 60000); // check 1 minute
   }, [client])
 
   useEffect(()=>{
@@ -55,14 +56,14 @@ const Lottery = observer(() => {
 
     useEffect(() => {
       (async()=>{
-        if (viewingKey) {
-           await lottery.getPaginatedUserTicketsTrigger(client, viewingKey, paginationValues.page, paginationValues.page_size)
-        }
+        if (!viewingKey || !client || !configs) return; 
+        await lottery.getPaginatedUserTicketsTrigger(client, viewingKey, paginationValues.page, paginationValues.page_size)
       })()
     }, [client, viewingKey,configs])
 
     useEffect(() => {
       (async () => {
+        if(!client || !configs) return;
         if(!lottery.roundViewer){
           await lottery.getRoundViewer(lottery.configs.current_round_number - 1);
         }else{
