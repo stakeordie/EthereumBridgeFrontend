@@ -182,12 +182,12 @@ export default observer(() => {
                   inverted
                   trigger={
                     <button className={`ticket-button-${!ticketPrizes ? "normal" : ticketPrizes.sequence_1.length > 0 ? "winner" : "no-winner"}`}>
-                      {userTicket.ticket}
+                      {userTicket?.ticket}
                     </button>
                   }
                   content={
                     <div className="popover-content">
-                      <h5><strong>Ticket {userTicket.ticket}</strong></h5>
+                      <h5><strong>Ticket {userTicket?.ticket}</strong></h5>
                       <p>{ticketSequence}</p>
                       <p>Ticket Rewards: {(accumutatedTicketRewards ? formatNumber(accumutatedTicketRewards! / 1000000) : 0)} </p>
                     </div>
@@ -195,7 +195,7 @@ export default observer(() => {
                 />
                 :
                 <button className='ticket-button'>
-                  {userTicket.ticket}
+                  {userTicket?.ticket}
                 </button>
             }
           </div>
