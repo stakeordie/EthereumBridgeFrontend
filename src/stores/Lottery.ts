@@ -266,13 +266,17 @@ export class Lottery extends StoreConstructor {
 
   @action public getSEFIBalance = async () => {
     if (!this.client) return null
-
-    const response = await getBalance(this.client, process.env.SCRT_GOV_TOKEN_ADDRESS)
-    const accountData = await this.client.execute.getAccount(this.client.accountData.address);
-    this.balances = ({
-      native: parseInt(accountData ? accountData.balance[0].amount : "0"),
-      SEFI: response
-    })
+    try {
+      const response = await getBalance(this.client, process.env.SCRT_GOV_TOKEN_ADDRESS)
+      const accountData = await this.client.execute.getAccount(this.client.accountData.address);
+      this.balances = ({
+        native: parseInt(accountData ? accountData.balance[0].amount : "0"),
+        SEFI: response
+      })
+    } catch (error) {
+      console.error(error)
+    }
+    
   }
 
   // QUERIES USER ROUNDS

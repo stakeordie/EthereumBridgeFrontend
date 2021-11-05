@@ -18,12 +18,14 @@ const Lottery = observer(() => {
   const { configs,client,ticketsCount,paginationValues,userRoundTicketsModal,currentPage, hasPermit } = lottery
 
   useEffect(() => {
+    if(!client) return;
     (async()=>{
       await lottery.getConfigsTrigger(client);
+      await lottery.getSEFIBalance();
     })();
     setInterval(async() => {
         await lottery.getConfigsTrigger(client)
-    }, 30000); // check 30 seconds
+    }, 60000); // check 1 minute
   }, [client])
 
   useEffect(()=>{
@@ -48,21 +50,22 @@ const Lottery = observer(() => {
 
       if (configs) {
           await lottery.getCurrentRound(client, configs.current_round_number);
-          await lottery.getRoundStakingRewardsTrigger(client, configs)
+          await lottery.getRoundStakingRewardsTrigger(client, configs)            
       }
     })()
   }, [configs])
 
     useEffect(() => {
       (async()=>{
-        if (hasPermit) {
-           await lottery.getPaginatedUserTicketsTrigger(client, paginationValues.page, paginationValues.page_size)
-        }
+        if (!hasPermit || !client || !configs) return;        
+        await lottery.getPaginatedUserTicketsTrigger(client, paginationValues.page, paginationValues.page_size)
+        
       })()
     }, [client, hasPermit,configs])
 
     useEffect(() => {
       (async () => {
+        if (!client || !configs) return;
         if(!lottery.roundViewer){
           await lottery.getRoundViewer(lottery.configs.current_round_number - 1);
         }else{
@@ -82,8 +85,6 @@ const Lottery = observer(() => {
     if (!client || !lottery.setPermit || !lottery) {return;}
 
     lottery.setPermit(false);
-    
-    lottery.getSEFIBalance();
 
     if (localStorage.getItem('lottery_permit_' + client.accountData.address)) {
       lottery.setPermit(true);

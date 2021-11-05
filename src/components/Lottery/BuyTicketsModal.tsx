@@ -56,13 +56,15 @@ const BuyTicketsModal = observer(({
         <div className='sefi-balance'>
           <h6>Balance</h6>
           <h6>
-            { (lottery.balances.SEFI.toString() === 'unlock')
-                ? unlockJsx({onClick:async()=>{ 
-                   await user.keplrWallet.suggestToken(user.chainId, process.env.SCRT_GOV_TOKEN_ADDRESS); 
-                   await lottery.getSEFIBalance();
-                  }
-                })
-                : divDecimals(lottery.balances.SEFI,6).toString()
+            { (lottery.balances.SEFI)
+              ? (lottery.balances?.SEFI?.toString() === 'unlock')
+                  ? unlockJsx({onClick:async()=>{ 
+                    await user.keplrWallet.suggestToken(user.chainId, process.env.SCRT_GOV_TOKEN_ADDRESS); 
+                    await lottery.getSEFIBalance();
+                    }
+                  })
+                  : divDecimals(lottery.balances.SEFI,6).toString()
+              : '0'
             }<span> SEFI</span>
           </h6>
         </div>
