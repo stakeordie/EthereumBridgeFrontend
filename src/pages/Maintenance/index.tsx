@@ -21,7 +21,7 @@ export const Maintenance = () => {
           </svg>
 
             {/* <h1 className={theme.currentTheme}>Website under maintenance</h1> */}
-            <h1 style={{maxWidth:'600'}} className={theme.currentTheme}>SecretSwap will be undergoing maintenance on the 10th for the Supernova upgrade.</h1>
+            <h1 style={{maxWidth:'600'}} className={theme.currentTheme}>SecretSwap is undergoing maintenance for the Supernova upgrade.</h1>
             </div>
           </Box>
         </Box>
