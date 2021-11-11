@@ -224,9 +224,11 @@ export const SefiModal = (props: {
       //Get sefi balance here
       try {
         balance = await getSefiBalance(token);
+        console.log('sefi balance',balance)
         balance = balance.toString().replace(",","")
         balance = formatWithTwoDecimals(balance);
       } catch (error) {
+        balance = 'unlock'
         console.error("Error at getting SEFI balance")
       }
       //Load unclaimed 

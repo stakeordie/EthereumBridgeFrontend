@@ -5,7 +5,7 @@ import { useStores } from 'stores';
 
 const MessageDismiss = () => {
   const { theme } = useStores();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   const handleDismiss = (e) => {
     e.preventDefault();
@@ -18,10 +18,7 @@ const MessageDismiss = () => {
         visible ?
           <div className={`messsage-body ${theme.currentTheme}`}>
             <div className="message-content">
-              <p className="header">🚨SEFI staking pool has been upgraded to support <a href="https://scrt.network/blog/sefi-governance-live-mainnet-private-voting">governance</a>!🚨</p>
-              <p className="subtitle">
-                <Link to={"/migration"}>Migrate your tokens</Link> to continue earning.
-              </p>
+              <p className="header">🚨SecretSwap will be undergoing <strong>maintenance</strong> on the <strong>10th</strong> for the <a href="https://scrt.network/blog/supernova-explosive-vision-future-secret-network">Supernova</a> upgrade🚨</p>
             </div>
             <div className="close-content">
               <a onClick={(e) => handleDismiss(e)}>
